@@ -21,11 +21,12 @@ except Exception:
 # -----------------------
 GRAPHQL_URL = "https://app.birdweather.com/graphql"
 
-# Florida-wide bbox (WGS84). Slightly conservative to avoid spillover.
-# South 24.396, North 31.000, West -87.635, East -80.031
+# Duval County and St. Johns County bbox (WGS84). 
+# Covers Jacksonville area (Duval) and St. Augustine area (St. Johns)
+# South 29.7, North 30.6, West -81.8, East -81.1
 BBOX = {
-    "ne": {"lat": 31.000, "lon": -80.031},
-    "sw": {"lat": 24.396, "lon": -87.635},
+    "ne": {"lat": 30.6, "lon": -81.1},
+    "sw": {"lat": 29.7, "lon": -81.8},
 }
 
 # Optionally keep only stations whose 'state' is Florida/FL
@@ -361,9 +362,9 @@ def compute_and_save_metrics(daily: pd.DataFrame):
     trend = pd.DataFrame(trend_rows)
 
     progress.note("Writing CSV outputs…")
-    metrics.to_csv("florida_daily_metrics.csv", index=False)
-    beta_df.to_csv("florida_weekly_beta_diversity.csv", index=False)
-    trend.to_csv("florida_trends_by_year.csv", index=False)
+    metrics.to_csv("duval_st_johns_daily_metrics.csv", index=False)
+    beta_df.to_csv("duval_st_johns_weekly_beta_diversity.csv", index=False)
+    trend.to_csv("duval_st_johns_trends_by_year.csv", index=False)
 
     try:
         n_days = metrics["date"].nunique()
