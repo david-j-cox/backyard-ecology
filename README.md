@@ -2,7 +2,7 @@
 
 A data analysis project for tracking and visualizing bird feeder visits in backyard ecosystems. This project combines automated data collection with advanced analytics to understand bird behavior patterns, migration timing, and ecological diversity.
 
-## 🐦 Project Overview
+## Project Overview
 
 This project analyzes bird feeder visit data collected from multiple sites, focusing on:
 - **Temporal patterns** of bird visits throughout the day and across seasons
