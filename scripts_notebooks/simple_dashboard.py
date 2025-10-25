@@ -119,6 +119,9 @@ def create_simple_dashboard():
         
         if plot_type == 'matplotlib':
             image_path = plot.get('image_path', '')
+            # Fix path to include dashboard_plots folder
+            if image_path.startswith('images/'):
+                image_path = f"dashboard_plots/{image_path}"
             html_content += f"""
             <div class="plot-card">
                 <h3>{title}</h3>
