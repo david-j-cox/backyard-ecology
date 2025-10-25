@@ -14,7 +14,7 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 1200px;
+            max-width: 98%;
             margin: 0 auto;
         }
         .header {
@@ -30,7 +30,12 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 30px;
-            justify-content: center;
+            row-gap: 50px;
+            margin: 0 auto 50px auto;
+        }
+        .plot-card.full-width {
+            grid-column: 1 / -1;
+            max-width: 98%;
         }
         .plot-card {
             background: white;
@@ -39,22 +44,32 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
             height: 100%;
         }
-        .plot-card h3 {
+        .plot-card h1 {
             margin-top: 0;
             color: #333;
+            text-align: center;
+        }
+        .plot-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            width: 100%;
         }
         .plot-card img {
             width: 100%;
+            max-height: 800px;
             height: auto;
             border-radius: 5px;
-            flex-grow: 1;
             object-fit: contain;
         }
         .plot-card iframe {
             width: 100%;
-            height: 400px;
+            height: 800px;
             border: none;
             border-radius: 5px;
         }
@@ -69,71 +84,85 @@
     <div class="container">
         <div class="header">
             <h1>Backyard Ecology Dashboard</h1>
-            <p>Last updated: 2025-10-25 08:20</p>
+            <p>Last updated: 2025-10-25 08:49</p>
         </div>
         
         <div class="plots-grid">
 
                 <div class="plot-card">
-                    <h3>Daily Bird Feeder Visits by Species</h3>
-                    <img src="dashboard_plots/images/species_visits_by_date.png" alt="Daily Bird Feeder Visits by Species">
+                    <h1>Daily Bird Feeder Visits by Species</h1>
+                    <div class="plot-content">
+                        <img src="dashboard_plots/images/species_visits_by_date.png" alt="Daily Bird Feeder Visits by Species">
+                    </div>
                     <div class="metadata">
                         <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2025-10-25T08:08:08.690948
+                        <strong>Created:</strong> 2025-10-25T08:47:04.299478
                     </div>
                 </div>
                 
                 <div class="plot-card">
-                    <h3>Feeder Visits Compared to Migration Activity</h3>
-                    <img src="dashboard_plots/images/migration_relation.png" alt="Feeder Visits Compared to Migration Activity">
+                    <h1>Feeder Visits Compared to Migration Activity</h1>
+                    <div class="plot-content">
+                        <img src="dashboard_plots/images/migration_relation.png" alt="Feeder Visits Compared to Migration Activity">
+                    </div>
                     <div class="metadata">
                         <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2025-10-25T08:08:25.249236
+                        <strong>Created:</strong> 2025-10-25T08:47:23.693574
                     </div>
                 </div>
                 
                 <div class="plot-card">
-                    <h3>Heatmap: Date vs Time of Day vs Observation Count</h3>
-                    <img src="dashboard_plots/images/heatmap_counts.png" alt="Heatmap: Date vs Time of Day vs Observation Count">
+                    <h1>Heatmap: Date vs Time of Day vs Observation Count</h1>
+                    <div class="plot-content">
+                        <img src="dashboard_plots/images/heatmap_counts.png" alt="Heatmap: Date vs Time of Day vs Observation Count">
+                    </div>
                     <div class="metadata">
                         <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2025-10-25T08:08:14.018498
+                        <strong>Created:</strong> 2025-10-25T08:47:09.586853
                     </div>
                 </div>
                 
                 <div class="plot-card">
-                    <h3>Heatmap: Date vs Time of Day vs Proportion of Observations</h3>
-                    <img src="dashboard_plots/images/heatmap_proportions.png" alt="Heatmap: Date vs Time of Day vs Proportion of Observations">
+                    <h1>Heatmap: Date vs Time of Day vs Proportion of Observations</h1>
+                    <div class="plot-content">
+                        <img src="dashboard_plots/images/heatmap_proportions.png" alt="Heatmap: Date vs Time of Day vs Proportion of Observations">
+                    </div>
                     <div class="metadata">
                         <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2025-10-25T08:08:17.461968
+                        <strong>Created:</strong> 2025-10-25T08:47:14.936262
                     </div>
                 </div>
                 
                 <div class="plot-card">
-                    <h3>All Birds: Bout Analysis</h3>
-                    <img src="dashboard_plots/images/all_birds_bout_analysis.png" alt="All Birds: Bout Analysis">
+                    <h1>All Birds: Bout Analysis</h1>
+                    <div class="plot-content">
+                        <img src="dashboard_plots/images/all_birds_bout_analysis.png" alt="All Birds: Bout Analysis">
+                    </div>
                     <div class="metadata">
                         <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2025-10-25T08:08:19.589838
+                        <strong>Created:</strong> 2025-10-25T08:47:17.029073
                     </div>
                 </div>
                 
                 <div class="plot-card">
-                    <h3>Individual Birds: Bout Analysis</h3>
-                    <img src="dashboard_plots/images/individual_species_bout_analysis.png" alt="Individual Birds: Bout Analysis">
+                    <h1>Individual Birds: Bout Analysis (log space)</h1>
+                    <div class="plot-content">
+                        <img src="dashboard_plots/images/individual_species_bout_analysis.png" alt="Individual Birds: Bout Analysis (log space)">
+                    </div>
                     <div class="metadata">
                         <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2025-10-25T08:08:24.357935
+                        <strong>Created:</strong> 2025-10-25T08:47:22.549465
                     </div>
                 </div>
                 
-                <div class="plot-card">
-                    <h3>Ecological Diversity Metrics</h3>
-                    <img src="dashboard_plots/images/diversity_metrics.png" alt="Ecological Diversity Metrics">
+                <div class="plot-card full-width">
+                    <h1>Ecological Diversity Metrics</h1>
+                    <div class="plot-content">
+                        <img src="dashboard_plots/images/diversity_metrics.png" alt="Ecological Diversity Metrics">
+                    </div>
                     <div class="metadata">
                         <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2025-10-25T08:08:27.475204
+                        <strong>Created:</strong> 2025-10-25T08:47:27.501617
                     </div>
                 </div>
                 
