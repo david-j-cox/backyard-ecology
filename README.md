@@ -8,7 +8,8 @@ This project analyzes bird feeder visit data collected from multiple sites, focu
 - **Temporal patterns** of bird visits throughout the day and across seasons
 - **Species diversity** metrics including Shannon H, species richness, and beta diversity
 - **Migration correlation** with BirdCast migration data
-- **Visualization** of complex ecological data through interactive plots and heatmaps
+- **Static dashboard** published automatically to GitHub Pages
+- **Visualization** of complex ecological data through high-quality static plots and heatmaps
 
 ## Data Sources
 
@@ -47,19 +48,29 @@ This project analyzes bird feeder visit data collected from multiple sites, focu
    jupyter notebook
    ```
 
-## Current Project Structure
+## Project Structure
 
 ```
 backyard-ecology/
 ├── README.md                    # This file
 ├── requirements.txt             # Python dependencies
-├── multi_site_data.xlsx         # Primary bird visit data
+├── GITHUB_PAGES_SETUP.md       # Dashboard setup guide
+├── data/
+│   ├── multi_site_data.xlsx    # Primary bird visit data
+│   └── haikubox.csv            # HaikuBox data
+├── docs/                       # Generated dashboard (GitHub Pages)
+│   ├── index.html              # Main dashboard
+│   └── dashboard_plots/        # Saved plots and metadata
 ├── scripts_notebooks/
 │   ├── analytics.ipynb         # Main analysis notebook
+│   ├── daily_update.py         # Daily workflow script
+│   ├── simple_dashboard.py     # Dashboard generator
 │   ├── haikubox.py             # HaikuBox data processing
 │   ├── haikubox.ipynb          # HaikuBox analysis
-│   └── *.csv                   # Processed data files
-└── venv/                       # Virtual environment (excluded from git)
+│   ├── birdweather.py          # Weather data processing
+│   └── weather.py              # Weather utilities
+└── .github/workflows/
+    └── deploy-dashboard.yml    # GitHub Pages deployment
 ```
 
 ## Current Analyses
@@ -90,13 +101,37 @@ backyard-ecology/
 - **Weather API**: OpenWeatherMap (configure in `analytics.ipynb`)
 - **Location**: Jacksonville, FL (30.09°N, 81.61°W)
 
+## Dashboard Workflow
+
+### Daily Update Process
+
+1. **Run Analysis**: Execute `analytics.ipynb` to generate plots
+2. **Generate Dashboard**: Run `python daily_update.py` to create HTML dashboard
+3. **Deploy**: Commit and push to GitHub for automatic deployment
+
+```bash
+# Daily workflow
+cd scripts_notebooks
+python daily_update.py
+git add docs/
+git commit -m "Update dashboard - $(date)"
+git push origin main
+```
+
+### Live Dashboard
+
+The dashboard is automatically published to GitHub Pages and available at:
+`https://yourusername.github.io/backyard-ecology/`
+
 ## Data Processing Pipeline
 
 1. **Raw Data Ingestion**: Excel files → Pandas DataFrames
 2. **Time Binning**: Continuous timestamps → Discrete time periods
 3. **Species Aggregation**: Individual visits → Daily summaries
 4. **Diversity Calculation**: Visit counts → Ecological metrics
-5. **Visualization**: Processed data → Interactive plots
+5. **Plot Generation**: Processed data → Saved plots with metadata
+6. **Dashboard Creation**: Saved plots → Static HTML dashboard
+7. **Automatic Deployment**: GitHub Pages → Live public dashboard
 
 ## Development
 
