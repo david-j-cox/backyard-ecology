@@ -6,145 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Backyard Ecology Dashboard</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
-        
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
         }
-        
         .header {
             text-align: center;
             color: white;
             margin-bottom: 40px;
         }
-        
         .header h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-        
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .last-updated {
-            font-size: 0.9rem;
-            margin-top: 10px;
-            opacity: 0.8;
-        }
-        
-        .plots-section {
-            margin-bottom: 50px;
-        }
-        
-        .section-title {
-            color: white;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            text-align: center;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-        
         .plots-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 30px;
-            margin-bottom: 40px;
         }
-        
         .plot-card {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .plot-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-        }
-        
-        .plot-header {
+            border-radius: 10px;
             padding: 20px;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        
-        .plot-header h3 {
-            margin: 0;
-            font-size: 1.4rem;
+        .plot-card h3 {
+            margin-top: 0;
+            color: #333;
         }
-        
-        .plot-header p {
-            margin: 10px 0 0 0;
-            opacity: 0.9;
-            font-size: 0.95rem;
-        }
-        
-        .plot-content {
-            padding: 20px;
-        }
-        
-        .plot-image {
+        .plot-card img {
             width: 100%;
             height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 5px;
         }
-        
-        .plot-iframe {
+        .plot-card iframe {
             width: 100%;
-            height: 500px;
+            height: 400px;
             border: none;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 5px;
         }
-        
-        .plot-metadata {
-            margin-top: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
+        .metadata {
             font-size: 0.9rem;
             color: #666;
-        }
-        
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 40px;
-            opacity: 0.8;
-        }
-        
-        @media (max-width: 768px) {
-            .plots-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .section-title {
-                font-size: 1.5rem;
-            }
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -152,98 +63,56 @@
     <div class="container">
         <div class="header">
             <h1>🐦 Backyard Ecology Dashboard</h1>
-            <p>Real-time analysis of bird feeder visits and ecological patterns</p>
-            <p class="last-updated">Last updated: 2025-10-25 07:33 UTC</p>
+            <p>Last updated: 2025-10-25 07:58</p>
         </div>
         
-        
-    <div class="plots-section">
-        <h2 class="section-title">Static Visualizations</h2>
         <div class="plots-grid">
+
+            <div class="plot-card">
+                <h3>Daily Bird Feeder Visits by Species</h3>
+                <img src="dashboard_plots/images/species_visits.png" alt="Daily Bird Feeder Visits by Species">
+                <div class="metadata">
+                    <strong>Type:</strong> Static Plot<br>
+                    <strong>Created:</strong> 2025-10-25T07:32:41.749347
+                </div>
+            </div>
             
-    <div class="plot-card">
-        <div class="plot-header">
-            <h3>Daily Bird Feeder Visits by Species</h3>
-            <p>Line plot showing daily feeder visits for each bird species with custom color coding</p>
-        </div>
-        <div class="plot-content">
-            <img src="images/species_visits.png" alt="Daily Bird Feeder Visits by Species" class="plot-image">
-            <div class="plot-metadata">
-                <strong>Type:</strong> Static Visualization<br>
-                <strong>Created:</strong> 2025-10-25T07:32:41.749347<br>
-                <strong>File:</strong> species_visits
+            <div class="plot-card">
+                <h3>Heatmap: Date vs Time of Day vs Observation Count</h3>
+                <img src="dashboard_plots/images/heatmap_counts.png" alt="Heatmap: Date vs Time of Day vs Observation Count">
+                <div class="metadata">
+                    <strong>Type:</strong> Static Plot<br>
+                    <strong>Created:</strong> 2025-10-25T07:32:44.698380
+                </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="plot-card">
-        <div class="plot-header">
-            <h3>Heatmap: Date vs Time of Day vs Observation Count</h3>
-            <p>Heatmap showing bird activity patterns across dates and times of day</p>
-        </div>
-        <div class="plot-content">
-            <img src="images/heatmap_counts.png" alt="Heatmap: Date vs Time of Day vs Observation Count" class="plot-image">
-            <div class="plot-metadata">
-                <strong>Type:</strong> Static Visualization<br>
-                <strong>Created:</strong> 2025-10-25T07:32:44.698380<br>
-                <strong>File:</strong> heatmap_counts
+            
+            <div class="plot-card">
+                <h3>Heatmap: Date vs Time of Day vs Proportion of Observations</h3>
+                <img src="dashboard_plots/images/heatmap_proportions.png" alt="Heatmap: Date vs Time of Day vs Proportion of Observations">
+                <div class="metadata">
+                    <strong>Type:</strong> Static Plot<br>
+                    <strong>Created:</strong> 2025-10-25T07:32:45.610866
+                </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="plot-card">
-        <div class="plot-header">
-            <h3>Heatmap: Date vs Time of Day vs Proportion of Observations</h3>
-            <p>Heatmap showing proportional bird activity patterns across dates and times of day</p>
-        </div>
-        <div class="plot-content">
-            <img src="images/heatmap_proportions.png" alt="Heatmap: Date vs Time of Day vs Proportion of Observations" class="plot-image">
-            <div class="plot-metadata">
-                <strong>Type:</strong> Static Visualization<br>
-                <strong>Created:</strong> 2025-10-25T07:32:45.610866<br>
-                <strong>File:</strong> heatmap_proportions
+            
+            <div class="plot-card">
+                <h3>Feeder Visits vs Migration Activity</h3>
+                <img src="dashboard_plots/images/migration_correlation.png" alt="Feeder Visits vs Migration Activity">
+                <div class="metadata">
+                    <strong>Type:</strong> Static Plot<br>
+                    <strong>Created:</strong> 2025-10-25T07:32:52.575294
+                </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="plot-card">
-        <div class="plot-header">
-            <h3>Feeder Visits vs Migration Activity</h3>
-            <p>Correlation between feeder visits and migration activity from BirdCast data</p>
-        </div>
-        <div class="plot-content">
-            <img src="images/migration_correlation.png" alt="Feeder Visits vs Migration Activity" class="plot-image">
-            <div class="plot-metadata">
-                <strong>Type:</strong> Static Visualization<br>
-                <strong>Created:</strong> 2025-10-25T07:32:52.575294<br>
-                <strong>File:</strong> migration_correlation
+            
+            <div class="plot-card">
+                <h3>Ecological Diversity Metrics</h3>
+                <img src="dashboard_plots/images/diversity_metrics.png" alt="Ecological Diversity Metrics">
+                <div class="metadata">
+                    <strong>Type:</strong> Static Plot<br>
+                    <strong>Created:</strong> 2025-10-25T07:32:57.626976
+                </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="plot-card">
-        <div class="plot-header">
-            <h3>Ecological Diversity Metrics</h3>
-            <p>Shannon H diversity and species richness metrics over time</p>
-        </div>
-        <div class="plot-content">
-            <img src="images/diversity_metrics.png" alt="Ecological Diversity Metrics" class="plot-image">
-            <div class="plot-metadata">
-                <strong>Type:</strong> Static Visualization<br>
-                <strong>Created:</strong> 2025-10-25T07:32:57.626976<br>
-                <strong>File:</strong> diversity_metrics
-            </div>
-        </div>
-    </div>
-    
-        </div>
-    </div>
-    
-        
-        
-        <div class="footer">
-            <p>Backyard Ecology Project | Data-driven bird behavior analysis</p>
-            <p>Generated from 5 plots</p>
+            
         </div>
     </div>
 </body>
