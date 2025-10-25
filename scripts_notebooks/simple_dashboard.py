@@ -56,7 +56,7 @@ def create_simple_dashboard():
             min-height: 100vh;
         }}
         .container {{
-            max-width: 1200px;
+            max-width: 98%;
             margin: 0 auto;
         }}
         .header {{
@@ -72,7 +72,12 @@ def create_simple_dashboard():
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 30px;
-            justify-content: center;
+            row-gap: 50px;
+            margin: 0 auto 50px auto;
+        }}
+        .plot-card.full-width {{
+            grid-column: 1 / -1;
+            max-width: 98%;
         }}
         .plot-card {{
             background: white;
@@ -81,22 +86,32 @@ def create_simple_dashboard():
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
             height: 100%;
         }}
-        .plot-card h3 {{
+        .plot-card h1 {{
             margin-top: 0;
             color: #333;
+            text-align: center;
+        }}
+        .plot-content {{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            width: 100%;
         }}
         .plot-card img {{
             width: 100%;
+            max-height: 800px;
             height: auto;
             border-radius: 5px;
-            flex-grow: 1;
             object-fit: contain;
         }}
         .plot-card iframe {{
             width: 100%;
-            height: 400px;
+            height: 800px;
             border: none;
             border-radius: 5px;
         }}
@@ -140,15 +155,20 @@ def create_simple_dashboard():
             description = plot.get('description', '')
             plot_type = plot.get('type', 'matplotlib')
             
+            # Add full-width class for diversity_metrics
+            card_class = "plot-card full-width" if filename == 'diversity_metrics' else "plot-card"
+            
             if plot_type == 'matplotlib':
                 image_path = plot.get('image_path', '')
                 # Fix path to include dashboard_plots folder
                 if image_path.startswith('images/'):
                     image_path = f"dashboard_plots/{image_path}"
                 html_content += f"""
-                <div class="plot-card">
-                    <h3>{title}</h3>
-                    <img src="{image_path}" alt="{title}">
+                <div class="{card_class}">
+                    <h1>{title}</h1>
+                    <div class="plot-content">
+                        <img src="{image_path}" alt="{title}">
+                    </div>
                     <div class="metadata">
                         <strong>Type:</strong> Static Plot<br>
                         <strong>Created:</strong> {plot.get('created', 'Unknown')}
@@ -158,9 +178,11 @@ def create_simple_dashboard():
             elif plot_type == 'plotly':
                 html_path = plot.get('html_path', '')
                 html_content += f"""
-                <div class="plot-card">
-                    <h3>{title}</h3>
-                    <iframe src="{html_path}"></iframe>
+                <div class="{card_class}">
+                    <h1>{title}</h1>
+                    <div class="plot-content">
+                        <iframe src="{html_path}"></iframe>
+                    </div>
                     <div class="metadata">
                         <strong>Type:</strong> Interactive Plot<br>
                         <strong>Created:</strong> {plot.get('created', 'Unknown')}
