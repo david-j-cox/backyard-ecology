@@ -104,46 +104,65 @@ def create_simple_dashboard():
 <body>
     <div class="container">
         <div class="header">
-            <h1>🐦 Backyard Ecology Dashboard</h1>
+            <h1>Backyard Ecology Dashboard</h1>
             <p>Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M')}</p>
         </div>
         
         <div class="plots-grid">
 """
     
-    # Add each plot to the HTML
-    for plot in plots:
-        title = plot.get('title', 'Untitled')
-        description = plot.get('description', '')
-        plot_type = plot.get('type', 'matplotlib')
-        
-        if plot_type == 'matplotlib':
-            image_path = plot.get('image_path', '')
-            # Fix path to include dashboard_plots folder
-            if image_path.startswith('images/'):
-                image_path = f"dashboard_plots/{image_path}"
-            html_content += f"""
-            <div class="plot-card">
-                <h3>{title}</h3>
-                <img src="{image_path}" alt="{title}">
-                <div class="metadata">
-                    <strong>Type:</strong> Static Plot<br>
-                    <strong>Created:</strong> {plot.get('created', 'Unknown')}
+    # Define the specific plot order and groupings
+    plot_order = [
+        # Row 1
+        'species_visits_by_date', 'migration_relation',
+        # Row 2  
+        'heatmap_counts', 'heatmap_proportions',
+        # Row 3
+        'all_birds_bout_analysis', 'individual_species_bout_analysis',
+        # Row 4
+        'diversity_metrics'
+    ]
+    
+    # Create a lookup dictionary for plots by filename
+    plot_lookup = {plot.get('filename', ''): plot for plot in plots}
+    
+    # Add plots in the specified order
+    for filename in plot_order:
+        if filename in plot_lookup:
+            plot = plot_lookup[filename]
+            title = plot.get('title', 'Untitled')
+            description = plot.get('description', '')
+            plot_type = plot.get('type', 'matplotlib')
+            
+            if plot_type == 'matplotlib':
+                image_path = plot.get('image_path', '')
+                # Fix path to include dashboard_plots folder
+                if image_path.startswith('images/'):
+                    image_path = f"dashboard_plots/{image_path}"
+                html_content += f"""
+                <div class="plot-card">
+                    <h3>{title}</h3>
+                    <img src="{image_path}" alt="{title}">
+                    <div class="metadata">
+                        <strong>Type:</strong> Static Plot<br>
+                        <strong>Created:</strong> {plot.get('created', 'Unknown')}
+                    </div>
                 </div>
-            </div>
-            """
-        elif plot_type == 'plotly':
-            html_path = plot.get('html_path', '')
-            html_content += f"""
-            <div class="plot-card">
-                <h3>{title}</h3>
-                <iframe src="{html_path}"></iframe>
-                <div class="metadata">
-                    <strong>Type:</strong> Interactive Plot<br>
-                    <strong>Created:</strong> {plot.get('created', 'Unknown')}
+                """
+            elif plot_type == 'plotly':
+                html_path = plot.get('html_path', '')
+                html_content += f"""
+                <div class="plot-card">
+                    <h3>{title}</h3>
+                    <iframe src="{html_path}"></iframe>
+                    <div class="metadata">
+                        <strong>Type:</strong> Interactive Plot<br>
+                        <strong>Created:</strong> {plot.get('created', 'Unknown')}
+                    </div>
                 </div>
-            </div>
-            """
+                """
+        else:
+            print(f"Warning: Plot '{filename}' not found in saved plots")
     
     html_content += """
         </div>
