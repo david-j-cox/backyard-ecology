@@ -70,14 +70,18 @@ def create_simple_dashboard():
         }}
         .plots-grid {{
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 30px;
+            justify-content: center;
         }}
         .plot-card {{
             background: white;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }}
         .plot-card h3 {{
             margin-top: 0;
@@ -87,6 +91,8 @@ def create_simple_dashboard():
             width: 100%;
             height: auto;
             border-radius: 5px;
+            flex-grow: 1;
+            object-fit: contain;
         }}
         .plot-card iframe {{
             width: 100%;
