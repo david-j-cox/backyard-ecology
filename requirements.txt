@@ -54,3 +54,7 @@ traitlets==5.14.3
 tzdata==2025.2
 urllib3==2.5.0
 wcwidth==0.2.14
+gspread==6.1.2
+google-auth==2.35.0
+google-auth-oauthlib==1.2.1
+google-auth-httplib2==0.2.0

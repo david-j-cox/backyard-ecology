@@ -70,14 +70,10 @@ def create_simple_dashboard():
         }}
         .plots-grid {{
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            row-gap: 50px;
+            grid-template-columns: 1fr;
+            gap: 100px;
             margin: 0 auto 50px auto;
-        }}
-        .plot-card.full-width {{
-            grid-column: 1 / -1;
-            max-width: 98%;
+            background: transparent;  /* Add this line */
         }}
         .plot-card {{
             background: white;
@@ -132,15 +128,14 @@ def create_simple_dashboard():
         <div class="plots-grid">
 """
     
-    # Define the specific plot order and groupings
+    # Define the specific plot order
     plot_order = [
-        # Row 1
-        'species_visits_by_date', 'migration_relation',
-        # Row 2  
-        'heatmap_counts', 'heatmap_proportions',
-        # Row 3
-        'all_birds_bout_analysis', 'individual_species_bout_analysis',
-        # Row 4
+        'species_visits_by_date',
+        'migration_relation', 
+        'heatmap_counts',
+        'heatmap_proportions',
+        'all_birds_bout_analysis',
+        'individual_species_bout_analysis',
         'diversity_metrics'
     ]
     
@@ -155,16 +150,13 @@ def create_simple_dashboard():
             description = plot.get('description', '')
             plot_type = plot.get('type', 'matplotlib')
             
-            # Add full-width class for diversity_metrics
-            card_class = "plot-card full-width" if filename == 'diversity_metrics' else "plot-card"
-            
             if plot_type == 'matplotlib':
                 image_path = plot.get('image_path', '')
                 # Fix path to include dashboard_plots folder
                 if image_path.startswith('images/'):
                     image_path = f"dashboard_plots/{image_path}"
                 html_content += f"""
-                <div class="{card_class}">
+                <div class="plot-card">
                     <h1>{title}</h1>
                     <div class="plot-content">
                         <img src="{image_path}" alt="{title}">
@@ -178,7 +170,7 @@ def create_simple_dashboard():
             elif plot_type == 'plotly':
                 html_path = plot.get('html_path', '')
                 html_content += f"""
-                <div class="{card_class}">
+                <div class="plot-card">
                     <h1>{title}</h1>
                     <div class="plot-content">
                         <iframe src="{html_path}"></iframe>
