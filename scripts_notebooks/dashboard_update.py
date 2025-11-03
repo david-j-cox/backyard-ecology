@@ -131,7 +131,8 @@ def create_simple_dashboard():
     # Define the specific plot order
     plot_order = [
         'species_visits_by_date',
-        'migration_relation', 
+        'migration_relation',
+        'mbd_plot',
         'heatmap_counts',
         'heatmap_proportions',
         'all_birds_bout_analysis',
