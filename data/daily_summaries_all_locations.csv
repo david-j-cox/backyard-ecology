@@ -1,0 +1,564 @@
+Date,source_sheet,Bird,Feeder Visits
+2025-10-05,Southampton daily summaries,Blue tit,0.0
+2025-10-06,Southampton daily summaries,Blue tit,0.0
+2025-10-07,Southampton daily summaries,Blue tit,0.0
+2025-10-08,Southampton daily summaries,Blue tit,0.0
+2025-10-09,Southampton daily summaries,Blue tit,0.0
+2025-10-10,Southampton daily summaries,Blue tit,0.0
+2025-10-11,Southampton daily summaries,Blue tit,2.0
+2025-10-12,Southampton daily summaries,Blue tit,7.0
+2025-10-13,Southampton daily summaries,Blue tit,6.0
+2025-10-14,Southampton daily summaries,Blue tit,15.0
+2025-10-15,Southampton daily summaries,Blue tit,10.0
+2025-10-16,Southampton daily summaries,Blue tit,16.0
+2025-10-17,Southampton daily summaries,Blue tit,14.0
+2025-10-18,Southampton daily summaries,Blue tit,35.0
+2025-10-19,Southampton daily summaries,Blue tit,26.0
+2025-10-20,Southampton daily summaries,Blue tit,52.0
+2025-10-21,Southampton daily summaries,Blue tit,34.0
+2025-10-22,Southampton daily summaries,Blue tit,37.0
+2025-10-23,Southampton daily summaries,Blue tit,76.0
+2025-10-24,Southampton daily summaries,Blue tit,73.0
+2025-10-25,Southampton daily summaries,Blue tit,92.0
+2025-10-26,Southampton daily summaries,Blue tit,119.0
+2025-10-27,Southampton daily summaries,Blue tit,81.0
+2025-10-28,Southampton daily summaries,Blue tit,56.0
+2025-10-29,Southampton daily summaries,Blue tit,72.0
+2025-10-30,Southampton daily summaries,Blue tit,109.0
+2025-10-31,Southampton daily summaries,Blue tit,133.0
+2025-11-01,Southampton daily summaries,Blue tit,86.0
+2025-11-02,Southampton daily summaries,Blue tit,56.0
+2025-11-03,Southampton daily summaries,Blue tit,53.0
+2025-11-04,Southampton daily summaries,Blue tit,69.0
+2025-11-05,Southampton daily summaries,Blue tit,49.0
+2025-11-06,Southampton daily summaries,Blue tit,55.0
+2025-11-07,Southampton daily summaries,Blue tit,31.0
+2025-11-08,Southampton daily summaries,Blue tit,74.0
+2025-11-09,Southampton daily summaries,Blue tit,69.0
+2025-11-10,Southampton daily summaries,Blue tit,19.0
+2025-11-11,Southampton daily summaries,Blue tit,17.0
+2025-11-12,Southampton daily summaries,Blue tit,5.0
+2025-11-13,Southampton daily summaries,Blue tit,3.0
+2025-11-14,Southampton daily summaries,Blue tit,0.0
+2025-11-15,Southampton daily summaries,Blue tit,1.0
+2025-10-05,Southampton daily summaries,Coal tit,0.0
+2025-10-06,Southampton daily summaries,Coal tit,0.0
+2025-10-07,Southampton daily summaries,Coal tit,0.0
+2025-10-08,Southampton daily summaries,Coal tit,0.0
+2025-10-09,Southampton daily summaries,Coal tit,0.0
+2025-10-10,Southampton daily summaries,Coal tit,0.0
+2025-10-11,Southampton daily summaries,Coal tit,0.0
+2025-10-12,Southampton daily summaries,Coal tit,0.0
+2025-10-13,Southampton daily summaries,Coal tit,0.0
+2025-10-14,Southampton daily summaries,Coal tit,0.0
+2025-10-15,Southampton daily summaries,Coal tit,10.0
+2025-10-16,Southampton daily summaries,Coal tit,11.0
+2025-10-17,Southampton daily summaries,Coal tit,8.0
+2025-10-18,Southampton daily summaries,Coal tit,33.0
+2025-10-19,Southampton daily summaries,Coal tit,16.0
+2025-10-20,Southampton daily summaries,Coal tit,17.0
+2025-10-21,Southampton daily summaries,Coal tit,31.0
+2025-10-22,Southampton daily summaries,Coal tit,27.0
+2025-10-23,Southampton daily summaries,Coal tit,15.0
+2025-10-24,Southampton daily summaries,Coal tit,46.0
+2025-10-25,Southampton daily summaries,Coal tit,31.0
+2025-10-26,Southampton daily summaries,Coal tit,35.0
+2025-10-27,Southampton daily summaries,Coal tit,26.0
+2025-10-28,Southampton daily summaries,Coal tit,11.0
+2025-10-29,Southampton daily summaries,Coal tit,26.0
+2025-10-30,Southampton daily summaries,Coal tit,51.0
+2025-10-31,Southampton daily summaries,Coal tit,35.0
+2025-11-01,Southampton daily summaries,Coal tit,37.0
+2025-11-02,Southampton daily summaries,Coal tit,29.0
+2025-11-03,Southampton daily summaries,Coal tit,11.0
+2025-11-04,Southampton daily summaries,Coal tit,25.0
+2025-11-05,Southampton daily summaries,Coal tit,15.0
+2025-11-06,Southampton daily summaries,Coal tit,21.0
+2025-11-07,Southampton daily summaries,Coal tit,15.0
+2025-11-08,Southampton daily summaries,Coal tit,22.0
+2025-11-09,Southampton daily summaries,Coal tit,19.0
+2025-11-10,Southampton daily summaries,Coal tit,1.0
+2025-11-11,Southampton daily summaries,Coal tit,4.0
+2025-11-12,Southampton daily summaries,Coal tit,1.0
+2025-11-13,Southampton daily summaries,Coal tit,0.0
+2025-11-14,Southampton daily summaries,Coal tit,0.0
+2025-11-15,Southampton daily summaries,Coal tit,0.0
+2025-10-05,Southampton daily summaries,Great tit,2.0
+2025-10-06,Southampton daily summaries,Great tit,5.0
+2025-10-07,Southampton daily summaries,Great tit,3.0
+2025-10-08,Southampton daily summaries,Great tit,5.0
+2025-10-09,Southampton daily summaries,Great tit,3.0
+2025-10-10,Southampton daily summaries,Great tit,8.0
+2025-10-11,Southampton daily summaries,Great tit,10.0
+2025-10-12,Southampton daily summaries,Great tit,14.0
+2025-10-13,Southampton daily summaries,Great tit,14.0
+2025-10-14,Southampton daily summaries,Great tit,50.0
+2025-10-15,Southampton daily summaries,Great tit,55.0
+2025-10-16,Southampton daily summaries,Great tit,50.0
+2025-10-17,Southampton daily summaries,Great tit,39.0
+2025-10-18,Southampton daily summaries,Great tit,35.0
+2025-10-19,Southampton daily summaries,Great tit,28.0
+2025-10-20,Southampton daily summaries,Great tit,50.0
+2025-10-21,Southampton daily summaries,Great tit,76.0
+2025-10-22,Southampton daily summaries,Great tit,80.0
+2025-10-23,Southampton daily summaries,Great tit,114.0
+2025-10-24,Southampton daily summaries,Great tit,126.0
+2025-10-25,Southampton daily summaries,Great tit,116.0
+2025-10-26,Southampton daily summaries,Great tit,126.0
+2025-10-27,Southampton daily summaries,Great tit,151.0
+2025-10-28,Southampton daily summaries,Great tit,89.0
+2025-10-29,Southampton daily summaries,Great tit,97.0
+2025-10-30,Southampton daily summaries,Great tit,160.0
+2025-10-31,Southampton daily summaries,Great tit,187.0
+2025-11-01,Southampton daily summaries,Great tit,191.0
+2025-11-02,Southampton daily summaries,Great tit,172.0
+2025-11-03,Southampton daily summaries,Great tit,132.0
+2025-11-04,Southampton daily summaries,Great tit,118.0
+2025-11-05,Southampton daily summaries,Great tit,124.0
+2025-11-06,Southampton daily summaries,Great tit,115.0
+2025-11-07,Southampton daily summaries,Great tit,65.0
+2025-11-08,Southampton daily summaries,Great tit,87.0
+2025-11-09,Southampton daily summaries,Great tit,78.0
+2025-11-10,Southampton daily summaries,Great tit,58.0
+2025-11-11,Southampton daily summaries,Great tit,17.0
+2025-11-12,Southampton daily summaries,Great tit,7.0
+2025-11-13,Southampton daily summaries,Great tit,6.0
+2025-11-14,Southampton daily summaries,Great tit,0.0
+2025-11-15,Southampton daily summaries,Great tit,1.0
+2025-10-05,Southampton daily summaries,Nuthatch,0.0
+2025-10-06,Southampton daily summaries,Nuthatch,0.0
+2025-10-07,Southampton daily summaries,Nuthatch,0.0
+2025-10-08,Southampton daily summaries,Nuthatch,0.0
+2025-10-09,Southampton daily summaries,Nuthatch,0.0
+2025-10-10,Southampton daily summaries,Nuthatch,0.0
+2025-10-11,Southampton daily summaries,Nuthatch,0.0
+2025-10-12,Southampton daily summaries,Nuthatch,0.0
+2025-10-13,Southampton daily summaries,Nuthatch,0.0
+2025-10-14,Southampton daily summaries,Nuthatch,0.0
+2025-10-15,Southampton daily summaries,Nuthatch,0.0
+2025-10-16,Southampton daily summaries,Nuthatch,0.0
+2025-10-17,Southampton daily summaries,Nuthatch,0.0
+2025-10-18,Southampton daily summaries,Nuthatch,0.0
+2025-10-19,Southampton daily summaries,Nuthatch,0.0
+2025-10-20,Southampton daily summaries,Nuthatch,0.0
+2025-10-21,Southampton daily summaries,Nuthatch,8.0
+2025-10-22,Southampton daily summaries,Nuthatch,38.0
+2025-10-23,Southampton daily summaries,Nuthatch,1.0
+2025-10-24,Southampton daily summaries,Nuthatch,47.0
+2025-10-25,Southampton daily summaries,Nuthatch,19.0
+2025-10-26,Southampton daily summaries,Nuthatch,40.0
+2025-10-27,Southampton daily summaries,Nuthatch,29.0
+2025-10-28,Southampton daily summaries,Nuthatch,35.0
+2025-10-29,Southampton daily summaries,Nuthatch,21.0
+2025-10-30,Southampton daily summaries,Nuthatch,30.0
+2025-10-31,Southampton daily summaries,Nuthatch,15.0
+2025-11-01,Southampton daily summaries,Nuthatch,22.0
+2025-11-02,Southampton daily summaries,Nuthatch,17.0
+2025-11-03,Southampton daily summaries,Nuthatch,20.0
+2025-11-04,Southampton daily summaries,Nuthatch,23.0
+2025-11-05,Southampton daily summaries,Nuthatch,5.0
+2025-11-06,Southampton daily summaries,Nuthatch,20.0
+2025-11-07,Southampton daily summaries,Nuthatch,10.0
+2025-11-08,Southampton daily summaries,Nuthatch,12.0
+2025-11-09,Southampton daily summaries,Nuthatch,19.0
+2025-11-10,Southampton daily summaries,Nuthatch,4.0
+2025-11-11,Southampton daily summaries,Nuthatch,2.0
+2025-11-12,Southampton daily summaries,Nuthatch,1.0
+2025-11-13,Southampton daily summaries,Nuthatch,1.0
+2025-11-14,Southampton daily summaries,Nuthatch,0.0
+2025-11-15,Southampton daily summaries,Nuthatch,0.0
+2025-10-05,Southampton daily summaries,Robin,0.0
+2025-10-06,Southampton daily summaries,Robin,0.0
+2025-10-07,Southampton daily summaries,Robin,0.0
+2025-10-08,Southampton daily summaries,Robin,1.0
+2025-10-09,Southampton daily summaries,Robin,10.0
+2025-10-10,Southampton daily summaries,Robin,7.0
+2025-10-11,Southampton daily summaries,Robin,18.0
+2025-10-12,Southampton daily summaries,Robin,12.0
+2025-10-13,Southampton daily summaries,Robin,11.0
+2025-10-14,Southampton daily summaries,Robin,19.0
+2025-10-15,Southampton daily summaries,Robin,9.0
+2025-10-16,Southampton daily summaries,Robin,5.0
+2025-10-17,Southampton daily summaries,Robin,5.0
+2025-10-18,Southampton daily summaries,Robin,13.0
+2025-10-19,Southampton daily summaries,Robin,6.0
+2025-10-20,Southampton daily summaries,Robin,5.0
+2025-10-21,Southampton daily summaries,Robin,6.0
+2025-10-22,Southampton daily summaries,Robin,7.0
+2025-10-23,Southampton daily summaries,Robin,13.0
+2025-10-24,Southampton daily summaries,Robin,6.0
+2025-10-25,Southampton daily summaries,Robin,15.0
+2025-10-26,Southampton daily summaries,Robin,6.0
+2025-10-27,Southampton daily summaries,Robin,10.0
+2025-10-28,Southampton daily summaries,Robin,7.0
+2025-10-29,Southampton daily summaries,Robin,17.0
+2025-10-30,Southampton daily summaries,Robin,12.0
+2025-10-31,Southampton daily summaries,Robin,12.0
+2025-11-01,Southampton daily summaries,Robin,14.0
+2025-11-02,Southampton daily summaries,Robin,15.0
+2025-11-03,Southampton daily summaries,Robin,15.0
+2025-11-04,Southampton daily summaries,Robin,13.0
+2025-11-05,Southampton daily summaries,Robin,18.0
+2025-11-06,Southampton daily summaries,Robin,11.0
+2025-11-07,Southampton daily summaries,Robin,18.0
+2025-11-08,Southampton daily summaries,Robin,22.0
+2025-11-09,Southampton daily summaries,Robin,14.0
+2025-11-10,Southampton daily summaries,Robin,11.0
+2025-11-11,Southampton daily summaries,Robin,4.0
+2025-11-12,Southampton daily summaries,Robin,1.0
+2025-11-13,Southampton daily summaries,Robin,1.0
+2025-11-14,Southampton daily summaries,Robin,1.0
+2025-11-15,Southampton daily summaries,Robin,1.0
+2025-10-05,Southampton daily summaries,Pigeon,0.0
+2025-10-06,Southampton daily summaries,Pigeon,0.0
+2025-10-07,Southampton daily summaries,Pigeon,0.0
+2025-10-08,Southampton daily summaries,Pigeon,0.0
+2025-10-09,Southampton daily summaries,Pigeon,0.0
+2025-10-10,Southampton daily summaries,Pigeon,0.0
+2025-10-11,Southampton daily summaries,Pigeon,0.0
+2025-10-12,Southampton daily summaries,Pigeon,0.0
+2025-10-13,Southampton daily summaries,Pigeon,0.0
+2025-10-14,Southampton daily summaries,Pigeon,4.0
+2025-10-15,Southampton daily summaries,Pigeon,3.0
+2025-10-16,Southampton daily summaries,Pigeon,9.0
+2025-10-17,Southampton daily summaries,Pigeon,6.0
+2025-10-18,Southampton daily summaries,Pigeon,4.0
+2025-10-19,Southampton daily summaries,Pigeon,1.0
+2025-10-20,Southampton daily summaries,Pigeon,8.0
+2025-10-21,Southampton daily summaries,Pigeon,8.0
+2025-10-22,Southampton daily summaries,Pigeon,7.0
+2025-10-23,Southampton daily summaries,Pigeon,1.0
+2025-10-24,Southampton daily summaries,Pigeon,8.0
+2025-10-25,Southampton daily summaries,Pigeon,5.0
+2025-10-26,Southampton daily summaries,Pigeon,8.0
+2025-10-27,Southampton daily summaries,Pigeon,13.0
+2025-10-28,Southampton daily summaries,Pigeon,18.0
+2025-10-29,Southampton daily summaries,Pigeon,19.0
+2025-10-30,Southampton daily summaries,Pigeon,16.0
+2025-10-31,Southampton daily summaries,Pigeon,17.0
+2025-11-01,Southampton daily summaries,Pigeon,25.0
+2025-11-02,Southampton daily summaries,Pigeon,37.0
+2025-11-03,Southampton daily summaries,Pigeon,11.0
+2025-11-04,Southampton daily summaries,Pigeon,13.0
+2025-11-05,Southampton daily summaries,Pigeon,22.0
+2025-11-06,Southampton daily summaries,Pigeon,9.0
+2025-11-07,Southampton daily summaries,Pigeon,5.0
+2025-11-08,Southampton daily summaries,Pigeon,15.0
+2025-11-09,Southampton daily summaries,Pigeon,8.0
+2025-11-10,Southampton daily summaries,Pigeon,9.0
+2025-11-11,Southampton daily summaries,Pigeon,7.0
+2025-11-12,Southampton daily summaries,Pigeon,1.0
+2025-11-13,Southampton daily summaries,Pigeon,3.0
+2025-11-14,Southampton daily summaries,Pigeon,0.0
+2025-11-15,Southampton daily summaries,Pigeon,1.0
+2025-10-05,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,18.0
+2025-10-05,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,1.0
+2025-10-06,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,51.0
+2025-10-06,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,8.0
+2025-10-06,"Jacksonville, FL 32259 Daily Su",Gray Catbird,1.0
+2025-10-06,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,5.0
+2025-10-07,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,39.0
+2025-10-07,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,22.0
+2025-10-07,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,28.0
+2025-10-07,"Jacksonville, FL 32259 Daily Su",Carolina Wren,2.0
+2025-10-08,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,49.0
+2025-10-08,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,61.0
+2025-10-08,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,28.0
+2025-10-09,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,77.0
+2025-10-09,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,3.0
+2025-10-09,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,22.0
+2025-10-10,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,86.0
+2025-10-10,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,87.0
+2025-10-10,"Jacksonville, FL 32259 Daily Su",Carolina Wren,11.0
+2025-10-10,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,127.0
+2025-10-11,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,124.0
+2025-10-11,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,117.0
+2025-10-11,"Jacksonville, FL 32259 Daily Su",Carolina Wren,7.0
+2025-10-11,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,126.0
+2025-10-11,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,1.0
+2025-10-12,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,116.0
+2025-10-12,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,59.0
+2025-10-12,"Jacksonville, FL 32259 Daily Su",Carolina Wren,12.0
+2025-10-12,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,53.0
+2025-10-12,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,1.0
+2025-10-12,"Jacksonville, FL 32259 Daily Su",Common Ground Dove,1.0
+2025-10-13,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,71.0
+2025-10-13,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,46.0
+2025-10-13,"Jacksonville, FL 32259 Daily Su",Carolina Wren,8.0
+2025-10-13,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,44.0
+2025-10-13,"Jacksonville, FL 32259 Daily Su",Common Ground Dove,14.0
+2025-10-14,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,67.0
+2025-10-14,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,37.0
+2025-10-14,"Jacksonville, FL 32259 Daily Su",Carolina Wren,3.0
+2025-10-14,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,34.0
+2025-10-14,"Jacksonville, FL 32259 Daily Su",Common Ground Dove,15.0
+2025-10-15,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,47.0
+2025-10-15,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,27.0
+2025-10-15,"Jacksonville, FL 32259 Daily Su",Carolina Wren,3.0
+2025-10-15,"Jacksonville, FL 32259 Daily Su",Common Ground Dove,25.0
+2025-10-15,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,26.0
+2025-10-16,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,67.0
+2025-10-16,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,26.0
+2025-10-16,"Jacksonville, FL 32259 Daily Su",Carolina Wren,8.0
+2025-10-16,"Jacksonville, FL 32259 Daily Su",Common Ground Dove,16.0
+2025-10-16,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,15.0
+2025-10-17,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,56.0
+2025-10-17,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,26.0
+2025-10-17,"Jacksonville, FL 32259 Daily Su",Carolina Wren,12.0
+2025-10-17,"Jacksonville, FL 32259 Daily Su",Common Ground Dove,13.0
+2025-10-17,"Jacksonville, FL 32259 Daily Su",Mourning Dove,19.0
+2025-10-17,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,10.0
+2025-10-18,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,25.0
+2025-10-18,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,6.0
+2025-10-18,"Jacksonville, FL 32259 Daily Su",Carolina Wren,11.0
+2025-10-18,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,18.0
+2025-10-18,"Jacksonville, FL 32259 Daily Su",Mourning Dove,4.0
+2025-10-19,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,56.0
+2025-10-19,"Jacksonville, FL 32259 Daily Su",Carolina Wren,17.0
+2025-10-19,"Jacksonville, FL 32259 Daily Su",Mourning Dove,12.0
+2025-10-19,"Jacksonville, FL 32259 Daily Su",Common Ground Dove,11.0
+2025-10-20,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,38.0
+2025-10-20,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,11.0
+2025-10-20,"Jacksonville, FL 32259 Daily Su",Carolina Wren,15.0
+2025-10-20,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,10.0
+2025-10-20,"Jacksonville, FL 32259 Daily Su",Common Ground Dove,14.0
+2025-10-20,"Jacksonville, FL 32259 Daily Su",Mourning Dove,14.0
+2025-10-21,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,47.0
+2025-10-21,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,4.0
+2025-10-21,"Jacksonville, FL 32259 Daily Su",Carolina Wren,36.0
+2025-10-21,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,10.0
+2025-10-21,"Jacksonville, FL 32259 Daily Su",Mourning Dove,36.0
+2025-10-22,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,55.0
+2025-10-22,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,1.0
+2025-10-22,"Jacksonville, FL 32259 Daily Su",Carolina Wren,10.0
+2025-10-22,"Jacksonville, FL 32259 Daily Su",Mourning Dove,64.0
+2025-10-23,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,64.0
+2025-10-23,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,72.0
+2025-10-23,"Jacksonville, FL 32259 Daily Su",Carolina Wren,15.0
+2025-10-23,"Jacksonville, FL 32259 Daily Su",Mourning Dove,162.0
+2025-10-23,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,4.0
+2025-10-23,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,81.0
+2025-10-24,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,40.0
+2025-10-24,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,19.0
+2025-10-24,"Jacksonville, FL 32259 Daily Su",Carolina Wren,10.0
+2025-10-24,"Jacksonville, FL 32259 Daily Su",Mourning Dove,106.0
+2025-10-24,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,22.0
+2025-10-25,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,30.0
+2025-10-25,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,26.0
+2025-10-25,"Jacksonville, FL 32259 Daily Su",Carolina Wren,3.0
+2025-10-25,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,16.0
+2025-10-25,"Jacksonville, FL 32259 Daily Su",Mourning Dove,97.0
+2025-10-26,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,44.0
+2025-10-26,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,4.0
+2025-10-26,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,2.0
+2025-10-26,"Jacksonville, FL 32259 Daily Su",Mourning Dove,83.0
+2025-10-27,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,55.0
+2025-10-27,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,47.0
+2025-10-27,"Jacksonville, FL 32259 Daily Su",Carolina Wren,12.0
+2025-10-27,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,32.0
+2025-10-27,"Jacksonville, FL 32259 Daily Su",Mourning Dove,129.0
+2025-10-28,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,25.0
+2025-10-28,"Jacksonville, FL 32259 Daily Su",Mourning Dove,35.0
+2025-10-28,"Jacksonville, FL 32259 Daily Su",Carolina Wren,7.0
+2025-10-28,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,4.0
+2025-10-29,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,34.0
+2025-10-29,"Jacksonville, FL 32259 Daily Su",Mourning Dove,110.0
+2025-10-29,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,23.0
+2025-10-29,"Jacksonville, FL 32259 Daily Su",Carolina Wren,1.0
+2025-10-29,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,28.0
+2025-10-30,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,24.0
+2025-10-30,"Jacksonville, FL 32259 Daily Su",Mourning Dove,147.0
+2025-10-30,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,7.0
+2025-10-30,"Jacksonville, FL 32259 Daily Su",Carolina Wren,4.0
+2025-10-30,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,0.0
+2025-10-31,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,43.0
+2025-10-31,"Jacksonville, FL 32259 Daily Su",Mourning Dove,189.0
+2025-10-31,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,18.0
+2025-10-31,"Jacksonville, FL 32259 Daily Su",Carolina Wren,3.0
+2025-10-31,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,6.0
+2025-11-01,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,18.0
+2025-11-01,"Jacksonville, FL 32259 Daily Su",Mourning Dove,117.0
+2025-11-01,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,5.0
+2025-11-01,"Jacksonville, FL 32259 Daily Su",Carolina Wren,11.0
+2025-11-01,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,6.0
+2025-11-02,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,7.0
+2025-11-02,"Jacksonville, FL 32259 Daily Su",Mourning Dove,38.0
+2025-11-02,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,4.0
+2025-11-02,"Jacksonville, FL 32259 Daily Su",Carolina Wren,2.0
+2025-11-03,"Jacksonville, FL 32259 Daily Su",Mourning Dove,10.0
+2025-11-03,"Jacksonville, FL 32259 Daily Su",Carolina Wren,6.0
+2025-11-03,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,1.0
+2025-11-04,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,3.0
+2025-11-05,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,1.0
+2025-11-05,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,1.0
+2025-11-05,"Jacksonville, FL 32259 Daily Su",Carolina Wren,2.0
+2025-11-05,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,2.0
+2025-11-06,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,1.0
+2025-11-06,"Jacksonville, FL 32259 Daily Su",Carolina Wren,3.0
+2025-11-06,"Jacksonville, FL 32259 Daily Su",Mourning Dove,1.0
+2025-11-06,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,2.0
+2025-11-07,"Jacksonville, FL 32259 Daily Su",Mourning Dove,4.0
+2025-11-07,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,3.0
+2025-11-08,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,1.0
+2025-11-08,"Jacksonville, FL 32259 Daily Su",Mourning Dove,1.0
+2025-11-09,"Jacksonville, FL 32259 Daily Su",Carolina Wren,1.0
+2025-11-09,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,1.0
+2025-11-10,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,1.0
+2025-11-12,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,1.0
+2025-11-13,"Jacksonville, FL 32259 Daily Su",Mourning Dove,1.0
+2025-11-14,"Jacksonville, FL 32259 Daily Su",Carolina Wren,2.0
+2025-11-15,"Jacksonville, FL 32259 Daily Su",Mourning Dove,1.0
+2025-09-16,"Essex Fells, NJ 07021 Daily Sum",,0.0
+2025-09-17,"Essex Fells, NJ 07021 Daily Sum",,0.0
+2025-09-18,"Essex Fells, NJ 07021 Daily Sum",,0.0
+2025-09-19,"Essex Fells, NJ 07021 Daily Sum",,0.0
+2025-09-20,"Essex Fells, NJ 07021 Daily Sum",,0.0
+2025-09-21,"Essex Fells, NJ 07021 Daily Sum",,0.0
+2025-09-22,"Essex Fells, NJ 07021 Daily Sum",,0.0
+2025-09-23,"Essex Fells, NJ 07021 Daily Sum",,0.0
+2025-09-24,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,15.0
+2025-09-25,"Essex Fells, NJ 07021 Daily Sum",,0.0
+2025-09-26,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,5.0
+2025-09-26,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,21.0
+2025-09-26,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,2.0
+2025-09-27,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,15.0
+2025-09-28,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,2.0
+2025-09-28,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,15.0
+2025-09-29,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,10.0
+2025-09-30,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,12.0
+2025-09-30,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,5.0
+2025-09-30,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,3.0
+2025-10-01,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,2.0
+2025-10-01,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,18.0
+2025-10-02,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,4.0
+2025-10-02,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,23.0
+2025-10-02,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,13.0
+2025-10-03,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,20.0
+2025-10-03,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,4.0
+2025-10-04,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,2.0
+2025-10-04,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,24.0
+2025-10-04,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,1.0
+2025-10-05,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,5.0
+2025-10-05,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,23.0
+2025-10-06,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,28.0
+2025-10-07,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,24.0
+2025-10-07,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,1.0
+2025-10-08,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,26.0
+2025-10-09,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,40.0
+2025-10-10,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,38.0
+2025-10-10,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,1.0
+2025-10-11,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,55.0
+2025-10-11,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,3.0
+2025-10-12,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,57.0
+2025-10-12,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,6.0
+2025-10-12,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,12.0
+2025-10-12,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,1.0
+2025-10-13,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,55.0
+2025-10-13,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,23.0
+2025-10-13,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,7.0
+2025-10-14,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,29.0
+2025-10-14,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,2.0
+2025-10-14,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,2.0
+2025-10-15,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,38.0
+2025-10-15,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,2.0
+2025-10-15,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,4.0
+2025-10-16,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,26.0
+2025-10-16,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,9.0
+2025-10-17,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,19.0
+2025-10-17,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,10.0
+2025-10-18,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,44.0
+2025-10-18,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,6.0
+2025-10-19,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,37.0
+2025-10-19,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,11.0
+2025-10-20,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,31.0
+2025-10-20,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,6.0
+2025-10-21,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,45.0
+2025-10-21,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,24.0
+2025-10-22,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,37.0
+2025-10-22,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,18.0
+2025-10-23,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,32.0
+2025-10-23,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,36.0
+2025-10-23,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,6.0
+2025-10-23,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,5.0
+2025-10-24,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,35.0
+2025-10-24,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,15.0
+2025-10-25,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,56.0
+2025-10-25,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,25.0
+2025-10-25,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,101.0
+2025-10-25,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,49.0
+2025-10-25,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,2.0
+2025-10-25,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,8.0
+2025-10-26,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,10.0
+2025-10-26,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,7.0
+2025-10-26,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,7.0
+2025-10-26,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,1.0
+2025-10-26,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,1.0
+2025-10-27,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,4.0
+2025-10-27,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,1.0
+2025-10-27,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,2.0
+2025-10-28,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,2.0
+2025-10-29,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,1.0
+2025-10-29,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,2.0
+2025-10-30,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,2.0
+2025-10-31,"Essex Fells, NJ 07021 Daily Sum",,
+2025-11-01,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,1.0
+2025-11-02,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,2.0
+2025-11-03,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,2.0
+2025-11-03,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,1.0
+2025-11-04,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,1.0
+2025-11-05,"Essex Fells, NJ 07021 Daily Sum",,
+2025-11-06,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,53.0
+2025-11-06,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,25.0
+2025-11-07,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,27.0
+2025-11-07,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,24.0
+2025-11-07,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,2.0
+2025-11-08,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,83.0
+2025-11-08,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,27.0
+2025-11-08,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,1.0
+2025-11-08,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,22.0
+2025-11-09,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,23.0
+2025-11-09,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,43.0
+2025-11-09,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,2.0
+2025-11-09,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,1.0
+2025-11-09,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,29.0
+2025-11-10,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,56.0
+2025-11-10,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,53.0
+2025-11-10,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,31.0
+2025-11-10,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,13.0
+2025-11-10,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,1.0
+2025-11-10,"Essex Fells, NJ 07021 Daily Sum",House Finch,8.0
+2025-11-11,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,48.0
+2025-11-11,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,36.0
+2025-11-11,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,74.0
+2025-11-11,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,88.0
+2025-11-11,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,2.0
+2025-11-11,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,41.0
+2025-11-11,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,25.0
+2025-11-11,"Essex Fells, NJ 07021 Daily Sum",House Finch,20.0
+2025-11-12,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,16.0
+2025-11-12,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,53.0
+2025-11-12,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,75.0
+2025-11-12,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,52.0
+2025-11-12,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,7.0
+2025-11-12,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,47.0
+2025-11-12,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,41.0
+2025-11-12,"Essex Fells, NJ 07021 Daily Sum",House Finch,8.0
+2025-11-12,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,2.0
+2025-11-13,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,72.0
+2025-11-13,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,66.0
+2025-11-13,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,58.0
+2025-11-13,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,10.0
+2025-11-13,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,58.0
+2025-11-13,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,52.0
+2025-11-13,"Essex Fells, NJ 07021 Daily Sum",House Finch,12.0
+2025-11-13,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,6.0
+2025-11-14,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,37.0
+2025-11-14,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,30.0
+2025-11-14,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,35.0
+2025-11-14,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,1.0
+2025-11-14,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,51.0
+2025-11-14,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,65.0
+2025-11-14,"Essex Fells, NJ 07021 Daily Sum",House Finch,9.0
+2025-11-14,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,6.0
+2025-11-14,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,3.0
+2025-11-14,"Essex Fells, NJ 07021 Daily Sum",Mourning Dove,13.0
