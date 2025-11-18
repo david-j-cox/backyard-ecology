@@ -377,8 +377,20 @@ def main():
             "OPENWEATHER_API_KEY environment variable."
         )
 
-    hourly_path = Path(args.hourly_output)
-    sunrise_path = Path(args.sunrise_output)
+    # Resolve paths relative to script location (repo root) if they're default paths
+    script_dir = Path(__file__).parent
+    repo_root = script_dir.parent
+    
+    # If using default paths, resolve relative to repo root
+    if args.hourly_output == "data/hourly_weather.csv":
+        hourly_path = repo_root / "data" / "hourly_weather.csv"
+    else:
+        hourly_path = Path(args.hourly_output)
+    
+    if args.sunrise_output == "data/sunrise_sunset.csv":
+        sunrise_path = repo_root / "data" / "sunrise_sunset.csv"
+    else:
+        sunrise_path = Path(args.sunrise_output)
 
     hourly_exists = hourly_path.exists()
     sunrise_exists = sunrise_path.exists()
@@ -440,7 +452,20 @@ def main():
                 print(f"  Skipping {loc_name}: start datetime ({check_dt.isoformat()}) is after end date ({end_date})")
                 continue
             
+            # Track current day to notify when a new day starts
+            current_day = None
             for dt_utc in generate_hourly_utc(loc_start_date, end_date, start_dt_override=loc_start_dt_override):
+                # Check if we've moved to a new day
+                day_utc = dt_utc.date()
+                if current_day is None:
+                    # First iteration - print the starting day
+                    current_day = day_utc
+                    print(f"  Processing day: {current_day.isoformat()}")
+                elif day_utc != current_day:
+                    # New day started
+                    current_day = day_utc
+                    print(f"  Processing day: {current_day.isoformat()}")
+                
                 unix_ts = int(dt_utc.timestamp())
                 payload = fetch_observation(
                     session=session,
