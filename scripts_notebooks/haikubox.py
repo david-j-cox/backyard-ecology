@@ -34,7 +34,8 @@ HAIKUBOX_API_BASE = "https://api.haikubox.com"
 
 # List of Haikubox serial codes in Duval/St. Johns County area
 HAIKUBOX_SERIAL_CODES = [
-    "48CA43335FD4", 
+    "48CA43335FD4",
+    "28372F881B98"
 ]
 
 # Date window (inclusive start, up to today by default)
