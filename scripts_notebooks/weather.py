@@ -87,10 +87,11 @@ def get_latest_timestamps_by_location(hourly_path: Path):
     return latest_by_location
 
 
-def generate_hourly_utc(start_date: date, end_date: date, start_dt_override: datetime = None):
+def generate_hourly_utc(start_date: date, end_date: date, start_dt_override: datetime = None, end_dt_override: datetime = None):
     """
     Yield UTC datetimes at hourly intervals from start_date 00:00 (or start_dt_override if provided)
-    through end_date 23:00, inclusive.
+    through end_date 23:00 (or end_dt_override if provided), inclusive.
+    Stops at the earliest of end_date 23:00 or end_dt_override.
     """
     if start_dt_override is not None:
         start_dt = start_dt_override
@@ -100,7 +101,16 @@ def generate_hourly_utc(start_date: date, end_date: date, start_dt_override: dat
     else:
         start_dt = datetime.combine(start_date, dtime(0, 0, tzinfo=timezone.utc))
     
-    end_dt = datetime.combine(end_date, dtime(23, 0, tzinfo=timezone.utc))
+    # Calculate the maximum end datetime based on end_date
+    end_dt_max = datetime.combine(end_date, dtime(23, 0, tzinfo=timezone.utc))
+    
+    # Use end_dt_override if provided, otherwise use end_date 23:00
+    # Always use the earlier of end_dt_override and end_dt_max to avoid future forecasts
+    if end_dt_override is not None:
+        end_dt_override_rounded = end_dt_override.replace(minute=0, second=0, microsecond=0)
+        end_dt = min(end_dt_override_rounded, end_dt_max)
+    else:
+        end_dt = end_dt_max
 
     current = start_dt
     while current <= end_dt:
@@ -413,6 +423,10 @@ def main():
     hourly_path.parent.mkdir(parents=True, exist_ok=True)
     sunrise_path.parent.mkdir(parents=True, exist_ok=True)
 
+    # Calculate current UTC time rounded down to the nearest hour to avoid fetching future forecasts
+    now_utc = datetime.now(timezone.utc)
+    max_end_dt = now_utc.replace(minute=0, second=0, microsecond=0)
+
     with hourly_path.open("a", newline="") as hf, \
          sunrise_path.open("a", newline="") as sf, \
          requests.Session() as session:
@@ -445,16 +459,20 @@ def main():
                 loc_start_dt_override = None
                 print(f"  Starting from {loc_start_date} (no existing data found)")
             
-            # Only process if start datetime is before or equal to end date
-            end_dt = datetime.combine(end_date, dtime(23, 0, tzinfo=timezone.utc))
+            # Only process if start datetime is before or equal to max_end_dt (current time)
             check_dt = loc_start_dt_override if loc_start_dt_override else datetime.combine(loc_start_date, dtime(0, 0, tzinfo=timezone.utc))
-            if check_dt > end_dt:
-                print(f"  Skipping {loc_name}: start datetime ({check_dt.isoformat()}) is after end date ({end_date})")
+            if check_dt > max_end_dt:
+                print(f"  Skipping {loc_name}: start datetime ({check_dt.isoformat()}) is after current time ({max_end_dt.isoformat()})")
                 continue
             
             # Track current day to notify when a new day starts
             current_day = None
-            for dt_utc in generate_hourly_utc(loc_start_date, end_date, start_dt_override=loc_start_dt_override):
+            for dt_utc in generate_hourly_utc(loc_start_date, end_date, start_dt_override=loc_start_dt_override, end_dt_override=max_end_dt):
+                # Safety check: skip any hours that are in the future (shouldn't happen, but be defensive)
+                if dt_utc > max_end_dt:
+                    print(f"  Skipping future hour: {dt_utc.isoformat()} (current time: {max_end_dt.isoformat()})")
+                    break
+                
                 # Check if we've moved to a new day
                 day_utc = dt_utc.date()
                 if current_day is None:
