@@ -6335,6 +6335,11 @@ Date,Bird,Time,LeftPecks,RightPecks,LeftSeed,RightSeed,source_sheet,Notes,CoolDo
 2025-11-19,Robin,07:08:00,,,,,southampton_uk,,
 2025-11-19,Nuthatch,09:30:00,,,,,southampton_uk,,
 2025-11-19,Great tit,15:24:00,,,,,southampton_uk,,
+2025-11-20,Robin,06:59:00,,,,,southampton_uk,,
+2025-11-20,Nuthatch,10:43:00,,,,,southampton_uk,,
+2025-11-20,Nuthatch,10:56:00,,,,,southampton_uk,,
+2025-11-20,Pigeon,13:29:00,,,,,southampton_uk,,
+2025-11-20,Robin,16:25:00,,,,,southampton_uk,,
 2025-10-05,Northern Cardinal,15:45:00,0.0,5.0,Special Finch Food,Golden Safflower,jacksonville_fl_32259,,
 2025-10-05,Northern Cardinal,15:47:00,1.0,1.0,Special Finch Food,Golden Safflower,jacksonville_fl_32259,,
 2025-10-05,Northern Cardinal,16:13:00,0.0,3.0,Special Finch Food,Golden Safflower,jacksonville_fl_32259,,
@@ -11345,6 +11350,79 @@ Date,Bird,Time,LeftPecks,RightPecks,LeftSeed,RightSeed,source_sheet,Notes,CoolDo
 2025-11-19,Northern Cardinal,17:41:00,0.0,3.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
 2025-11-19,Northern Cardinal,17:42:00,0.0,3.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
 2025-11-19,Northern Cardinal,17:42:00,0.0,1.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,09:02:00,0.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,09:04:00,11.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,09:05:00,0.0,8.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,09:07:00,0.0,2.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,09:08:00,0.0,9.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,09:09:00,0.0,6.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,09:11:00,0.0,9.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Carolina Wren,09:29:00,0.0,9.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Carolina Wren,09:29:00,0.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Carolina Wren,09:33:00,0.0,6.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:00:00,0.0,2.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:02:00,0.0,10.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:03:00,0.0,15.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:05:00,0.0,15.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:06:00,0.0,3.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:08:00,0.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Northern Cardinal,10:08:00,3.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Northern Cardinal,10:09:00,5.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Carolina Wren,10:11:00,0.0,8.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Carolina Wren,10:35:00,3.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:35:00,0.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:36:00,0.0,13.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:38:00,0.0,14.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:39:00,13.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:40:00,0.0,17.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:42:00,0.0,2.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:43:00,0.0,14.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:45:00,0.0,16.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:46:00,0.0,15.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:48:00,0.0,15.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:49:00,0.0,17.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:50:00,0.0,21.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:52:00,0.0,15.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:53:00,0.0,5.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:55:00,0.0,8.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Carolina Wren,10:55:00,0.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:56:00,0.0,10.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:57:00,0.0,2.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,10:59:00,0.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,12:46:00,0.0,4.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,12:48:00,0.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:47:00,0.0,4.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Carolina Chickadee,13:47:00,1.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:48:00,0.0,2.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:48:00,0.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:49:00,0.0,5.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:49:00,9.0,4.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:51:00,0.0,15.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:52:00,0.0,17.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:54:00,0.0,15.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:55:00,0.0,17.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:56:00,0.0,13.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:58:00,4.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,13:59:00,14.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Tufted Titmouse,13:59:00,0.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,14:01:00,14.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,14:02:00,0.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Tufted Titmouse,14:04:00,1.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Tufted Titmouse,14:04:00,0.0,2.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Tufted Titmouse,14:05:00,2.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,14:39:00,0.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,14:40:00,6.0,5.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,14:41:00,0.0,6.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,14:43:00,0.0,11.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Mourning Dove,14:44:00,0.0,13.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Northern Cardinal,17:35:00,0.0,1.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Northern Cardinal,17:36:00,0.0,2.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Northern Cardinal,17:37:00,0.0,9.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Northern Cardinal,17:39:00,0.0,12.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Northern Cardinal,17:40:00,0.0,7.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Northern Cardinal,17:43:00,2.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Northern Cardinal,17:44:00,3.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
+2025-11-20,Northern Cardinal,17:46:00,2.0,0.0,Golden Safflower,Special Finch Food,jacksonville_fl_32259,,
 2025-09-16,,,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
 2025-09-17,,,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
 2025-09-18,,,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
@@ -11368,6 +11446,7 @@ Date,Bird,Time,LeftPecks,RightPecks,LeftSeed,RightSeed,source_sheet,Notes,CoolDo
 2025-09-24,Black-capped Chickadee,11:21:00,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
 2025-09-24,Black-capped Chickadee,11:23:00,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
 2025-09-24,Black-capped Chickadee,11:43:00,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
+2025-09-25,,,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
 2025-09-26,Black-capped Chickadee,09:35:00,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
 2025-09-26,Black-capped Chickadee,10:50:00,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
 2025-09-26,Black-capped Chickadee,10:52:00,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
@@ -16194,3 +16273,531 @@ Date,Bird,Time,LeftPecks,RightPecks,LeftSeed,RightSeed,source_sheet,Notes,CoolDo
 2025-11-19,Northern Cardinal,16:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
 2025-11-19,Northern Cardinal,16:25:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
 2025-11-19,Northern Cardinal,16:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,06:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,06:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,06:59:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:00:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:00:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,07:01:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:01:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:03:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:04:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:04:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:04:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:07:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:11:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:12:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:14:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:15:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:15:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:17:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:17:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:18:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:20:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,07:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:28:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:28:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,07:30:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:30:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,07:32:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:32:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,07:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,07:35:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,07:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,07:39:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,07:39:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,07:39:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,07:40:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,07:47:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,07:48:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,07:50:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:50:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,07:51:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,07:51:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,08:18:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,08:18:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,08:20:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,08:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Dark-eyed Junco,08:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,08:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,08:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,08:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,08:28:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,08:28:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,08:30:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,08:32:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,08:32:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,08:32:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,08:32:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,08:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,08:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,08:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,08:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,08:35:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,08:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,08:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,08:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,08:39:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,08:39:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,08:39:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,08:41:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,08:41:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,08:43:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,08:44:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,08:46:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:46:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,08:47:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,08:47:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,08:47:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,08:49:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,08:49:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:49:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Mourning Dove,08:50:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Mourning Dove,08:51:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,08:53:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,08:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,08:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,08:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,08:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:56:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,08:57:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,08:59:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,09:01:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,09:01:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,09:04:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,09:05:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:05:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:07:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,09:07:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,09:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,09:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:11:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:13:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:14:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:14:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:16:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:17:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,09:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:30:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:30:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:30:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:31:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:31:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:31:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:31:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:35:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:35:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,09:35:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:35:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,09:35:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:35:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,09:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:39:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:40:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,09:51:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,09:51:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,09:53:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,09:53:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:53:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,09:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,09:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,09:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,09:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,09:56:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,09:56:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,09:56:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,09:57:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,09:57:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,09:57:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,09:59:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,09:59:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:00:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:00:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:00:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:02:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:02:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:02:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:03:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:03:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Dark-eyed Junco,10:03:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Dark-eyed Junco,10:05:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Dark-eyed Junco,10:05:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Dark-eyed Junco,10:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:09:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,10:11:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,10:11:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,10:12:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:14:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,10:17:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:18:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,10:18:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,10:20:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,10:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:22:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,10:25:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,10:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,10:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,10:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,10:29:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:29:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,10:29:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,10:30:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,10:32:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:32:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,10:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,10:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,10:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,10:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,10:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,10:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:40:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:40:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:40:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,10:42:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:42:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:42:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:42:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,10:43:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,10:43:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,10:43:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:44:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:44:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,10:44:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:48:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:48:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,10:49:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,10:49:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:49:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:49:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:50:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,10:50:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:50:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:50:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,10:52:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,10:52:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:52:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:53:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:53:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:53:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,10:56:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,10:56:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,10:57:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,10:58:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,10:58:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:00:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:00:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,11:00:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,11:01:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:01:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:03:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:04:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:07:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:11:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:11:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:11:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:13:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:13:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:14:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:15:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:19:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:19:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:20:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,11:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,11:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,11:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,11:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,11:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:27:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:29:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:30:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:32:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:32:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,11:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,11:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,11:40:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:40:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:41:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:41:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:43:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:43:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:44:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:44:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:44:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:45:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:45:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:45:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:47:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:47:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,11:48:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,11:49:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:49:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:49:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:51:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,11:52:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:52:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,11:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,11:55:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,11:57:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:57:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,11:58:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,11:58:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,11:58:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,11:58:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:00:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:00:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:01:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:01:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,12:03:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:03:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,12:03:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,12:03:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:04:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:04:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:04:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,12:05:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:05:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,12:05:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,12:07:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,12:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,12:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,12:11:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:14:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Black-capped Chickadee,12:15:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,12:17:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,12:18:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:19:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,12:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:22:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,12:22:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:23:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,12:26:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,12:28:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,12:28:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,12:28:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,12:28:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,12:29:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,12:30:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:32:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,12:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,12:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,12:39:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,12:41:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:43:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:44:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:44:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:44:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:46:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:47:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:47:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:48:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:48:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:51:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:52:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,12:52:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:54:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,12:55:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,12:55:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,12:56:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,12:58:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,12:58:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,12:58:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,12:59:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,12:59:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,13:00:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Mourning Dove,13:03:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Mourning Dove,13:04:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,13:04:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Mourning Dove,13:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,13:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Mourning Dove,13:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Mourning Dove,13:09:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Mourning Dove,13:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Mourning Dove,13:12:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Mourning Dove,13:13:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:14:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:14:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:14:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,13:14:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:16:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,13:16:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:16:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,13:17:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:20:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:20:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,13:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,13:22:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:22:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:24:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,13:25:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,13:25:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,13:31:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,13:31:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,13:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,13:51:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,13:53:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,13:55:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,13:57:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,13:57:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,13:58:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,14:05:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,14:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,14:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,14:06:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,14:07:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,14:09:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,14:09:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,14:09:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,14:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,14:10:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,14:11:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,14:13:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,14:14:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,14:15:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,14:15:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,14:17:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,14:17:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,14:18:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,14:18:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,14:19:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,14:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,14:21:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,14:22:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Blue Jay,14:28:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Northern Cardinal,14:31:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,14:33:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Downy Woodpecker,14:35:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,14:35:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,14:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,14:36:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,14:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Red-bellied Woodpecker,14:42:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,14:44:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,14:46:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,14:48:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,14:49:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Dark-eyed Junco,14:50:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Dark-eyed Junco,14:52:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,14:53:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,15:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Dark-eyed Junco,15:34:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,15:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,White-breasted Nuthatch,15:37:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,Tufted Titmouse,15:41:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,16:08:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,16:09:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,16:11:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-11-20,House Finch,16:12:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
