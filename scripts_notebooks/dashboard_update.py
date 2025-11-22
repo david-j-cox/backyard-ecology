@@ -136,6 +136,7 @@ def create_simple_dashboard():
         'heatmap_counts',
         'heatmap_proportions',
         'all_birds_bout_analysis',
+        'all_birds_bout_analysis_within_date',
         'individual_species_bout_analysis',
         'diversity_metrics'
     ]
