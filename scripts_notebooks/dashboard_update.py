@@ -140,6 +140,7 @@ def create_simple_dashboard():
         'species_cluster_visits_by_weather', 
         'visit_predict_from_weather',
         'all_birds_bout_analysis',
+        'all_birds_bout_seed_no_seed_separate',
         'all_birds_bout_analysis_within_date',
         'individual_species_bout_analysis',
         'diversity_metrics'
