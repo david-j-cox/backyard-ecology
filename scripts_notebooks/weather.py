@@ -37,6 +37,7 @@ LOCATIONS = [
     {"name": "Jacksonville, FL", "lat": 30.3501, "lon": -81.6035},
     {"name": "Essex Fells, NJ", "lat": 40.8308, "lon": -74.2831},
     {"name": "Southampton, UK", "lat": 50.9105, "lon": -1.4049},
+    {"name": "Auburn, AL", "lat": 32.6099, "lon": -85.4808},
 ]
 
 
