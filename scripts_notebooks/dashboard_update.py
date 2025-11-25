@@ -83,8 +83,8 @@ def create_simple_dashboard():
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            height: 100%;
+            justify-content: flex-start;
+            width: 100%;
         }}
         .plot-card h1 {{
             margin-top: 0;
@@ -95,12 +95,11 @@ def create_simple_dashboard():
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-grow: 1;
             width: 100%;
         }}
         .plot-card img {{
             width: 100%;
-            max-height: 800px;
+            max-height: 1500px;
             height: auto;
             border-radius: 5px;
             object-fit: contain;
