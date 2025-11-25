@@ -499,6 +499,12 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-23,"Jacksonville, FL 32259 Daily Su",Carolina Wren,18.0
 2025-11-23,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,37.0
 2025-11-23,"Jacksonville, FL 32259 Daily Su",Mourning Dove,72.0
+2025-11-24,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,38.0
+2025-11-24,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,3.0
+2025-11-24,"Jacksonville, FL 32259 Daily Su",Carolina Wren,25.0
+2025-11-24,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,22.0
+2025-11-24,"Jacksonville, FL 32259 Daily Su",Mourning Dove,121.0
+2025-11-24,"Jacksonville, FL 32259 Daily Su",Pine Warbler,2.0
 2025-09-16,"Essex Fells, NJ 07021 Daily Sum",,0.0
 2025-09-17,"Essex Fells, NJ 07021 Daily Sum",,0.0
 2025-09-18,"Essex Fells, NJ 07021 Daily Sum",,0.0
@@ -754,3 +760,327 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-23,"Essex Fells, NJ 07021 Daily Sum",Common Grackle,0.0
 2025-11-23,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
 2025-11-23,"Essex Fells, NJ 07021 Daily Sum",Red-breasted Nuthatch,1.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,1.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,1.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,5.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,1.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,2.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,7.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",House Finch,0.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,0.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,1.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",Mourning Dove,0.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",Common Grackle,0.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
+2025-11-24,"Essex Fells, NJ 07021 Daily Sum",Red-breasted Nuthatch,0.0
+2025-11-02,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,18.0
+2025-11-03,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,20.0
+2025-11-04,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,17.0
+2025-11-05,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,16.0
+2025-11-06,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,23.0
+2025-11-07,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,9.0
+2025-11-09,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,4.0
+2025-11-10,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,12.0
+2025-11-11,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,7.0
+2025-11-12,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,6.0
+2025-11-13,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,2.0
+2025-11-14,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,11.0
+2025-11-15,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,2.0
+2025-11-16,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,3.0
+2025-11-18,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,1.0
+2025-11-20,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,10.0
+2025-11-21,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,1.0
+2025-11-22,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,4.0
+2025-10-31,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
+2025-11-01,"Auburn, AL 36830 Daily Sum",Carolina Wren,2.0
+2025-11-02,"Auburn, AL 36830 Daily Sum",Carolina Wren,3.0
+2025-11-03,"Auburn, AL 36830 Daily Sum",Carolina Wren,2.0
+2025-11-04,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
+2025-11-05,"Auburn, AL 36830 Daily Sum",Carolina Wren,3.0
+2025-11-06,"Auburn, AL 36830 Daily Sum",Carolina Wren,3.0
+2025-11-07,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
+2025-11-09,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
+2025-11-10,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
+2025-11-14,"Auburn, AL 36830 Daily Sum",Carolina Wren,2.0
+2025-11-16,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
+2025-11-18,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
+2025-11-20,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
+2025-11-22,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
+2025-10-30,"Auburn, AL 36830 Daily Sum",Northern Cardinal,8.0
+2025-10-31,"Auburn, AL 36830 Daily Sum",Northern Cardinal,23.0
+2025-11-01,"Auburn, AL 36830 Daily Sum",Northern Cardinal,25.0
+2025-11-02,"Auburn, AL 36830 Daily Sum",Northern Cardinal,22.0
+2025-11-03,"Auburn, AL 36830 Daily Sum",Northern Cardinal,36.0
+2025-11-04,"Auburn, AL 36830 Daily Sum",Northern Cardinal,22.0
+2025-11-05,"Auburn, AL 36830 Daily Sum",Northern Cardinal,17.0
+2025-11-06,"Auburn, AL 36830 Daily Sum",Northern Cardinal,12.0
+2025-11-07,"Auburn, AL 36830 Daily Sum",Northern Cardinal,17.0
+2025-11-08,"Auburn, AL 36830 Daily Sum",Northern Cardinal,12.0
+2025-11-09,"Auburn, AL 36830 Daily Sum",Northern Cardinal,8.0
+2025-11-10,"Auburn, AL 36830 Daily Sum",Northern Cardinal,13.0
+2025-11-11,"Auburn, AL 36830 Daily Sum",Northern Cardinal,10.0
+2025-11-12,"Auburn, AL 36830 Daily Sum",Northern Cardinal,16.0
+2025-11-13,"Auburn, AL 36830 Daily Sum",Northern Cardinal,8.0
+2025-11-14,"Auburn, AL 36830 Daily Sum",Northern Cardinal,8.0
+2025-11-15,"Auburn, AL 36830 Daily Sum",Northern Cardinal,1.0
+2025-11-16,"Auburn, AL 36830 Daily Sum",Northern Cardinal,3.0
+2025-11-17,"Auburn, AL 36830 Daily Sum",Northern Cardinal,9.0
+2025-11-18,"Auburn, AL 36830 Daily Sum",Northern Cardinal,17.0
+2025-11-19,"Auburn, AL 36830 Daily Sum",Northern Cardinal,6.0
+2025-11-20,"Auburn, AL 36830 Daily Sum",Northern Cardinal,12.0
+2025-11-21,"Auburn, AL 36830 Daily Sum",Northern Cardinal,7.0
+2025-11-22,"Auburn, AL 36830 Daily Sum",Northern Cardinal,3.0
+2025-11-02,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
+2025-11-05,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
+2025-11-06,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
+2025-11-07,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
+2025-11-11,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
+2025-11-14,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
+2025-11-02,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,3.0
+2025-11-04,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,3.0
+2025-11-05,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,1.0
+2025-11-10,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,1.0
+2025-11-12,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,1.0
+2025-11-14,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,3.0
+2025-11-03,"Auburn, AL 36830 Daily Sum",House Finch,5.0
+2025-11-04,"Auburn, AL 36830 Daily Sum",House Finch,1.0
+2025-11-05,"Auburn, AL 36830 Daily Sum",House Finch,1.0
+2025-11-06,"Auburn, AL 36830 Daily Sum",House Finch,3.0
+2025-11-07,"Auburn, AL 36830 Daily Sum",House Finch,4.0
+2025-11-08,"Auburn, AL 36830 Daily Sum",House Finch,5.0
+2025-11-12,"Auburn, AL 36830 Daily Sum",House Finch,1.0
+2025-11-13,"Auburn, AL 36830 Daily Sum",House Finch,1.0
+2025-11-14,"Auburn, AL 36830 Daily Sum",House Finch,2.0
+2025-11-16,"Auburn, AL 36830 Daily Sum",House Finch,1.0
+2025-11-22,"Auburn, AL 36830 Daily Sum",House Finch,1.0
+2025-11-05,"Auburn, AL 36830 Daily Sum",Carolina Chickadee,2.0
+2025-11-06,"Auburn, AL 36830 Daily Sum",Carolina Chickadee,1.0
+2025-11-15,"Auburn, AL 36830 Daily Sum",Carolina Chickadee,1.0
+2025-11-22,"Auburn, AL 36830 Daily Sum",Carolina Chickadee,1.0
+2025-11-20,"Auburn, AL 36830 Daily Sum",Chipping Sparrow,1.0
+2025-11-02,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,3.0
+2025-11-04,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,6.0
+2025-11-05,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,2.0
+2025-11-06,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,2.0
+2025-11-09,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,1.0
+2025-11-10,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,1.0
+2025-11-12,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,1.0
+2025-11-14,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,3.0
+2025-11-20,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,1.0
+2025-11-22,"Auburn, AL 36830 Daily Sum",Northern Mockingbird,7.0
+2025-10-30,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-10-31,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-01,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-02,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-03,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-04,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-05,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-06,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-07,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-08,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-09,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-10,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-11,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-12,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-13,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-14,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,1.0
+2025-11-15,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-16,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-17,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-18,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-19,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-20,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-21,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-11-22,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
+2025-10-30,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-10-31,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-01,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-02,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-03,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-04,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-05,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-06,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-07,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-08,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-09,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-10,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-11,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-12,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-13,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-14,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-15,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-16,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-17,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-18,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-19,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-20,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-21,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-11-22,"Auburn, AL 36830 Daily Sum",Indigo Bunting,
+2025-10-30,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-10-31,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-01,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-02,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-03,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-04,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-05,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-06,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-07,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-08,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-09,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-10,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-11,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-12,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-13,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-14,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-15,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-16,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-17,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-18,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-19,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-20,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-21,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-11-22,"Auburn, AL 36830 Daily Sum",American Goldfinch,
+2025-10-30,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-10-31,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-01,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-02,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-03,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-04,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-05,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-06,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-07,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-08,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-09,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-10,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-11,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-12,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-13,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-14,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-15,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-16,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-17,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-18,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-19,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-20,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-21,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-11-22,"Auburn, AL 36830 Daily Sum",Brown Headed Cowbird,
+2025-10-30,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-10-31,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-01,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-02,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,1.0
+2025-11-03,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-04,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-05,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-06,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-07,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,1.0
+2025-11-08,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-09,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-10,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-11,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-12,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-13,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-14,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-15,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-16,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-17,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-18,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-19,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-20,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-21,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-22,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-10-30,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-10-31,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-01,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-02,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-03,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-04,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-05,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-06,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-07,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-08,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-09,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-10,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-11,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-12,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-13,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-14,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-15,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-16,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-17,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-18,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-19,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-20,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-21,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-11-22,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
+2025-10-30,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-10-31,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-01,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-02,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-03,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-04,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-05,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-06,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-07,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-08,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-09,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-10,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-11,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-12,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-13,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-14,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-15,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-16,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-17,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-18,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-19,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-20,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-21,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-11-22,"Auburn, AL 36830 Daily Sum",House Sparrow,
+2025-10-30,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-10-31,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-01,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-02,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-03,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-04,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-05,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-06,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-07,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-08,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-09,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-10,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-11,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-12,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-13,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-14,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-15,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-16,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-17,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-18,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-19,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-20,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-21,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-11-22,"Auburn, AL 36830 Daily Sum",Mourning Dove,
+2025-10-30,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-10-31,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-01,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-02,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-03,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-04,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-05,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-06,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-07,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-08,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-09,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-10,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-11,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-12,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-13,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-14,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-15,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-16,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-17,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-18,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-19,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-20,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-21,"Auburn, AL 36830 Daily Sum",Gray Catbird,
+2025-11-22,"Auburn, AL 36830 Daily Sum",Gray Catbird,1.0
