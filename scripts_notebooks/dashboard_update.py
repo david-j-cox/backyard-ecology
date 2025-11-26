@@ -142,7 +142,9 @@ def create_simple_dashboard():
         'all_birds_bout_seed_no_seed_separate',
         'all_birds_bout_analysis_within_date',
         'individual_species_bout_analysis',
-        'diversity_metrics'
+        'diversity_metrics', 
+        'seed_preference_by_bird', 
+        'peck_distribution_by_bird'
     ]
     
     # Create a lookup dictionary for plots by filename
