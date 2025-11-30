@@ -137,6 +137,7 @@ def create_simple_dashboard():
         'heatmap_proportions_sunrise_sunset',
         'prop_visits_wind_temp',
         'species_cluster_visits_by_weather', 
+        'cor_plot_weather_data', 
         'visit_predict_from_weather',
         'all_birds_bout_analysis',
         'all_birds_bout_seed_no_seed_separate',
