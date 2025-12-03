@@ -35,6 +35,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-07,Southampton daily summaries,Blue tit,31.0
 2025-11-08,Southampton daily summaries,Blue tit,74.0
 2025-11-09,Southampton daily summaries,Blue tit,69.0
+,Southampton daily summaries,Blue tit,
 2025-11-10,Southampton daily summaries,Blue tit,19.0
 2025-11-11,Southampton daily summaries,Blue tit,17.0
 2025-11-12,Southampton daily summaries,Blue tit,5.0
@@ -46,6 +47,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-18,Southampton daily summaries,Blue tit,1.0
 2025-11-19,Southampton daily summaries,Blue tit,0.0
 2025-11-20,Southampton daily summaries,Blue tit,0.0
+,Southampton daily summaries,Blue tit,
 2025-11-21,Southampton daily summaries,Blue tit,57.0
 2025-11-22,Southampton daily summaries,Blue tit,43.0
 2025-11-23,Southampton daily summaries,Blue tit,38.0
@@ -90,6 +92,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-07,Southampton daily summaries,Coal tit,15.0
 2025-11-08,Southampton daily summaries,Coal tit,22.0
 2025-11-09,Southampton daily summaries,Coal tit,19.0
+,Southampton daily summaries,Coal tit,
 2025-11-10,Southampton daily summaries,Coal tit,1.0
 2025-11-11,Southampton daily summaries,Coal tit,4.0
 2025-11-12,Southampton daily summaries,Coal tit,1.0
@@ -101,6 +104,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-18,Southampton daily summaries,Coal tit,0.0
 2025-11-19,Southampton daily summaries,Coal tit,0.0
 2025-11-20,Southampton daily summaries,Coal tit,0.0
+,Southampton daily summaries,Coal tit,
 2025-11-21,Southampton daily summaries,Coal tit,32.0
 2025-11-22,Southampton daily summaries,Coal tit,23.0
 2025-11-23,Southampton daily summaries,Coal tit,13.0
@@ -145,6 +149,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-07,Southampton daily summaries,Great tit,65.0
 2025-11-08,Southampton daily summaries,Great tit,87.0
 2025-11-09,Southampton daily summaries,Great tit,78.0
+,Southampton daily summaries,Great tit,
 2025-11-10,Southampton daily summaries,Great tit,58.0
 2025-11-11,Southampton daily summaries,Great tit,17.0
 2025-11-12,Southampton daily summaries,Great tit,7.0
@@ -156,6 +161,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-18,Southampton daily summaries,Great tit,2.0
 2025-11-19,Southampton daily summaries,Great tit,1.0
 2025-11-20,Southampton daily summaries,Great tit,0.0
+,Southampton daily summaries,Great tit,
 2025-11-21,Southampton daily summaries,Great tit,81.0
 2025-11-22,Southampton daily summaries,Great tit,97.0
 2025-11-23,Southampton daily summaries,Great tit,36.0
@@ -200,6 +206,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-07,Southampton daily summaries,Nuthatch,10.0
 2025-11-08,Southampton daily summaries,Nuthatch,12.0
 2025-11-09,Southampton daily summaries,Nuthatch,19.0
+,Southampton daily summaries,Nuthatch,
 2025-11-10,Southampton daily summaries,Nuthatch,4.0
 2025-11-11,Southampton daily summaries,Nuthatch,2.0
 2025-11-12,Southampton daily summaries,Nuthatch,1.0
@@ -211,6 +218,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-18,Southampton daily summaries,Nuthatch,6.0
 2025-11-19,Southampton daily summaries,Nuthatch,1.0
 2025-11-20,Southampton daily summaries,Nuthatch,2.0
+,Southampton daily summaries,Nuthatch,
 2025-11-21,Southampton daily summaries,Nuthatch,54.0
 2025-11-22,Southampton daily summaries,Nuthatch,10.0
 2025-11-23,Southampton daily summaries,Nuthatch,11.0
@@ -255,6 +263,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-07,Southampton daily summaries,Robin,18.0
 2025-11-08,Southampton daily summaries,Robin,22.0
 2025-11-09,Southampton daily summaries,Robin,14.0
+,Southampton daily summaries,Robin,
 2025-11-10,Southampton daily summaries,Robin,11.0
 2025-11-11,Southampton daily summaries,Robin,4.0
 2025-11-12,Southampton daily summaries,Robin,1.0
@@ -266,6 +275,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-18,Southampton daily summaries,Robin,1.0
 2025-11-19,Southampton daily summaries,Robin,1.0
 2025-11-20,Southampton daily summaries,Robin,2.0
+,Southampton daily summaries,Robin,
 2025-11-21,Southampton daily summaries,Robin,22.0
 2025-11-22,Southampton daily summaries,Robin,23.0
 2025-11-23,Southampton daily summaries,Robin,29.0
@@ -310,6 +320,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-07,Southampton daily summaries,Pigeon,5.0
 2025-11-08,Southampton daily summaries,Pigeon,15.0
 2025-11-09,Southampton daily summaries,Pigeon,8.0
+,Southampton daily summaries,Pigeon,
 2025-11-10,Southampton daily summaries,Pigeon,9.0
 2025-11-11,Southampton daily summaries,Pigeon,7.0
 2025-11-12,Southampton daily summaries,Pigeon,1.0
@@ -321,6 +332,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-18,Southampton daily summaries,Pigeon,0.0
 2025-11-19,Southampton daily summaries,Pigeon,0.0
 2025-11-20,Southampton daily summaries,Pigeon,1.0
+,Southampton daily summaries,Pigeon,
 2025-11-21,Southampton daily summaries,Pigeon,2.0
 2025-11-22,Southampton daily summaries,Pigeon,6.0
 2025-11-23,Southampton daily summaries,Pigeon,17.0
@@ -571,6 +583,11 @@ Date,source_sheet,Bird,Feeder Visits
 2025-12-01,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,1.0
 2025-12-01,"Jacksonville, FL 32259 Daily Su",Eastern Bluebird,9.0
 2025-12-01,"Jacksonville, FL 32259 Daily Su",Mourning Dove,26.0
+2025-12-02,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,2.0
+2025-12-02,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,5.0
+2025-12-02,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,4.0
+2025-12-02,"Jacksonville, FL 32259 Daily Su",Mourning Dove,1.0
+2025-12-02,"Jacksonville, FL 32259 Daily Su",Carolina Wren,3.0
 2025-09-16,"Essex Fells, NJ 07021 Daily Sum",,0.0
 2025-09-17,"Essex Fells, NJ 07021 Daily Sum",,0.0
 2025-09-18,"Essex Fells, NJ 07021 Daily Sum",,0.0
@@ -930,6 +947,19 @@ Date,source_sheet,Bird,Feeder Visits
 2025-12-01,"Essex Fells, NJ 07021 Daily Sum",Common Grackle,0.0
 2025-12-01,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
 2025-12-01,"Essex Fells, NJ 07021 Daily Sum",Red-breasted Nuthatch,0.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,1.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,0.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,2.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,0.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,0.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,0.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",House Finch,1.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,0.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,0.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",Mourning Dove,1.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",Common Grackle,0.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
+2025-12-02,"Essex Fells, NJ 07021 Daily Sum",Red-breasted Nuthatch,0.0
 2025-11-02,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,18.0
 2025-11-03,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,20.0
 2025-11-04,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,17.0
@@ -948,6 +978,14 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-20,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,10.0
 2025-11-21,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,1.0
 2025-11-22,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,4.0
+2025-11-23,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,17.0
+2025-11-24,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,18.0
+2025-11-25,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,2.0
+2025-11-26,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,12.0
+2025-11-27,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,2.0
+2025-11-28,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,3.0
+2025-11-29,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,1.0
+2025-12-01,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,11.0
 2025-10-31,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
 2025-11-01,"Auburn, AL 36830 Daily Sum",Carolina Wren,2.0
 2025-11-02,"Auburn, AL 36830 Daily Sum",Carolina Wren,3.0
@@ -963,6 +1001,9 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-18,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
 2025-11-20,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
 2025-11-22,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
+2025-11-23,"Auburn, AL 36830 Daily Sum",Carolina Wren,2.0
+2025-11-24,"Auburn, AL 36830 Daily Sum",Carolina Wren,2.0
+2025-12-01,"Auburn, AL 36830 Daily Sum",Carolina Wren,1.0
 2025-10-30,"Auburn, AL 36830 Daily Sum",Northern Cardinal,8.0
 2025-10-31,"Auburn, AL 36830 Daily Sum",Northern Cardinal,23.0
 2025-11-01,"Auburn, AL 36830 Daily Sum",Northern Cardinal,25.0
@@ -987,18 +1028,33 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-20,"Auburn, AL 36830 Daily Sum",Northern Cardinal,12.0
 2025-11-21,"Auburn, AL 36830 Daily Sum",Northern Cardinal,7.0
 2025-11-22,"Auburn, AL 36830 Daily Sum",Northern Cardinal,3.0
+2025-11-23,"Auburn, AL 36830 Daily Sum",Northern Cardinal,10.0
+2025-11-24,"Auburn, AL 36830 Daily Sum",Northern Cardinal,8.0
+2025-11-25,"Auburn, AL 36830 Daily Sum",Northern Cardinal,2.0
+2025-11-26,"Auburn, AL 36830 Daily Sum",Northern Cardinal,5.0
+2025-11-27,"Auburn, AL 36830 Daily Sum",Northern Cardinal,7.0
+2025-11-28,"Auburn, AL 36830 Daily Sum",Northern Cardinal,6.0
+2025-11-29,"Auburn, AL 36830 Daily Sum",Northern Cardinal,4.0
+2025-11-30,"Auburn, AL 36830 Daily Sum",Northern Cardinal,8.0
+2025-12-01,"Auburn, AL 36830 Daily Sum",Northern Cardinal,13.0
 2025-11-02,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
 2025-11-05,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
 2025-11-06,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
 2025-11-07,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
 2025-11-11,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
 2025-11-14,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
+2025-11-24,"Auburn, AL 36830 Daily Sum",White-breasted Nuthatch,1.0
 2025-11-02,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,3.0
 2025-11-04,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,3.0
 2025-11-05,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,1.0
 2025-11-10,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,1.0
 2025-11-12,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,1.0
 2025-11-14,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,3.0
+2025-11-23,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,1.0
+2025-11-24,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,1.0
+2025-11-25,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,2.0
+2025-11-27,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,1.0
+2025-11-28,"Auburn, AL 36830 Daily Sum",Eastern Bluebird,1.0
 2025-11-03,"Auburn, AL 36830 Daily Sum",House Finch,5.0
 2025-11-04,"Auburn, AL 36830 Daily Sum",House Finch,1.0
 2025-11-05,"Auburn, AL 36830 Daily Sum",House Finch,1.0
@@ -1010,11 +1066,24 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-14,"Auburn, AL 36830 Daily Sum",House Finch,2.0
 2025-11-16,"Auburn, AL 36830 Daily Sum",House Finch,1.0
 2025-11-22,"Auburn, AL 36830 Daily Sum",House Finch,1.0
+2025-11-23,"Auburn, AL 36830 Daily Sum",House Finch,3.0
+2025-11-25,"Auburn, AL 36830 Daily Sum",House Finch,2.0
+2025-11-26,"Auburn, AL 36830 Daily Sum",House Finch,5.0
+2025-11-27,"Auburn, AL 36830 Daily Sum",House Finch,7.0
+2025-11-28,"Auburn, AL 36830 Daily Sum",House Finch,6.0
+2025-11-29,"Auburn, AL 36830 Daily Sum",House Finch,1.0
+2025-12-01,"Auburn, AL 36830 Daily Sum",House Finch,2.0
 2025-11-05,"Auburn, AL 36830 Daily Sum",Carolina Chickadee,2.0
 2025-11-06,"Auburn, AL 36830 Daily Sum",Carolina Chickadee,1.0
 2025-11-15,"Auburn, AL 36830 Daily Sum",Carolina Chickadee,1.0
 2025-11-22,"Auburn, AL 36830 Daily Sum",Carolina Chickadee,1.0
+2025-11-23,"Auburn, AL 36830 Daily Sum",Carolina Chickadee,1.0
+2025-11-26,"Auburn, AL 36830 Daily Sum",Carolina Chickadee,1.0
+2025-12-01,"Auburn, AL 36830 Daily Sum",Carolina Chickadee,2.0
 2025-11-20,"Auburn, AL 36830 Daily Sum",Chipping Sparrow,1.0
+2025-11-25,"Auburn, AL 36830 Daily Sum",Chipping Sparrow,1.0
+2025-11-29,"Auburn, AL 36830 Daily Sum",Chipping Sparrow,2.0
+2025-12-01,"Auburn, AL 36830 Daily Sum",Chipping Sparrow,1.0
 2025-11-02,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,3.0
 2025-11-04,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,6.0
 2025-11-05,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,2.0
@@ -1024,7 +1093,20 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-12,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,1.0
 2025-11-14,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,3.0
 2025-11-20,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,1.0
+2025-11-24,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,2.0
+2025-11-27,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,1.0
+2025-11-28,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,1.0
+2025-12-01,"Auburn, AL 36830 Daily Sum",Black-capped Chickadee,1.0
 2025-11-22,"Auburn, AL 36830 Daily Sum",Northern Mockingbird,7.0
+2025-11-24,"Auburn, AL 36830 Daily Sum",Northern Mockingbird,7.0
+2025-11-25,"Auburn, AL 36830 Daily Sum",Northern Mockingbird,5.0
+2025-11-26,"Auburn, AL 36830 Daily Sum",Northern Mockingbird,8.0
+2025-11-27,"Auburn, AL 36830 Daily Sum",Northern Mockingbird,10.0
+2025-11-28,"Auburn, AL 36830 Daily Sum",Northern Mockingbird,7.0
+2025-11-29,"Auburn, AL 36830 Daily Sum",Northern Mockingbird,1.0
+2025-11-30,"Auburn, AL 36830 Daily Sum",Northern Mockingbird,1.0
+2025-12-01,"Auburn, AL 36830 Daily Sum",Northern Mockingbird,3.0
+2025-11-24,"Auburn, AL 36830 Daily Sum",Dark-eyed Junco,1.0
 2025-10-30,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
 2025-10-31,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
 2025-11-01,"Auburn, AL 36830 Daily Sum",Brown Headed Nuthatch,
@@ -1145,6 +1227,7 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-20,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
 2025-11-21,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
 2025-11-22,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,
+2025-11-28,"Auburn, AL 36830 Daily Sum",Red-bellied Woodpecker,1.0
 2025-10-30,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
 2025-10-31,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
 2025-11-01,"Auburn, AL 36830 Daily Sum",Yellow Rumped Warbler,
@@ -1241,3 +1324,28 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-20,"Auburn, AL 36830 Daily Sum",Gray Catbird,
 2025-11-21,"Auburn, AL 36830 Daily Sum",Gray Catbird,
 2025-11-22,"Auburn, AL 36830 Daily Sum",Gray Catbird,1.0
+2025-10-30,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-10-31,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-01,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-02,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-03,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-04,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-05,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-06,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-07,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-08,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-09,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-10,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-11,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-12,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-13,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-14,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-15,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-16,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-17,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-18,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-19,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-20,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-21,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-11-22,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,
+2025-12-01,"Auburn, AL 36830 Daily Sum",Chestnut-backed Chickadee,1.0
