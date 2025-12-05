@@ -16347,6 +16347,16 @@ Date,Bird,Time,LeftPecks,RightPecks,LeftSeed,RightSeed,source_sheet,Notes,CoolDo
 2025-12-03,Northern Cardinal,17:19:00,0.0,0.0,,,jacksonville_fl_32259,,
 2025-12-03,Northern Cardinal,17:20:00,0.0,0.0,,,jacksonville_fl_32259,,
 2025-12-03,Northern Cardinal,17:39:00,0.0,0.0,,,jacksonville_fl_32259,,
+2025-12-04,Carolina Wren,12:29:00,0.0,0.0,,,jacksonville_fl_32259,,
+2025-12-04,Carolina Wren,13:09:00,0.0,0.0,,,jacksonville_fl_32259,,
+2025-12-04,Carolina Chickadee,13:20:00,0.0,0.0,,,jacksonville_fl_32259,,
+2025-12-04,Tufted Titmouse,13:20:00,0.0,0.0,,,jacksonville_fl_32259,,
+2025-12-04,Carolina Chickadee,13:20:00,0.0,0.0,,,jacksonville_fl_32259,,
+2025-12-04,Tufted Titmouse,13:20:00,0.0,0.0,,,jacksonville_fl_32259,,
+2025-12-04,Tufted Titmouse,13:22:00,0.0,0.0,,,jacksonville_fl_32259,,
+2025-12-04,Mourning Dove,15:31:00,0.0,0.0,,,jacksonville_fl_32259,,
+2025-12-04,Mourning Dove,15:31:00,0.0,0.0,,,jacksonville_fl_32259,,
+2025-12-04,Mourning Dove,15:32:00,0.0,0.0,,,jacksonville_fl_32259,,
 2025-09-16,,,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
 2025-09-17,,,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
 2025-09-18,,,,,BOSS,BOSS,essex_fells_nj_07021,,1 min
@@ -22817,3 +22827,5 @@ Date,Bird,Time,LeftPecks,RightPecks,LeftSeed,RightSeed,source_sheet,Notes,CoolDo
 2025-12-02,House Finch,10:07:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
 2025-12-02,Blue Jay,12:38:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
 2025-12-02,Blue Jay,12:57:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-12-03,,,,,Seed,Seed,essex_fells_nj_07021,,1 min
+2025-12-04,Northern Cardinal,16:40:00,,,Seed,Seed,essex_fells_nj_07021,,1 min
