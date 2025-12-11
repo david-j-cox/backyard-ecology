@@ -56,7 +56,10 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-27,Southampton daily summaries,Blue tit,191.0
 2025-11-28,Southampton daily summaries,Blue tit,157.0
 2025-11-29,Southampton daily summaries,Blue tit,77.0
-2025-12-03,Southampton daily summaries,Blue tit,177.0
+2025-12-03,Southampton daily summaries,Blue tit,121.0
+2025-12-04,Southampton daily summaries,Blue tit,145.0
+2025-12-05,Southampton daily summaries,Blue tit,191.0
+2025-12-06,Southampton daily summaries,Blue tit,219.0
 2025-10-05,Southampton daily summaries,Coal tit,0.0
 2025-10-06,Southampton daily summaries,Coal tit,0.0
 2025-10-07,Southampton daily summaries,Coal tit,0.0
@@ -114,7 +117,10 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-27,Southampton daily summaries,Coal tit,16.0
 2025-11-28,Southampton daily summaries,Coal tit,10.0
 2025-11-29,Southampton daily summaries,Coal tit,4.0
-2025-12-03,Southampton daily summaries,Coal tit,29.0
+2025-12-03,Southampton daily summaries,Coal tit,19.0
+2025-12-04,Southampton daily summaries,Coal tit,7.0
+2025-12-05,Southampton daily summaries,Coal tit,13.0
+2025-12-06,Southampton daily summaries,Coal tit,16.0
 2025-10-05,Southampton daily summaries,Great tit,2.0
 2025-10-06,Southampton daily summaries,Great tit,5.0
 2025-10-07,Southampton daily summaries,Great tit,3.0
@@ -172,7 +178,10 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-27,Southampton daily summaries,Great tit,198.0
 2025-11-28,Southampton daily summaries,Great tit,156.0
 2025-11-29,Southampton daily summaries,Great tit,82.0
-2025-12-03,Southampton daily summaries,Great tit,224.0
+2025-12-03,Southampton daily summaries,Great tit,143.0
+2025-12-04,Southampton daily summaries,Great tit,153.0
+2025-12-05,Southampton daily summaries,Great tit,208.0
+2025-12-06,Southampton daily summaries,Great tit,198.0
 2025-10-05,Southampton daily summaries,Nuthatch,0.0
 2025-10-06,Southampton daily summaries,Nuthatch,0.0
 2025-10-07,Southampton daily summaries,Nuthatch,0.0
@@ -230,7 +239,10 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-27,Southampton daily summaries,Nuthatch,8.0
 2025-11-28,Southampton daily summaries,Nuthatch,22.0
 2025-11-29,Southampton daily summaries,Nuthatch,15.0
-2025-12-03,Southampton daily summaries,Nuthatch,25.0
+2025-12-03,Southampton daily summaries,Nuthatch,16.0
+2025-12-04,Southampton daily summaries,Nuthatch,6.0
+2025-12-05,Southampton daily summaries,Nuthatch,10.0
+2025-12-06,Southampton daily summaries,Nuthatch,7.0
 2025-10-05,Southampton daily summaries,Robin,0.0
 2025-10-06,Southampton daily summaries,Robin,0.0
 2025-10-07,Southampton daily summaries,Robin,0.0
@@ -288,7 +300,10 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-27,Southampton daily summaries,Robin,8.0
 2025-11-28,Southampton daily summaries,Robin,24.0
 2025-11-29,Southampton daily summaries,Robin,21.0
-2025-12-03,Southampton daily summaries,Robin,14.0
+2025-12-03,Southampton daily summaries,Robin,13.0
+2025-12-04,Southampton daily summaries,Robin,14.0
+2025-12-05,Southampton daily summaries,Robin,16.0
+2025-12-06,Southampton daily summaries,Robin,18.0
 2025-10-05,Southampton daily summaries,Pigeon,0.0
 2025-10-06,Southampton daily summaries,Pigeon,0.0
 2025-10-07,Southampton daily summaries,Pigeon,0.0
@@ -346,7 +361,10 @@ Date,source_sheet,Bird,Feeder Visits
 2025-11-27,Southampton daily summaries,Pigeon,7.0
 2025-11-28,Southampton daily summaries,Pigeon,19.0
 2025-11-29,Southampton daily summaries,Pigeon,7.0
-2025-12-03,Southampton daily summaries,Pigeon,7.0
+2025-12-03,Southampton daily summaries,Pigeon,2.0
+2025-12-04,Southampton daily summaries,Pigeon,0.0
+2025-12-05,Southampton daily summaries,Pigeon,9.0
+2025-12-06,Southampton daily summaries,Pigeon,4.0
 2025-10-05,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,18.0
 2025-10-05,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,1.0
 2025-10-06,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,51.0
@@ -614,6 +632,10 @@ Date,source_sheet,Bird,Feeder Visits
 2025-12-08,"Jacksonville, FL 32259 Daily Su",Mourning Dove,2.0
 2025-12-08,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,1.0
 2025-12-08,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,4.0
+2025-12-09,"Jacksonville, FL 32259 Daily Su",Common Ground Dove,2.0
+2025-12-09,"Jacksonville, FL 32259 Daily Su",Eastern Bluebird,2.0
+2025-12-09,"Jacksonville, FL 32259 Daily Su",Mourning Dove,1.0
+2025-12-10,"Jacksonville, FL 32259 Daily Su",Mourning Dove,1.0
 2025-09-16,"Essex Fells, NJ 07021 Daily Sum",,0.0
 2025-09-17,"Essex Fells, NJ 07021 Daily Sum",,0.0
 2025-09-18,"Essex Fells, NJ 07021 Daily Sum",,0.0
@@ -1056,6 +1078,34 @@ Date,source_sheet,Bird,Feeder Visits
 2025-12-07,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
 2025-12-07,"Essex Fells, NJ 07021 Daily Sum",Red-breasted Nuthatch,0.0
 2025-12-07,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",House Finch,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Mourning Dove,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Common Grackle,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Red-breasted Nuthatch,0.0
+2025-12-08,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,23.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,2.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,118.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,8.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,0.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,1.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",House Finch,0.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,58.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,0.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Mourning Dove,0.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Common Grackle,0.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Red-breasted Nuthatch,0.0
+2025-12-09,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
 2025-11-02,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,18.0
 2025-11-03,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,20.0
 2025-11-04,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,17.0
