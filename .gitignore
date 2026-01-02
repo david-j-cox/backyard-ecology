@@ -17,6 +17,13 @@ __pycache__/
 .env.local
 .env.*.local
 
+# Google Sheets credentials
+service_account.json
+*.service_account.json
+~/.config/gspread/
+.config/gspread/
+gspread_credentials.json
+
 # IDE files
 .vscode/
 .idea/
