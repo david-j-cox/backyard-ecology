@@ -144,6 +144,7 @@ def create_simple_dashboard():
         'all_birds_bout_analysis_within_date',
         'individual_species_bout_analysis',
         'diversity_metrics', 
+        'diversity_metrics_corr_matrix',
         'seed_preference_by_bird', 
         'peck_distribution_by_bird'
     ]
