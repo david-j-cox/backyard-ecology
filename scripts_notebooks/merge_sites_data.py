@@ -137,7 +137,41 @@ def process_phase_changes(excel_file: pd.ExcelFile, output_dir: Path, logger: lo
     logger.info(f"Phase change data saved: {phase_change_data.shape}")
 
 
-def process_raw_data(excel_file: pd.ExcelFile, raw_data_sheets: list, output_dir: Path, logger: logging.Logger) -> None:
+def merge_jacksonville_data(gsheet_df: pd.DataFrame, multi_site_df: pd.DataFrame, sheet_name: str, logger: logging.Logger) -> pd.DataFrame:
+    """
+    Merge data from multi_site_data.xlsx into Google Sheet data for Jacksonville tabs.
+    
+    Args:
+        gsheet_df: DataFrame from downloaded Google Sheet
+        multi_site_df: DataFrame from multi_site_data.xlsx
+        sheet_name: Name of the sheet being processed
+        logger: Logger instance
+        
+    Returns:
+        Merged DataFrame
+    """
+    logger.info(f"Merging data for {sheet_name}...")
+    logger.debug(f"  Google Sheet rows: {len(gsheet_df)}")
+    logger.debug(f"  Multi-site data rows: {len(multi_site_df)}")
+    
+    # Concatenate the dataframes
+    merged_df = pd.concat([gsheet_df, multi_site_df], ignore_index=True)
+    
+    # Remove duplicates if any (based on key columns)
+    # This assumes Date, Bird, Time are unique identifiers
+    key_columns = ['Date', 'Bird', 'Time'] if 'Time' in merged_df.columns else ['Date', 'Bird']
+    if key_columns:
+        before_dedup = len(merged_df)
+        merged_df = merged_df.drop_duplicates(subset=key_columns, keep='first')
+        after_dedup = len(merged_df)
+        if before_dedup != after_dedup:
+            logger.info(f"  Removed {before_dedup - after_dedup} duplicate rows")
+    
+    logger.info(f"  Merged total rows: {len(merged_df)}")
+    return merged_df
+
+
+def process_raw_data(excel_file: pd.ExcelFile, raw_data_sheets: list, multi_site_excel: pd.ExcelFile, output_dir: Path, logger: logging.Logger) -> None:
     """Process and merge raw data from multiple sheets."""
     logger.info(f"Processing {len(raw_data_sheets)} raw data sheets...")
     
@@ -145,6 +179,27 @@ def process_raw_data(excel_file: pd.ExcelFile, raw_data_sheets: list, output_dir
     for sheet_name in raw_data_sheets:
         df = pd.read_excel(excel_file, sheet_name=sheet_name)
         df['source_sheet'] = sheet_name.lower().replace(" raw data", "").replace(" ", "_").replace(",", "")
+        
+        # Check if this is a Jacksonville sheet and if we have matching data in multi_site_data.xlsx
+        if "jacksonville" in sheet_name.lower() and multi_site_excel is not None:
+            multi_site_sheets = multi_site_excel.sheet_names
+            # Find matching sheet in multi_site_data.xlsx (case-insensitive)
+            matching_sheet = None
+            for ms_sheet in multi_site_sheets:
+                if "jacksonville" in ms_sheet.lower() and "raw" in ms_sheet.lower():
+                    matching_sheet = ms_sheet
+                    break
+            
+            if matching_sheet:
+                logger.info(f"Found matching Jacksonville raw data sheet in multi_site_data.xlsx: {matching_sheet}")
+                multi_site_df = pd.read_excel(multi_site_excel, sheet_name=matching_sheet)
+                # Ensure source_sheet column matches
+                multi_site_df['source_sheet'] = sheet_name.lower().replace(" raw data", "").replace(" ", "_").replace(",", "")
+                # Merge the data
+                df = merge_jacksonville_data(df, multi_site_df, sheet_name, logger)
+            else:
+                logger.debug(f"No matching Jacksonville raw data sheet found in multi_site_data.xlsx for {sheet_name}")
+        
         raw_data_frames.append(df)
         logger.debug(f"  {sheet_name}: {len(df)} rows")
     
@@ -157,7 +212,7 @@ def process_raw_data(excel_file: pd.ExcelFile, raw_data_sheets: list, output_dir
     logger.info(f"Raw data saved: {raw_data.shape}")
 
 
-def process_daily_summaries(excel_file: pd.ExcelFile, daily_summaries_sheets: list, output_dir: Path, logger: logging.Logger) -> None:
+def process_daily_summaries(excel_file: pd.ExcelFile, daily_summaries_sheets: list, multi_site_excel: pd.ExcelFile, output_dir: Path, logger: logging.Logger) -> None:
     """Process and merge daily summaries from multiple sheets."""
     logger.info(f"Processing {len(daily_summaries_sheets)} daily summary sheets...")
     
@@ -166,6 +221,26 @@ def process_daily_summaries(excel_file: pd.ExcelFile, daily_summaries_sheets: li
         logger.debug(f"Processing sheet: {sheet_name}")
         df = pd.read_excel(excel_file, sheet_name=sheet_name)
         df['source_sheet'] = sheet_name
+        
+        # Check if this is a Jacksonville sheet and if we have matching data in multi_site_data.xlsx
+        if "jacksonville" in sheet_name.lower() and multi_site_excel is not None:
+            multi_site_sheets = multi_site_excel.sheet_names
+            # Find matching sheet in multi_site_data.xlsx (case-insensitive)
+            matching_sheet = None
+            for ms_sheet in multi_site_sheets:
+                if "jacksonville" in ms_sheet.lower() and "daily" in ms_sheet.lower():
+                    matching_sheet = ms_sheet
+                    break
+            
+            if matching_sheet:
+                logger.info(f"Found matching Jacksonville daily summary sheet in multi_site_data.xlsx: {matching_sheet}")
+                multi_site_df = pd.read_excel(multi_site_excel, sheet_name=matching_sheet)
+                # Ensure source_sheet column matches
+                multi_site_df['source_sheet'] = sheet_name
+                # Merge the data
+                df = merge_jacksonville_data(df, multi_site_df, sheet_name, logger)
+            else:
+                logger.debug(f"No matching Jacksonville daily summary sheet found in multi_site_data.xlsx for {sheet_name}")
         
         # Handle Auburn sheet - wide format with Phase column
         if "auburn" in sheet_name.lower() and "daily" in sheet_name.lower():
@@ -238,6 +313,17 @@ def main():
         all_sheet_names = excel_file.sheet_names
         logger.info(f"Found {len(all_sheet_names)} sheets: {', '.join(all_sheet_names)}")
         
+        # Load multi_site_data.xlsx if it exists
+        multi_site_file_path = output_dir / 'multi_site_data.xlsx'
+        multi_site_excel = None
+        if multi_site_file_path.exists():
+            logger.info(f"Loading multi_site_data.xlsx from {multi_site_file_path}")
+            multi_site_excel = pd.ExcelFile(multi_site_file_path)
+            multi_site_sheet_names = multi_site_excel.sheet_names
+            logger.info(f"Found {len(multi_site_sheet_names)} sheets in multi_site_data.xlsx: {', '.join(multi_site_sheet_names)}")
+        else:
+            logger.warning(f"multi_site_data.xlsx not found at {multi_site_file_path}. Skipping merge step.")
+        
         # Identify sheet types
         raw_data_sheets = [sheet for sheet in all_sheet_names if 'raw' in sheet.lower()]
         daily_summaries_sheets = [sheet for sheet in all_sheet_names if 'daily' in sheet.lower()]
@@ -247,8 +333,8 @@ def main():
         
         # Process each data type
         process_phase_changes(excel_file, output_dir, logger)
-        process_raw_data(excel_file, raw_data_sheets, output_dir, logger)
-        process_daily_summaries(excel_file, daily_summaries_sheets, output_dir, logger)
+        process_raw_data(excel_file, raw_data_sheets, multi_site_excel, output_dir, logger)
+        process_daily_summaries(excel_file, daily_summaries_sheets, multi_site_excel, output_dir, logger)
         
         logger.info("✓ Data merging process completed successfully")
         

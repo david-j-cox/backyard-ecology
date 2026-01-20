@@ -34,10 +34,12 @@ gspread_credentials.json
 .DS_Store
 Thumbs.db
 
-# Data files (optional - uncomment if you don't want to track data)
+# Data files
 # *.xlsx
 # *.csv
 *.json
+*.log
+*.parquet 
 
 # Temporary files
 *.tmp
