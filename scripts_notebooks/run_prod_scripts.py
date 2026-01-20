@@ -186,8 +186,8 @@ def main():
         scripts = {
             'weather.py': script_dir / 'weather.py',
             'merge_sites_data.py': script_dir / 'merge_sites_data.py',
-            # 'birdweather_specific_pucs.py': script_dir / 'birdweather_specific_pucs.py', 
-            # 'birdweather.py': script_dir / 'birdweather.py'
+            'birdweather_specific_pucs.py': script_dir / 'birdweather_specific_pucs.py', 
+            'birdweather.py': script_dir / 'birdweather.py'
         }
         
         # Verify scripts exist
