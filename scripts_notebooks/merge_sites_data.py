@@ -336,7 +336,7 @@ def main():
         process_raw_data(excel_file, raw_data_sheets, multi_site_excel, output_dir, logger)
         process_daily_summaries(excel_file, daily_summaries_sheets, multi_site_excel, output_dir, logger)
         
-        logger.info("✓ Data merging process completed successfully")
+        logger.info("Data merging process completed successfully")
         
     except Exception as e:
         logger.error(f"Error processing data: {e}", exc_info=True)
