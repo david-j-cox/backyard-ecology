@@ -130,8 +130,10 @@ def create_simple_dashboard():
     # Define the specific plot order
     plot_order = [
         'species_visits_by_date',
-        'migration_relation',
         'mbd_plot',
+        'diversity_metrics', 
+        'diversity_metrics_corr_matrix',
+        'puc_audio_data', 
         'heatmap_counts',
         'heatmap_proportions',
         'heatmap_proportions_sunrise_sunset',
@@ -143,8 +145,6 @@ def create_simple_dashboard():
         'all_birds_bout_seed_no_seed_separate',
         'all_birds_bout_analysis_within_date',
         'individual_species_bout_analysis',
-        'diversity_metrics', 
-        'diversity_metrics_corr_matrix',
         'seed_preference_by_bird', 
         'peck_distribution_by_bird'
     ]
