@@ -93,6 +93,7 @@ Date,source_sheet,Bird,Feeder Visits
 2026-01-04,Southampton daily summaries,Blue tit,260.0
 2026-01-05,Southampton daily summaries,Blue tit,324.0
 2026-01-06,Southampton daily summaries,Blue tit,276.0
+2026-01-07,Southampton daily summaries,Blue tit,344.0
 2025-10-05,Southampton daily summaries,Coal tit,0.0
 2025-10-06,Southampton daily summaries,Coal tit,0.0
 2025-10-07,Southampton daily summaries,Coal tit,0.0
@@ -187,6 +188,7 @@ Date,source_sheet,Bird,Feeder Visits
 2026-01-04,Southampton daily summaries,Coal tit,19.0
 2026-01-05,Southampton daily summaries,Coal tit,18.0
 2026-01-06,Southampton daily summaries,Coal tit,18.0
+2026-01-07,Southampton daily summaries,Coal tit,1.0
 2025-10-05,Southampton daily summaries,Great tit,2.0
 2025-10-06,Southampton daily summaries,Great tit,5.0
 2025-10-07,Southampton daily summaries,Great tit,3.0
@@ -281,6 +283,7 @@ Date,source_sheet,Bird,Feeder Visits
 2026-01-04,Southampton daily summaries,Great tit,228.0
 2026-01-05,Southampton daily summaries,Great tit,306.0
 2026-01-06,Southampton daily summaries,Great tit,284.0
+2026-01-07,Southampton daily summaries,Great tit,294.0
 2025-10-05,Southampton daily summaries,Nuthatch,0.0
 2025-10-06,Southampton daily summaries,Nuthatch,0.0
 2025-10-07,Southampton daily summaries,Nuthatch,0.0
@@ -375,6 +378,7 @@ Date,source_sheet,Bird,Feeder Visits
 2026-01-04,Southampton daily summaries,Nuthatch,29.0
 2026-01-05,Southampton daily summaries,Nuthatch,20.0
 2026-01-06,Southampton daily summaries,Nuthatch,11.0
+2026-01-07,Southampton daily summaries,Nuthatch,14.0
 2025-10-05,Southampton daily summaries,Robin,0.0
 2025-10-06,Southampton daily summaries,Robin,0.0
 2025-10-07,Southampton daily summaries,Robin,0.0
@@ -469,6 +473,7 @@ Date,source_sheet,Bird,Feeder Visits
 2026-01-04,Southampton daily summaries,Robin,5.0
 2026-01-05,Southampton daily summaries,Robin,11.0
 2026-01-06,Southampton daily summaries,Robin,9.0
+2026-01-07,Southampton daily summaries,Robin,10.0
 2025-10-05,Southampton daily summaries,Pigeon,0.0
 2025-10-06,Southampton daily summaries,Pigeon,0.0
 2025-10-07,Southampton daily summaries,Pigeon,0.0
@@ -563,6 +568,7 @@ Date,source_sheet,Bird,Feeder Visits
 2026-01-04,Southampton daily summaries,Pigeon,10.0
 2026-01-05,Southampton daily summaries,Pigeon,8.0
 2026-01-06,Southampton daily summaries,Pigeon,9.0
+2026-01-07,Southampton daily summaries,Pigeon,7.0
 2025-10-05,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,18.0
 2025-10-05,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,1.0
 2025-10-06,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,51.0
@@ -936,6 +942,49 @@ Date,source_sheet,Bird,Feeder Visits
 2026-01-23,"Jacksonville, FL 32259 Daily Su",Mourning Dove,126.0
 2026-01-23,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,14.0
 2026-01-23,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,17.0
+2026-01-24,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,25.0
+2026-01-24,"Jacksonville, FL 32259 Daily Su",Carolina Wren,23.0
+2026-01-24,"Jacksonville, FL 32259 Daily Su",Mourning Dove,206.0
+2026-01-24,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,2.0
+2026-01-24,"Jacksonville, FL 32259 Daily Su",Eastern Bluebird,21.0
+2026-01-24,"Jacksonville, FL 32259 Daily Su",Pine Warbler,2.0
+2026-01-25,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,16.0
+2026-01-25,"Jacksonville, FL 32259 Daily Su",Carolina Wren,16.0
+2026-01-25,"Jacksonville, FL 32259 Daily Su",Mourning Dove,110.0
+2026-01-25,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,4.0
+2026-01-25,"Jacksonville, FL 32259 Daily Su",Eastern Bluebird,10.0
+2026-01-26,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,26.0
+2026-01-26,"Jacksonville, FL 32259 Daily Su",Mourning Dove,121.0
+2026-01-26,"Jacksonville, FL 32259 Daily Su",Eastern Bluebird,23.0
+2026-01-26,"Jacksonville, FL 32259 Daily Su",Carolina Wren,26.0
+2026-01-27,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,20.0
+2026-01-27,"Jacksonville, FL 32259 Daily Su",Mourning Dove,130.0
+2026-01-27,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,19.0
+2026-01-27,"Jacksonville, FL 32259 Daily Su",Eastern Bluebird,9.0
+2026-01-27,"Jacksonville, FL 32259 Daily Su",Carolina Wren,11.0
+2026-01-28,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,25.0
+2026-01-28,"Jacksonville, FL 32259 Daily Su",Mourning Dove,53.0
+2026-01-28,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,44.0
+2026-01-28,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,11.0
+2026-01-28,"Jacksonville, FL 32259 Daily Su",Carolina Wren,39.0
+2026-01-28,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,16.0
+2026-01-28,"Jacksonville, FL 32259 Daily Su",Eastern Bluebird,174.0
+2026-01-28,"Jacksonville, FL 32259 Daily Su",Pine Warbler,16.0
+2026-01-29,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,47.0
+2026-01-29,"Jacksonville, FL 32259 Daily Su",Carolina Wren,30.0
+2026-01-29,"Jacksonville, FL 32259 Daily Su",Mourning Dove,47.0
+2026-01-29,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,23.0
+2026-01-29,"Jacksonville, FL 32259 Daily Su",Pine Warbler,8.0
+2026-01-29,"Jacksonville, FL 32259 Daily Su",Eastern Bluebird,109.0
+2026-01-29,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,33.0
+2026-01-29,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,3.0
+2026-01-30,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,30.0
+2026-01-30,"Jacksonville, FL 32259 Daily Su",Carolina Wren,27.0
+2026-01-30,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,54.0
+2026-01-30,"Jacksonville, FL 32259 Daily Su",Pine Warbler,8.0
+2026-01-30,"Jacksonville, FL 32259 Daily Su",Eastern Bluebird,66.0
+2026-01-30,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,10.0
+2026-01-30,"Jacksonville, FL 32259 Daily Su",Mourning Dove,5.0
 2025-09-16,"Essex Fells, NJ 07021 Daily Sum",,0.0
 2025-09-17,"Essex Fells, NJ 07021 Daily Sum",,0.0
 2025-09-18,"Essex Fells, NJ 07021 Daily Sum",,0.0
