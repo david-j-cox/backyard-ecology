@@ -1,0 +1,124 @@
+name: Update Dashboard
+
+on:
+  schedule:
+    # 6:30 AM ET every day (ET = UTC-5, so 11:30 UTC)
+    # During daylight saving time (EDT = UTC-4), this runs at 7:30 AM ET
+    - cron: '30 11 * * *'
+
+  # Manual trigger from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "dashboard-update"
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create .env file
+        run: |
+          cat > .env << 'EOF'
+          WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}
+          JAX_BIRDWX_API_KEY=${{ secrets.JAX_BIRDWX_API_KEY }}
+          ESSEX_BIRDWX_API_KEY=${{ secrets.ESSEX_BIRDWX_API_KEY }}
+          EOF
+
+      - name: Phase 1 - Fetch data
+        working-directory: scripts_notebooks
+        run: |
+          echo "=== Fetching weather data ==="
+          python weather.py --out ../data/hourly_weather.csv --sunrise-out ../data/sunrise_sunset.csv &
+          PID_WEATHER=$!
+
+          echo "=== Merging site data ==="
+          python merge_sites_data.py &
+          PID_MERGE=$!
+
+          echo "=== Fetching BirdWeather PUC data ==="
+          python birdweather_specific_pucs.py &
+          PID_PUC=$!
+
+          # Wait for all data scripts (don't fail the whole job if one errors)
+          wait $PID_WEATHER || echo "WARNING: weather.py failed"
+          wait $PID_MERGE || echo "WARNING: merge_sites_data.py failed"
+          wait $PID_PUC || echo "WARNING: birdweather_specific_pucs.py failed"
+
+          echo "=== Phase 1 complete ==="
+
+      - name: Phase 2 - Run analytics
+        working-directory: scripts_notebooks
+        run: |
+          echo "=== Running all-sites analytics ==="
+          python all_sites_all_analytics.py
+
+          echo "=== Running one-site analytics ==="
+          python one_site_analytics.py
+
+          echo "=== Phase 2 complete ==="
+
+      - name: Phase 3 - Generate dashboard HTML
+        working-directory: scripts_notebooks
+        run: python dashboard_update.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ docs/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Daily dashboard update"
+            git push
+          fi
+
+  # Deploy to GitHub Pages (runs after update job)
+  deploy:
+    needs: update
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          # Pull the commit we just pushed
+          fetch-depth: 0
+
+      - name: Pull latest
+        run: git pull origin main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
