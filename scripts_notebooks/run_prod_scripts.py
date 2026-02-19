@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """
-Run production scripts in parallel.
+Run production scripts in parallel, then analytics.
 
 This script orchestrates the execution of:
-1. weather.py - Fetches weather data from OpenWeather API
-2. merge_sites_data.py - Downloads and merges data from Google Sheets
+Phase 1 (parallel - data fetching):
+  1. weather.py - Fetches weather data from OpenWeather API
+  2. merge_sites_data.py - Downloads and merges data from Google Sheets
+  3. birdweather_specific_pucs.py - Fetches BirdWeather PUC data
+  4. birdweather.py - Fetches BirdWeather county data
 
-Both scripts run in parallel to reduce total execution time.
+Phase 2 (parallel - analytics, after data is fresh):
+  5. all_sites_all_analytics.py - Multi-site analysis and dashboard plots
+  6. one_site_analytics.py - Single-site (Jacksonville) peck/seed analysis
 """
 
 import logging
@@ -54,28 +59,29 @@ def setup_logging(script_dir: Path) -> Path:
     return log_file
 
 
-def run_script(script_path: Path, script_name: str, script_dir: Path, logger: logging.Logger, python_executable: str) -> Tuple[str, bool, str]:
+def run_script(script_path: Path, script_name: str, script_dir: Path, logger: logging.Logger, python_executable: str, cwd: Optional[Path] = None) -> Tuple[str, bool, str]:
     """
     Run a Python script as a subprocess.
-    
+
     Args:
         script_path: Full path to the script to run
         script_name: Name of the script for logging
         script_dir: Directory where scripts are located (working directory)
         logger: Logger instance
         python_executable: Python executable to use
-        
+        cwd: Working directory for the subprocess (defaults to project root)
+
     Returns:
         Tuple of (script_name, success: bool, output: str)
     """
     logger.info(f"Starting {script_name}...")
     start_time = datetime.now()
-    
+
     try:
         # Run the script as a subprocess
         result = subprocess.run(
             [python_executable, str(script_path)],
-            cwd=script_dir.parent,  # Run from project root
+            cwd=cwd or script_dir.parent,  # Default: project root
             capture_output=True,
             text=True,
             timeout=3600  # 1 hour timeout
@@ -182,42 +188,48 @@ def main():
         if python_executable != sys.executable:
             logger.info(f"  (Switched from {sys.executable} due to environment issues)")
         
-        # Define scripts to run
-        scripts = {
+        # -------------------------------------------------------
+        # Phase 1: Data fetching (parallel - all I/O bound)
+        # -------------------------------------------------------
+        data_scripts = {
             'weather.py': script_dir / 'weather.py',
             'merge_sites_data.py': script_dir / 'merge_sites_data.py',
-            'birdweather_specific_pucs.py': script_dir / 'birdweather_specific_pucs.py', 
+            'birdweather_specific_pucs.py': script_dir / 'birdweather_specific_pucs.py',
             'birdweather.py': script_dir / 'birdweather.py'
         }
-        
-        # Verify scripts exist
-        for name, path in scripts.items():
+
+        # -------------------------------------------------------
+        # Phase 2: Analytics (parallel - depend on fresh data)
+        # -------------------------------------------------------
+        analytics_scripts = {
+            'all_sites_all_analytics.py': script_dir / 'all_sites_all_analytics.py',
+            'one_site_analytics.py': script_dir / 'one_site_analytics.py',
+        }
+
+        all_scripts = {**data_scripts, **analytics_scripts}
+
+        # Verify all scripts exist
+        for name, path in all_scripts.items():
             if not path.exists():
                 logger.error(f"Script not found: {path}")
                 sys.exit(1)
-        
-        logger.info(f"Running {len(scripts)} scripts in parallel...")
+
         overall_start_time = datetime.now()
-        
-        # Run scripts in parallel using ThreadPoolExecutor
-        # (I/O bound operations, so threading is appropriate)
         results: Dict[str, Tuple[str, bool, str]] = {}
-        
-        with ThreadPoolExecutor(max_workers=len(scripts)) as executor:
-            # Submit all scripts
+
+        # --- Phase 1: Data fetching ---
+        logger.info("-" * 60)
+        logger.info(f"Phase 1: Running {len(data_scripts)} data scripts in parallel...")
+        logger.info("-" * 60)
+
+        with ThreadPoolExecutor(max_workers=len(data_scripts)) as executor:
             future_to_script = {
                 executor.submit(
-                    run_script,
-                    path,
-                    name,
-                    script_dir,
-                    logger,
-                    python_executable
+                    run_script, path, name, script_dir, logger, python_executable
                 ): name
-                for name, path in scripts.items()
+                for name, path in data_scripts.items()
             }
-            
-            # Collect results as they complete
+
             for future in as_completed(future_to_script):
                 script_name = future_to_script[future]
                 try:
@@ -226,24 +238,53 @@ def main():
                 except Exception as e:
                     logger.error(f"Exception in {script_name}: {e}", exc_info=True)
                     results[script_name] = (script_name, False, str(e))
-        
+
+        phase1_failures = sum(1 for name in data_scripts if not results.get(name, (None, False, None))[1])
+        if phase1_failures > 0:
+            logger.warning(f"Phase 1: {phase1_failures} data script(s) failed. Running analytics anyway with existing data.")
+        else:
+            logger.info("Phase 1: All data scripts completed successfully.")
+
+        # --- Phase 2: Analytics ---
+        # Analytics scripts use ../data/ paths, so run from scripts_notebooks/
+        logger.info("-" * 60)
+        logger.info(f"Phase 2: Running {len(analytics_scripts)} analytics scripts in parallel...")
+        logger.info("-" * 60)
+
+        with ThreadPoolExecutor(max_workers=len(analytics_scripts)) as executor:
+            future_to_script = {
+                executor.submit(
+                    run_script, path, name, script_dir, logger, python_executable, cwd=script_dir
+                ): name
+                for name, path in analytics_scripts.items()
+            }
+
+            for future in as_completed(future_to_script):
+                script_name = future_to_script[future]
+                try:
+                    result = future.result()
+                    results[script_name] = result
+                except Exception as e:
+                    logger.error(f"Exception in {script_name}: {e}", exc_info=True)
+                    results[script_name] = (script_name, False, str(e))
+
         # Summary
         overall_elapsed = (datetime.now() - overall_start_time).total_seconds()
         logger.info("=" * 60)
         logger.info("Execution Summary")
         logger.info("=" * 60)
-        
+
         success_count = sum(1 for _, success, _ in results.values() if success)
         failure_count = len(results) - success_count
-        
+
         for script_name, success, output in results.values():
-            status = "SUCCESS" if success else "✗ FAILED"
-            logger.info(f"{script_name}: {status}")
-        
+            status = "SUCCESS" if success else "FAILED"
+            logger.info(f"  {script_name}: {status}")
+
         logger.info(f"\nTotal execution time: {overall_elapsed:.1f} seconds")
-        logger.info(f"Successful: {success_count}/{len(scripts)}")
-        logger.info(f"Failed: {failure_count}/{len(scripts)}")
-        
+        logger.info(f"Successful: {success_count}/{len(all_scripts)}")
+        logger.info(f"Failed: {failure_count}/{len(all_scripts)}")
+
         # Exit with error code if any script failed
         if failure_count > 0:
             logger.error("One or more scripts failed. Check logs for details.")
