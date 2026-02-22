@@ -1,5 +1,7 @@
 appnope==0.1.4
 asttokens==3.0.0
+beautifulsoup4==4.13.3
+lxml==5.3.1
 cachetools==5.5.2
 certifi==2025.10.5
 charset-normalizer==3.4.4

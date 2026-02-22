@@ -28,7 +28,7 @@ from dotenv import load_dotenv
 DATA_XLSX = '../data/multi_site_data.xlsx'
 RAW_SHEET = 'RawData'
 DAILY_SUMMS_SHEET = 'DailySummaries'
-BIRDCAST_PARQUET = '../../birdcast-data-grabber/data/birdcast_data.parquet'
+BIRDCAST_PARQUET = '../data/birdcast_data.parquet'
 load_dotenv()
 
 # Create dashboard output directory

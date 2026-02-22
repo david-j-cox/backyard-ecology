@@ -1,0 +1,362 @@
+state,state_abbr,county,GEOID,county_fips3,birdcast_url
+Arkansas,AR,Arkansas,05001,001,https://dashboard.birdcast.info/region/US-AR-001
+Arkansas,AR,Ashley,05003,003,https://dashboard.birdcast.info/region/US-AR-003
+Arkansas,AR,Bradley,05011,011,https://dashboard.birdcast.info/region/US-AR-011
+Arkansas,AR,Chicot,05017,017,https://dashboard.birdcast.info/region/US-AR-017
+Arkansas,AR,Clay,05021,021,https://dashboard.birdcast.info/region/US-AR-021
+Arkansas,AR,Cleveland,05025,025,https://dashboard.birdcast.info/region/US-AR-025
+Arkansas,AR,Craighead,05031,031,https://dashboard.birdcast.info/region/US-AR-031
+Arkansas,AR,Crittenden,05035,035,https://dashboard.birdcast.info/region/US-AR-035
+Arkansas,AR,Cross,05037,037,https://dashboard.birdcast.info/region/US-AR-037
+Arkansas,AR,Desha,05041,041,https://dashboard.birdcast.info/region/US-AR-041
+Arkansas,AR,Drew,05043,043,https://dashboard.birdcast.info/region/US-AR-043
+Arkansas,AR,Greene,05055,055,https://dashboard.birdcast.info/region/US-AR-055
+Arkansas,AR,Jackson,05067,067,https://dashboard.birdcast.info/region/US-AR-067
+Arkansas,AR,Jefferson,05069,069,https://dashboard.birdcast.info/region/US-AR-069
+Arkansas,AR,Lawrence,05075,075,https://dashboard.birdcast.info/region/US-AR-075
+Arkansas,AR,Lee,05077,077,https://dashboard.birdcast.info/region/US-AR-077
+Arkansas,AR,Lincoln,05079,079,https://dashboard.birdcast.info/region/US-AR-079
+Arkansas,AR,Mississippi,05093,093,https://dashboard.birdcast.info/region/US-AR-093
+Arkansas,AR,Monroe,05095,095,https://dashboard.birdcast.info/region/US-AR-095
+Arkansas,AR,Phillips,05107,107,https://dashboard.birdcast.info/region/US-AR-107
+Arkansas,AR,Poinsett,05111,111,https://dashboard.birdcast.info/region/US-AR-111
+Arkansas,AR,Prairie,05117,117,https://dashboard.birdcast.info/region/US-AR-117
+Arkansas,AR,Randolph,05121,121,https://dashboard.birdcast.info/region/US-AR-121
+Arkansas,AR,St. Francis,05123,123,https://dashboard.birdcast.info/region/US-AR-123
+Arkansas,AR,Woodruff,05147,147,https://dashboard.birdcast.info/region/US-AR-147
+Illinois,IL,Adams,17001,001,https://dashboard.birdcast.info/region/US-IL-001
+Illinois,IL,Alexander,17003,003,https://dashboard.birdcast.info/region/US-IL-003
+Illinois,IL,Bond,17005,005,https://dashboard.birdcast.info/region/US-IL-005
+Illinois,IL,Brown,17009,009,https://dashboard.birdcast.info/region/US-IL-009
+Illinois,IL,Bureau,17011,011,https://dashboard.birdcast.info/region/US-IL-011
+Illinois,IL,Calhoun,17013,013,https://dashboard.birdcast.info/region/US-IL-013
+Illinois,IL,Carroll,17015,015,https://dashboard.birdcast.info/region/US-IL-015
+Illinois,IL,Cass,17017,017,https://dashboard.birdcast.info/region/US-IL-017
+Illinois,IL,Christian,17021,021,https://dashboard.birdcast.info/region/US-IL-021
+Illinois,IL,Clinton,17027,027,https://dashboard.birdcast.info/region/US-IL-027
+Illinois,IL,Fayette,17051,051,https://dashboard.birdcast.info/region/US-IL-051
+Illinois,IL,Franklin,17055,055,https://dashboard.birdcast.info/region/US-IL-055
+Illinois,IL,Fulton,17057,057,https://dashboard.birdcast.info/region/US-IL-057
+Illinois,IL,Gallatin,17059,059,https://dashboard.birdcast.info/region/US-IL-059
+Illinois,IL,Greene,17061,061,https://dashboard.birdcast.info/region/US-IL-061
+Illinois,IL,Hamilton,17065,065,https://dashboard.birdcast.info/region/US-IL-065
+Illinois,IL,Hancock,17067,067,https://dashboard.birdcast.info/region/US-IL-067
+Illinois,IL,Hardin,17069,069,https://dashboard.birdcast.info/region/US-IL-069
+Illinois,IL,Henderson,17071,071,https://dashboard.birdcast.info/region/US-IL-071
+Illinois,IL,Henry,17073,073,https://dashboard.birdcast.info/region/US-IL-073
+Illinois,IL,Jackson,17077,077,https://dashboard.birdcast.info/region/US-IL-077
+Illinois,IL,Jefferson,17081,081,https://dashboard.birdcast.info/region/US-IL-081
+Illinois,IL,Jersey,17083,083,https://dashboard.birdcast.info/region/US-IL-083
+Illinois,IL,Jo Daviess,17085,085,https://dashboard.birdcast.info/region/US-IL-085
+Illinois,IL,Johnson,17087,087,https://dashboard.birdcast.info/region/US-IL-087
+Illinois,IL,Knox,17095,095,https://dashboard.birdcast.info/region/US-IL-095
+Illinois,IL,Lee,17103,103,https://dashboard.birdcast.info/region/US-IL-103
+Illinois,IL,Logan,17107,107,https://dashboard.birdcast.info/region/US-IL-107
+Illinois,IL,Macoupin,17117,117,https://dashboard.birdcast.info/region/US-IL-117
+Illinois,IL,Madison,17119,119,https://dashboard.birdcast.info/region/US-IL-119
+Illinois,IL,Marion,17121,121,https://dashboard.birdcast.info/region/US-IL-121
+Illinois,IL,Marshall,17123,123,https://dashboard.birdcast.info/region/US-IL-123
+Illinois,IL,Mason,17125,125,https://dashboard.birdcast.info/region/US-IL-125
+Illinois,IL,Massac,17127,127,https://dashboard.birdcast.info/region/US-IL-127
+Illinois,IL,McDonough,17109,109,https://dashboard.birdcast.info/region/US-IL-109
+Illinois,IL,Menard,17129,129,https://dashboard.birdcast.info/region/US-IL-129
+Illinois,IL,Mercer,17131,131,https://dashboard.birdcast.info/region/US-IL-131
+Illinois,IL,Monroe,17133,133,https://dashboard.birdcast.info/region/US-IL-133
+Illinois,IL,Montgomery,17135,135,https://dashboard.birdcast.info/region/US-IL-135
+Illinois,IL,Morgan,17137,137,https://dashboard.birdcast.info/region/US-IL-137
+Illinois,IL,Ogle,17141,141,https://dashboard.birdcast.info/region/US-IL-141
+Illinois,IL,Peoria,17143,143,https://dashboard.birdcast.info/region/US-IL-143
+Illinois,IL,Perry,17145,145,https://dashboard.birdcast.info/region/US-IL-145
+Illinois,IL,Pike,17149,149,https://dashboard.birdcast.info/region/US-IL-149
+Illinois,IL,Pope,17151,151,https://dashboard.birdcast.info/region/US-IL-151
+Illinois,IL,Pulaski,17153,153,https://dashboard.birdcast.info/region/US-IL-153
+Illinois,IL,Putnam,17155,155,https://dashboard.birdcast.info/region/US-IL-155
+Illinois,IL,Randolph,17157,157,https://dashboard.birdcast.info/region/US-IL-157
+Illinois,IL,Rock Island,17161,161,https://dashboard.birdcast.info/region/US-IL-161
+Illinois,IL,Saline,17165,165,https://dashboard.birdcast.info/region/US-IL-165
+Illinois,IL,Sangamon,17167,167,https://dashboard.birdcast.info/region/US-IL-167
+Illinois,IL,Schuyler,17169,169,https://dashboard.birdcast.info/region/US-IL-169
+Illinois,IL,Scott,17171,171,https://dashboard.birdcast.info/region/US-IL-171
+Illinois,IL,St. Clair,17163,163,https://dashboard.birdcast.info/region/US-IL-163
+Illinois,IL,Stark,17175,175,https://dashboard.birdcast.info/region/US-IL-175
+Illinois,IL,Stephenson,17177,177,https://dashboard.birdcast.info/region/US-IL-177
+Illinois,IL,Tazewell,17179,179,https://dashboard.birdcast.info/region/US-IL-179
+Illinois,IL,Union,17181,181,https://dashboard.birdcast.info/region/US-IL-181
+Illinois,IL,Warren,17187,187,https://dashboard.birdcast.info/region/US-IL-187
+Illinois,IL,Washington,17189,189,https://dashboard.birdcast.info/region/US-IL-189
+Illinois,IL,Wayne,17191,191,https://dashboard.birdcast.info/region/US-IL-191
+Illinois,IL,Whiteside,17195,195,https://dashboard.birdcast.info/region/US-IL-195
+Illinois,IL,Williamson,17199,199,https://dashboard.birdcast.info/region/US-IL-199
+Illinois,IL,Woodford,17203,203,https://dashboard.birdcast.info/region/US-IL-203
+Iowa,IA,Allamakee,19005,005,https://dashboard.birdcast.info/region/US-IA-005
+Iowa,IA,Benton,19011,011,https://dashboard.birdcast.info/region/US-IA-011
+Iowa,IA,Black Hawk,19013,013,https://dashboard.birdcast.info/region/US-IA-013
+Iowa,IA,Bremer,19017,017,https://dashboard.birdcast.info/region/US-IA-017
+Iowa,IA,Buchanan,19019,019,https://dashboard.birdcast.info/region/US-IA-019
+Iowa,IA,Cedar,19031,031,https://dashboard.birdcast.info/region/US-IA-031
+Iowa,IA,Chickasaw,19037,037,https://dashboard.birdcast.info/region/US-IA-037
+Iowa,IA,Clayton,19043,043,https://dashboard.birdcast.info/region/US-IA-043
+Iowa,IA,Clinton,19045,045,https://dashboard.birdcast.info/region/US-IA-045
+Iowa,IA,Delaware,19055,055,https://dashboard.birdcast.info/region/US-IA-055
+Iowa,IA,Des Moines,19057,057,https://dashboard.birdcast.info/region/US-IA-057
+Iowa,IA,Dubuque,19061,061,https://dashboard.birdcast.info/region/US-IA-061
+Iowa,IA,Fayette,19065,065,https://dashboard.birdcast.info/region/US-IA-065
+Iowa,IA,Floyd,19067,067,https://dashboard.birdcast.info/region/US-IA-067
+Iowa,IA,Henry,19087,087,https://dashboard.birdcast.info/region/US-IA-087
+Iowa,IA,Howard,19089,089,https://dashboard.birdcast.info/region/US-IA-089
+Iowa,IA,Iowa,19095,095,https://dashboard.birdcast.info/region/US-IA-095
+Iowa,IA,Jackson,19097,097,https://dashboard.birdcast.info/region/US-IA-097
+Iowa,IA,Jefferson,19101,101,https://dashboard.birdcast.info/region/US-IA-101
+Iowa,IA,Johnson,19103,103,https://dashboard.birdcast.info/region/US-IA-103
+Iowa,IA,Jones,19105,105,https://dashboard.birdcast.info/region/US-IA-105
+Iowa,IA,Lee,19111,111,https://dashboard.birdcast.info/region/US-IA-111
+Iowa,IA,Linn,19113,113,https://dashboard.birdcast.info/region/US-IA-113
+Iowa,IA,Louisa,19115,115,https://dashboard.birdcast.info/region/US-IA-115
+Iowa,IA,Mitchell,19131,131,https://dashboard.birdcast.info/region/US-IA-131
+Iowa,IA,Muscatine,19139,139,https://dashboard.birdcast.info/region/US-IA-139
+Iowa,IA,Scott,19163,163,https://dashboard.birdcast.info/region/US-IA-163
+Iowa,IA,Van Buren,19177,177,https://dashboard.birdcast.info/region/US-IA-177
+Iowa,IA,Washington,19183,183,https://dashboard.birdcast.info/region/US-IA-183
+Iowa,IA,Winneshiek,19191,191,https://dashboard.birdcast.info/region/US-IA-191
+Kentucky,KY,Ballard,21007,007,https://dashboard.birdcast.info/region/US-KY-007
+Kentucky,KY,Caldwell,21033,033,https://dashboard.birdcast.info/region/US-KY-033
+Kentucky,KY,Calloway,21035,035,https://dashboard.birdcast.info/region/US-KY-035
+Kentucky,KY,Carlisle,21039,039,https://dashboard.birdcast.info/region/US-KY-039
+Kentucky,KY,Crittenden,21055,055,https://dashboard.birdcast.info/region/US-KY-055
+Kentucky,KY,Fulton,21075,075,https://dashboard.birdcast.info/region/US-KY-075
+Kentucky,KY,Graves,21083,083,https://dashboard.birdcast.info/region/US-KY-083
+Kentucky,KY,Hickman,21105,105,https://dashboard.birdcast.info/region/US-KY-105
+Kentucky,KY,Livingston,21139,139,https://dashboard.birdcast.info/region/US-KY-139
+Kentucky,KY,Lyon,21143,143,https://dashboard.birdcast.info/region/US-KY-143
+Kentucky,KY,Marshall,21157,157,https://dashboard.birdcast.info/region/US-KY-157
+Kentucky,KY,McCracken,21145,145,https://dashboard.birdcast.info/region/US-KY-145
+Kentucky,KY,Trigg,21221,221,https://dashboard.birdcast.info/region/US-KY-221
+Kentucky,KY,Union,21225,225,https://dashboard.birdcast.info/region/US-KY-225
+Louisiana,LA,Acadia,22001,001,https://dashboard.birdcast.info/region/US-LA-001
+Louisiana,LA,Ascension,22005,005,https://dashboard.birdcast.info/region/US-LA-005
+Louisiana,LA,Assumption,22007,007,https://dashboard.birdcast.info/region/US-LA-007
+Louisiana,LA,Avoyelles,22009,009,https://dashboard.birdcast.info/region/US-LA-009
+Louisiana,LA,Caldwell,22021,021,https://dashboard.birdcast.info/region/US-LA-021
+Louisiana,LA,Catahoula,22025,025,https://dashboard.birdcast.info/region/US-LA-025
+Louisiana,LA,Concordia,22029,029,https://dashboard.birdcast.info/region/US-LA-029
+Louisiana,LA,East Baton Rouge,22033,033,https://dashboard.birdcast.info/region/US-LA-033
+Louisiana,LA,East Carroll,22035,035,https://dashboard.birdcast.info/region/US-LA-035
+Louisiana,LA,East Feliciana,22037,037,https://dashboard.birdcast.info/region/US-LA-037
+Louisiana,LA,Evangeline,22039,039,https://dashboard.birdcast.info/region/US-LA-039
+Louisiana,LA,Franklin,22041,041,https://dashboard.birdcast.info/region/US-LA-041
+Louisiana,LA,Iberia,22045,045,https://dashboard.birdcast.info/region/US-LA-045
+Louisiana,LA,Iberville,22047,047,https://dashboard.birdcast.info/region/US-LA-047
+Louisiana,LA,Jackson,22049,049,https://dashboard.birdcast.info/region/US-LA-049
+Louisiana,LA,Jefferson,22051,051,https://dashboard.birdcast.info/region/US-LA-051
+Louisiana,LA,LaSalle,22059,059,https://dashboard.birdcast.info/region/US-LA-059
+Louisiana,LA,Lafayette,22055,055,https://dashboard.birdcast.info/region/US-LA-055
+Louisiana,LA,Lafourche,22057,057,https://dashboard.birdcast.info/region/US-LA-057
+Louisiana,LA,Livingston,22063,063,https://dashboard.birdcast.info/region/US-LA-063
+Louisiana,LA,Madison,22065,065,https://dashboard.birdcast.info/region/US-LA-065
+Louisiana,LA,Morehouse,22067,067,https://dashboard.birdcast.info/region/US-LA-067
+Louisiana,LA,Orleans,22071,071,https://dashboard.birdcast.info/region/US-LA-071
+Louisiana,LA,Ouachita,22073,073,https://dashboard.birdcast.info/region/US-LA-073
+Louisiana,LA,Plaquemines,22075,075,https://dashboard.birdcast.info/region/US-LA-075
+Louisiana,LA,Pointe Coupee,22077,077,https://dashboard.birdcast.info/region/US-LA-077
+Louisiana,LA,Richland,22083,083,https://dashboard.birdcast.info/region/US-LA-083
+Louisiana,LA,St. Bernard,22087,087,https://dashboard.birdcast.info/region/US-LA-087
+Louisiana,LA,St. Charles,22089,089,https://dashboard.birdcast.info/region/US-LA-089
+Louisiana,LA,St. Helena,22091,091,https://dashboard.birdcast.info/region/US-LA-091
+Louisiana,LA,St. James,22093,093,https://dashboard.birdcast.info/region/US-LA-093
+Louisiana,LA,St. John the Baptist,22095,095,https://dashboard.birdcast.info/region/US-LA-095
+Louisiana,LA,St. Landry,22097,097,https://dashboard.birdcast.info/region/US-LA-097
+Louisiana,LA,St. Martin,22099,099,https://dashboard.birdcast.info/region/US-LA-099
+Louisiana,LA,St. Mary,22101,101,https://dashboard.birdcast.info/region/US-LA-101
+Louisiana,LA,St. Tammany,22103,103,https://dashboard.birdcast.info/region/US-LA-103
+Louisiana,LA,Tangipahoa,22105,105,https://dashboard.birdcast.info/region/US-LA-105
+Louisiana,LA,Tensas,22107,107,https://dashboard.birdcast.info/region/US-LA-107
+Louisiana,LA,Terrebonne,22109,109,https://dashboard.birdcast.info/region/US-LA-109
+Louisiana,LA,Union,22111,111,https://dashboard.birdcast.info/region/US-LA-111
+Louisiana,LA,Washington,22117,117,https://dashboard.birdcast.info/region/US-LA-117
+Louisiana,LA,West Baton Rouge,22121,121,https://dashboard.birdcast.info/region/US-LA-121
+Louisiana,LA,West Carroll,22123,123,https://dashboard.birdcast.info/region/US-LA-123
+Louisiana,LA,West Feliciana,22125,125,https://dashboard.birdcast.info/region/US-LA-125
+Minnesota,MN,Aitkin,27001,001,https://dashboard.birdcast.info/region/US-MN-001
+Minnesota,MN,Anoka,27003,003,https://dashboard.birdcast.info/region/US-MN-003
+Minnesota,MN,Becker,27005,005,https://dashboard.birdcast.info/region/US-MN-005
+Minnesota,MN,Benton,27009,009,https://dashboard.birdcast.info/region/US-MN-009
+Minnesota,MN,Blue Earth,27013,013,https://dashboard.birdcast.info/region/US-MN-013
+Minnesota,MN,Carver,27019,019,https://dashboard.birdcast.info/region/US-MN-019
+Minnesota,MN,Cass,27021,021,https://dashboard.birdcast.info/region/US-MN-021
+Minnesota,MN,Chippewa,27023,023,https://dashboard.birdcast.info/region/US-MN-023
+Minnesota,MN,Chisago,27025,025,https://dashboard.birdcast.info/region/US-MN-025
+Minnesota,MN,Clearwater,27029,029,https://dashboard.birdcast.info/region/US-MN-029
+Minnesota,MN,Crow Wing,27035,035,https://dashboard.birdcast.info/region/US-MN-035
+Minnesota,MN,Dakota,27037,037,https://dashboard.birdcast.info/region/US-MN-037
+Minnesota,MN,Dodge,27039,039,https://dashboard.birdcast.info/region/US-MN-039
+Minnesota,MN,Douglas,27041,041,https://dashboard.birdcast.info/region/US-MN-041
+Minnesota,MN,Fillmore,27045,045,https://dashboard.birdcast.info/region/US-MN-045
+Minnesota,MN,Freeborn,27047,047,https://dashboard.birdcast.info/region/US-MN-047
+Minnesota,MN,Goodhue,27049,049,https://dashboard.birdcast.info/region/US-MN-049
+Minnesota,MN,Grant,27051,051,https://dashboard.birdcast.info/region/US-MN-051
+Minnesota,MN,Hennepin,27053,053,https://dashboard.birdcast.info/region/US-MN-053
+Minnesota,MN,Houston,27055,055,https://dashboard.birdcast.info/region/US-MN-055
+Minnesota,MN,Hubbard,27057,057,https://dashboard.birdcast.info/region/US-MN-057
+Minnesota,MN,Isanti,27059,059,https://dashboard.birdcast.info/region/US-MN-059
+Minnesota,MN,Itasca,27061,061,https://dashboard.birdcast.info/region/US-MN-061
+Minnesota,MN,Kanabec,27065,065,https://dashboard.birdcast.info/region/US-MN-065
+Minnesota,MN,Kandiyohi,27067,067,https://dashboard.birdcast.info/region/US-MN-067
+Minnesota,MN,Le Sueur,27079,079,https://dashboard.birdcast.info/region/US-MN-079
+Minnesota,MN,Mahnomen,27087,087,https://dashboard.birdcast.info/region/US-MN-087
+Minnesota,MN,McLeod,27085,085,https://dashboard.birdcast.info/region/US-MN-085
+Minnesota,MN,Meeker,27093,093,https://dashboard.birdcast.info/region/US-MN-093
+Minnesota,MN,Mille Lacs,27095,095,https://dashboard.birdcast.info/region/US-MN-095
+Minnesota,MN,Morrison,27097,097,https://dashboard.birdcast.info/region/US-MN-097
+Minnesota,MN,Mower,27099,099,https://dashboard.birdcast.info/region/US-MN-099
+Minnesota,MN,Nicollet,27103,103,https://dashboard.birdcast.info/region/US-MN-103
+Minnesota,MN,Olmsted,27109,109,https://dashboard.birdcast.info/region/US-MN-109
+Minnesota,MN,Otter Tail,27111,111,https://dashboard.birdcast.info/region/US-MN-111
+Minnesota,MN,Pine,27115,115,https://dashboard.birdcast.info/region/US-MN-115
+Minnesota,MN,Pope,27121,121,https://dashboard.birdcast.info/region/US-MN-121
+Minnesota,MN,Ramsey,27123,123,https://dashboard.birdcast.info/region/US-MN-123
+Minnesota,MN,Renville,27129,129,https://dashboard.birdcast.info/region/US-MN-129
+Minnesota,MN,Rice,27131,131,https://dashboard.birdcast.info/region/US-MN-131
+Minnesota,MN,Scott,27139,139,https://dashboard.birdcast.info/region/US-MN-139
+Minnesota,MN,Sherburne,27141,141,https://dashboard.birdcast.info/region/US-MN-141
+Minnesota,MN,Sibley,27143,143,https://dashboard.birdcast.info/region/US-MN-143
+Minnesota,MN,Stearns,27145,145,https://dashboard.birdcast.info/region/US-MN-145
+Minnesota,MN,Steele,27147,147,https://dashboard.birdcast.info/region/US-MN-147
+Minnesota,MN,Stevens,27149,149,https://dashboard.birdcast.info/region/US-MN-149
+Minnesota,MN,Swift,27151,151,https://dashboard.birdcast.info/region/US-MN-151
+Minnesota,MN,Todd,27153,153,https://dashboard.birdcast.info/region/US-MN-153
+Minnesota,MN,Wabasha,27157,157,https://dashboard.birdcast.info/region/US-MN-157
+Minnesota,MN,Wadena,27159,159,https://dashboard.birdcast.info/region/US-MN-159
+Minnesota,MN,Waseca,27161,161,https://dashboard.birdcast.info/region/US-MN-161
+Minnesota,MN,Washington,27163,163,https://dashboard.birdcast.info/region/US-MN-163
+Minnesota,MN,Winona,27169,169,https://dashboard.birdcast.info/region/US-MN-169
+Minnesota,MN,Wright,27171,171,https://dashboard.birdcast.info/region/US-MN-171
+Mississippi,MS,Adams,28001,001,https://dashboard.birdcast.info/region/US-MS-001
+Mississippi,MS,Amite,28005,005,https://dashboard.birdcast.info/region/US-MS-005
+Mississippi,MS,Benton,28009,009,https://dashboard.birdcast.info/region/US-MS-009
+Mississippi,MS,Bolivar,28011,011,https://dashboard.birdcast.info/region/US-MS-011
+Mississippi,MS,Calhoun,28013,013,https://dashboard.birdcast.info/region/US-MS-013
+Mississippi,MS,Carroll,28015,015,https://dashboard.birdcast.info/region/US-MS-015
+Mississippi,MS,Claiborne,28021,021,https://dashboard.birdcast.info/region/US-MS-021
+Mississippi,MS,Coahoma,28027,027,https://dashboard.birdcast.info/region/US-MS-027
+Mississippi,MS,Copiah,28029,029,https://dashboard.birdcast.info/region/US-MS-029
+Mississippi,MS,DeSoto,28033,033,https://dashboard.birdcast.info/region/US-MS-033
+Mississippi,MS,Franklin,28037,037,https://dashboard.birdcast.info/region/US-MS-037
+Mississippi,MS,Grenada,28043,043,https://dashboard.birdcast.info/region/US-MS-043
+Mississippi,MS,Hancock,28045,045,https://dashboard.birdcast.info/region/US-MS-045
+Mississippi,MS,Harrison,28047,047,https://dashboard.birdcast.info/region/US-MS-047
+Mississippi,MS,Hinds,28049,049,https://dashboard.birdcast.info/region/US-MS-049
+Mississippi,MS,Holmes,28051,051,https://dashboard.birdcast.info/region/US-MS-051
+Mississippi,MS,Humphreys,28053,053,https://dashboard.birdcast.info/region/US-MS-053
+Mississippi,MS,Issaquena,28055,055,https://dashboard.birdcast.info/region/US-MS-055
+Mississippi,MS,Jefferson,28063,063,https://dashboard.birdcast.info/region/US-MS-063
+Mississippi,MS,Jefferson Davis,28065,065,https://dashboard.birdcast.info/region/US-MS-065
+Mississippi,MS,Lafayette,28071,071,https://dashboard.birdcast.info/region/US-MS-071
+Mississippi,MS,Lawrence,28077,077,https://dashboard.birdcast.info/region/US-MS-077
+Mississippi,MS,Leflore,28083,083,https://dashboard.birdcast.info/region/US-MS-083
+Mississippi,MS,Lincoln,28085,085,https://dashboard.birdcast.info/region/US-MS-085
+Mississippi,MS,Madison,28089,089,https://dashboard.birdcast.info/region/US-MS-089
+Mississippi,MS,Marion,28091,091,https://dashboard.birdcast.info/region/US-MS-091
+Mississippi,MS,Marshall,28093,093,https://dashboard.birdcast.info/region/US-MS-093
+Mississippi,MS,Montgomery,28097,097,https://dashboard.birdcast.info/region/US-MS-097
+Mississippi,MS,Panola,28107,107,https://dashboard.birdcast.info/region/US-MS-107
+Mississippi,MS,Pearl River,28109,109,https://dashboard.birdcast.info/region/US-MS-109
+Mississippi,MS,Pike,28113,113,https://dashboard.birdcast.info/region/US-MS-113
+Mississippi,MS,Pontotoc,28115,115,https://dashboard.birdcast.info/region/US-MS-115
+Mississippi,MS,Quitman,28119,119,https://dashboard.birdcast.info/region/US-MS-119
+Mississippi,MS,Rankin,28121,121,https://dashboard.birdcast.info/region/US-MS-121
+Mississippi,MS,Sharkey,28125,125,https://dashboard.birdcast.info/region/US-MS-125
+Mississippi,MS,Simpson,28127,127,https://dashboard.birdcast.info/region/US-MS-127
+Mississippi,MS,Sunflower,28133,133,https://dashboard.birdcast.info/region/US-MS-133
+Mississippi,MS,Tallahatchie,28135,135,https://dashboard.birdcast.info/region/US-MS-135
+Mississippi,MS,Tate,28137,137,https://dashboard.birdcast.info/region/US-MS-137
+Mississippi,MS,Tippah,28139,139,https://dashboard.birdcast.info/region/US-MS-139
+Mississippi,MS,Tunica,28143,143,https://dashboard.birdcast.info/region/US-MS-143
+Mississippi,MS,Union,28145,145,https://dashboard.birdcast.info/region/US-MS-145
+Mississippi,MS,Walthall,28147,147,https://dashboard.birdcast.info/region/US-MS-147
+Mississippi,MS,Warren,28149,149,https://dashboard.birdcast.info/region/US-MS-149
+Mississippi,MS,Washington,28151,151,https://dashboard.birdcast.info/region/US-MS-151
+Mississippi,MS,Wilkinson,28157,157,https://dashboard.birdcast.info/region/US-MS-157
+Mississippi,MS,Yalobusha,28161,161,https://dashboard.birdcast.info/region/US-MS-161
+Mississippi,MS,Yazoo,28163,163,https://dashboard.birdcast.info/region/US-MS-163
+Missouri,MO,Audrain,29007,007,https://dashboard.birdcast.info/region/US-MO-007
+Missouri,MO,Bollinger,29017,017,https://dashboard.birdcast.info/region/US-MO-017
+Missouri,MO,Butler,29023,023,https://dashboard.birdcast.info/region/US-MO-023
+Missouri,MO,Callaway,29027,027,https://dashboard.birdcast.info/region/US-MO-027
+Missouri,MO,Cape Girardeau,29031,031,https://dashboard.birdcast.info/region/US-MO-031
+Missouri,MO,Clark,29045,045,https://dashboard.birdcast.info/region/US-MO-045
+Missouri,MO,Crawford,29055,055,https://dashboard.birdcast.info/region/US-MO-055
+Missouri,MO,Dunklin,29069,069,https://dashboard.birdcast.info/region/US-MO-069
+Missouri,MO,Franklin,29071,071,https://dashboard.birdcast.info/region/US-MO-071
+Missouri,MO,Gasconade,29073,073,https://dashboard.birdcast.info/region/US-MO-073
+Missouri,MO,Iron,29093,093,https://dashboard.birdcast.info/region/US-MO-093
+Missouri,MO,Jefferson,29099,099,https://dashboard.birdcast.info/region/US-MO-099
+Missouri,MO,Knox,29103,103,https://dashboard.birdcast.info/region/US-MO-103
+Missouri,MO,Lewis,29111,111,https://dashboard.birdcast.info/region/US-MO-111
+Missouri,MO,Lincoln,29113,113,https://dashboard.birdcast.info/region/US-MO-113
+Missouri,MO,Macon,29121,121,https://dashboard.birdcast.info/region/US-MO-121
+Missouri,MO,Madison,29123,123,https://dashboard.birdcast.info/region/US-MO-123
+Missouri,MO,Marion,29127,127,https://dashboard.birdcast.info/region/US-MO-127
+Missouri,MO,Mississippi,29133,133,https://dashboard.birdcast.info/region/US-MO-133
+Missouri,MO,Monroe,29137,137,https://dashboard.birdcast.info/region/US-MO-137
+Missouri,MO,Montgomery,29139,139,https://dashboard.birdcast.info/region/US-MO-139
+Missouri,MO,New Madrid,29143,143,https://dashboard.birdcast.info/region/US-MO-143
+Missouri,MO,Pemiscot,29155,155,https://dashboard.birdcast.info/region/US-MO-155
+Missouri,MO,Perry,29157,157,https://dashboard.birdcast.info/region/US-MO-157
+Missouri,MO,Pike,29163,163,https://dashboard.birdcast.info/region/US-MO-163
+Missouri,MO,Ralls,29173,173,https://dashboard.birdcast.info/region/US-MO-173
+Missouri,MO,Randolph,29175,175,https://dashboard.birdcast.info/region/US-MO-175
+Missouri,MO,Reynolds,29179,179,https://dashboard.birdcast.info/region/US-MO-179
+Missouri,MO,Ripley,29181,181,https://dashboard.birdcast.info/region/US-MO-181
+Missouri,MO,Scotland,29199,199,https://dashboard.birdcast.info/region/US-MO-199
+Missouri,MO,Scott,29201,201,https://dashboard.birdcast.info/region/US-MO-201
+Missouri,MO,Shelby,29205,205,https://dashboard.birdcast.info/region/US-MO-205
+Missouri,MO,St. Charles,29183,183,https://dashboard.birdcast.info/region/US-MO-183
+Missouri,MO,St. Francois,29187,187,https://dashboard.birdcast.info/region/US-MO-187
+Missouri,MO,St. Louis,29189,189,https://dashboard.birdcast.info/region/US-MO-189
+Missouri,MO,St. Louis,29510,510,https://dashboard.birdcast.info/region/US-MO-510
+Missouri,MO,Ste. Genevieve,29186,186,https://dashboard.birdcast.info/region/US-MO-186
+Missouri,MO,Stoddard,29207,207,https://dashboard.birdcast.info/region/US-MO-207
+Missouri,MO,Warren,29219,219,https://dashboard.birdcast.info/region/US-MO-219
+Missouri,MO,Washington,29221,221,https://dashboard.birdcast.info/region/US-MO-221
+Missouri,MO,Wayne,29223,223,https://dashboard.birdcast.info/region/US-MO-223
+Tennessee,TN,Carroll,47017,017,https://dashboard.birdcast.info/region/US-TN-017
+Tennessee,TN,Chester,47023,023,https://dashboard.birdcast.info/region/US-TN-023
+Tennessee,TN,Crockett,47033,033,https://dashboard.birdcast.info/region/US-TN-033
+Tennessee,TN,Dyer,47045,045,https://dashboard.birdcast.info/region/US-TN-045
+Tennessee,TN,Fayette,47047,047,https://dashboard.birdcast.info/region/US-TN-047
+Tennessee,TN,Gibson,47053,053,https://dashboard.birdcast.info/region/US-TN-053
+Tennessee,TN,Hardeman,47069,069,https://dashboard.birdcast.info/region/US-TN-069
+Tennessee,TN,Haywood,47075,075,https://dashboard.birdcast.info/region/US-TN-075
+Tennessee,TN,Henry,47079,079,https://dashboard.birdcast.info/region/US-TN-079
+Tennessee,TN,Lake,47095,095,https://dashboard.birdcast.info/region/US-TN-095
+Tennessee,TN,Lauderdale,47097,097,https://dashboard.birdcast.info/region/US-TN-097
+Tennessee,TN,Madison,47113,113,https://dashboard.birdcast.info/region/US-TN-113
+Tennessee,TN,Obion,47131,131,https://dashboard.birdcast.info/region/US-TN-131
+Tennessee,TN,Shelby,47157,157,https://dashboard.birdcast.info/region/US-TN-157
+Tennessee,TN,Stewart,47161,161,https://dashboard.birdcast.info/region/US-TN-161
+Tennessee,TN,Tipton,47167,167,https://dashboard.birdcast.info/region/US-TN-167
+Tennessee,TN,Weakley,47183,183,https://dashboard.birdcast.info/region/US-TN-183
+Wisconsin,WI,Barron,55005,005,https://dashboard.birdcast.info/region/US-WI-005
+Wisconsin,WI,Buffalo,55011,011,https://dashboard.birdcast.info/region/US-WI-011
+Wisconsin,WI,Burnett,55013,013,https://dashboard.birdcast.info/region/US-WI-013
+Wisconsin,WI,Chippewa,55017,017,https://dashboard.birdcast.info/region/US-WI-017
+Wisconsin,WI,Clark,55019,019,https://dashboard.birdcast.info/region/US-WI-019
+Wisconsin,WI,Crawford,55023,023,https://dashboard.birdcast.info/region/US-WI-023
+Wisconsin,WI,Dunn,55033,033,https://dashboard.birdcast.info/region/US-WI-033
+Wisconsin,WI,Eau Claire,55035,035,https://dashboard.birdcast.info/region/US-WI-035
+Wisconsin,WI,Grant,55043,043,https://dashboard.birdcast.info/region/US-WI-043
+Wisconsin,WI,Green,55045,045,https://dashboard.birdcast.info/region/US-WI-045
+Wisconsin,WI,Iowa,55049,049,https://dashboard.birdcast.info/region/US-WI-049
+Wisconsin,WI,Jackson,55053,053,https://dashboard.birdcast.info/region/US-WI-053
+Wisconsin,WI,Juneau,55057,057,https://dashboard.birdcast.info/region/US-WI-057
+Wisconsin,WI,La Crosse,55063,063,https://dashboard.birdcast.info/region/US-WI-063
+Wisconsin,WI,Lafayette,55065,065,https://dashboard.birdcast.info/region/US-WI-065
+Wisconsin,WI,Monroe,55081,081,https://dashboard.birdcast.info/region/US-WI-081
+Wisconsin,WI,Pepin,55091,091,https://dashboard.birdcast.info/region/US-WI-091
+Wisconsin,WI,Pierce,55093,093,https://dashboard.birdcast.info/region/US-WI-093
+Wisconsin,WI,Polk,55095,095,https://dashboard.birdcast.info/region/US-WI-095
+Wisconsin,WI,Richland,55103,103,https://dashboard.birdcast.info/region/US-WI-103
+Wisconsin,WI,Sauk,55111,111,https://dashboard.birdcast.info/region/US-WI-111
+Wisconsin,WI,St. Croix,55109,109,https://dashboard.birdcast.info/region/US-WI-109
+Wisconsin,WI,Trempealeau,55121,121,https://dashboard.birdcast.info/region/US-WI-121
+Wisconsin,WI,Vernon,55123,123,https://dashboard.birdcast.info/region/US-WI-123

@@ -39,7 +39,8 @@ Thumbs.db
 # *.csv
 *.json
 *.log
-*.parquet 
+*.parquet
+!data/*.parquet
 
 # Temporary files
 *.tmp

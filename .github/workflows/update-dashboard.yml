@@ -59,10 +59,30 @@ jobs:
           python birdweather_specific_pucs.py &
           PID_PUC=$!
 
+          echo "=== Scraping BirdCast migration data ==="
+          python birdcast_scraper.py &
+          PID_BIRDCAST=$!
+
+          echo "=== Scraping Atlantic Flyway ==="
+          python atlantic_flyway_scraper.py &
+          PID_ATLANTIC=$!
+
+          echo "=== Scraping Mississippi Flyway ==="
+          python mississippi_flyway_scraper.py &
+          PID_MISSISSIPPI=$!
+
+          echo "=== Scraping Pacific Flyway ==="
+          python pacific_flyway_scraper.py &
+          PID_PACIFIC=$!
+
           # Wait for all data scripts (don't fail the whole job if one errors)
           wait $PID_WEATHER || echo "WARNING: weather.py failed"
           wait $PID_MERGE || echo "WARNING: merge_sites_data.py failed"
           wait $PID_PUC || echo "WARNING: birdweather_specific_pucs.py failed"
+          wait $PID_BIRDCAST || echo "WARNING: birdcast_scraper.py failed"
+          wait $PID_ATLANTIC || echo "WARNING: atlantic_flyway_scraper.py failed"
+          wait $PID_MISSISSIPPI || echo "WARNING: mississippi_flyway_scraper.py failed"
+          wait $PID_PACIFIC || echo "WARNING: pacific_flyway_scraper.py failed"
 
           echo "=== Phase 1 complete ==="
 
