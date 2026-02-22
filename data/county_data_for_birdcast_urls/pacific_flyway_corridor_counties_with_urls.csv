@@ -1,0 +1,86 @@
+state,state_abbr,county,GEOID,county_fips3,birdcast_url
+Alaska,AK,Anchorage,02020,020,https://dashboard.birdcast.info/region/US-AK-020
+Alaska,AK,Hoonah-Angoon,02105,105,https://dashboard.birdcast.info/region/US-AK-105
+Alaska,AK,Kenai Peninsula,02122,122,https://dashboard.birdcast.info/region/US-AK-122
+Alaska,AK,Ketchikan Gateway,02130,130,https://dashboard.birdcast.info/region/US-AK-130
+Alaska,AK,Matanuska-Susitna,02170,170,https://dashboard.birdcast.info/region/US-AK-170
+Alaska,AK,Petersburg,02195,195,https://dashboard.birdcast.info/region/US-AK-195
+Alaska,AK,Prince of Wales-Hyder,02198,198,https://dashboard.birdcast.info/region/US-AK-198
+Alaska,AK,Sitka,02220,220,https://dashboard.birdcast.info/region/US-AK-220
+Alaska,AK,Wrangell,02275,275,https://dashboard.birdcast.info/region/US-AK-275
+California,CA,Alameda,06001,001,https://dashboard.birdcast.info/region/US-CA-001
+California,CA,Colusa,06011,011,https://dashboard.birdcast.info/region/US-CA-011
+California,CA,Contra Costa,06013,013,https://dashboard.birdcast.info/region/US-CA-013
+California,CA,Del Norte,06015,015,https://dashboard.birdcast.info/region/US-CA-015
+California,CA,Glenn,06021,021,https://dashboard.birdcast.info/region/US-CA-021
+California,CA,Humboldt,06023,023,https://dashboard.birdcast.info/region/US-CA-023
+California,CA,Kern,06029,029,https://dashboard.birdcast.info/region/US-CA-029
+California,CA,Kings,06031,031,https://dashboard.birdcast.info/region/US-CA-031
+California,CA,Lake,06033,033,https://dashboard.birdcast.info/region/US-CA-033
+California,CA,Los Angeles,06037,037,https://dashboard.birdcast.info/region/US-CA-037
+California,CA,Marin,06041,041,https://dashboard.birdcast.info/region/US-CA-041
+California,CA,Mendocino,06045,045,https://dashboard.birdcast.info/region/US-CA-045
+California,CA,Merced,06047,047,https://dashboard.birdcast.info/region/US-CA-047
+California,CA,Monterey,06053,053,https://dashboard.birdcast.info/region/US-CA-053
+California,CA,Napa,06055,055,https://dashboard.birdcast.info/region/US-CA-055
+California,CA,Orange,06059,059,https://dashboard.birdcast.info/region/US-CA-059
+California,CA,Sacramento,06067,067,https://dashboard.birdcast.info/region/US-CA-067
+California,CA,San Benito,06069,069,https://dashboard.birdcast.info/region/US-CA-069
+California,CA,San Diego,06073,073,https://dashboard.birdcast.info/region/US-CA-073
+California,CA,San Francisco,06075,075,https://dashboard.birdcast.info/region/US-CA-075
+California,CA,San Joaquin,06077,077,https://dashboard.birdcast.info/region/US-CA-077
+California,CA,San Luis Obispo,06079,079,https://dashboard.birdcast.info/region/US-CA-079
+California,CA,San Mateo,06081,081,https://dashboard.birdcast.info/region/US-CA-081
+California,CA,Santa Barbara,06083,083,https://dashboard.birdcast.info/region/US-CA-083
+California,CA,Santa Clara,06085,085,https://dashboard.birdcast.info/region/US-CA-085
+California,CA,Santa Cruz,06087,087,https://dashboard.birdcast.info/region/US-CA-087
+California,CA,Siskiyou,06093,093,https://dashboard.birdcast.info/region/US-CA-093
+California,CA,Solano,06095,095,https://dashboard.birdcast.info/region/US-CA-095
+California,CA,Sonoma,06097,097,https://dashboard.birdcast.info/region/US-CA-097
+California,CA,Stanislaus,06099,099,https://dashboard.birdcast.info/region/US-CA-099
+California,CA,Sutter,06101,101,https://dashboard.birdcast.info/region/US-CA-101
+California,CA,Tehama,06103,103,https://dashboard.birdcast.info/region/US-CA-103
+California,CA,Trinity,06105,105,https://dashboard.birdcast.info/region/US-CA-105
+California,CA,Ventura,06111,111,https://dashboard.birdcast.info/region/US-CA-111
+California,CA,Yolo,06113,113,https://dashboard.birdcast.info/region/US-CA-113
+Oregon,OR,Benton,41003,003,https://dashboard.birdcast.info/region/US-OR-003
+Oregon,OR,Clackamas,41005,005,https://dashboard.birdcast.info/region/US-OR-005
+Oregon,OR,Clatsop,41007,007,https://dashboard.birdcast.info/region/US-OR-007
+Oregon,OR,Columbia,41009,009,https://dashboard.birdcast.info/region/US-OR-009
+Oregon,OR,Coos,41011,011,https://dashboard.birdcast.info/region/US-OR-011
+Oregon,OR,Curry,41015,015,https://dashboard.birdcast.info/region/US-OR-015
+Oregon,OR,Douglas,41019,019,https://dashboard.birdcast.info/region/US-OR-019
+Oregon,OR,Hood River,41027,027,https://dashboard.birdcast.info/region/US-OR-027
+Oregon,OR,Jackson,41029,029,https://dashboard.birdcast.info/region/US-OR-029
+Oregon,OR,Jefferson,41031,031,https://dashboard.birdcast.info/region/US-OR-031
+Oregon,OR,Josephine,41033,033,https://dashboard.birdcast.info/region/US-OR-033
+Oregon,OR,Lane,41039,039,https://dashboard.birdcast.info/region/US-OR-039
+Oregon,OR,Lincoln,41041,041,https://dashboard.birdcast.info/region/US-OR-041
+Oregon,OR,Linn,41043,043,https://dashboard.birdcast.info/region/US-OR-043
+Oregon,OR,Marion,41047,047,https://dashboard.birdcast.info/region/US-OR-047
+Oregon,OR,Multnomah,41051,051,https://dashboard.birdcast.info/region/US-OR-051
+Oregon,OR,Polk,41053,053,https://dashboard.birdcast.info/region/US-OR-053
+Oregon,OR,Tillamook,41057,057,https://dashboard.birdcast.info/region/US-OR-057
+Oregon,OR,Wasco,41065,065,https://dashboard.birdcast.info/region/US-OR-065
+Oregon,OR,Washington,41067,067,https://dashboard.birdcast.info/region/US-OR-067
+Oregon,OR,Yamhill,41071,071,https://dashboard.birdcast.info/region/US-OR-071
+Washington,WA,Clallam,53009,009,https://dashboard.birdcast.info/region/US-WA-009
+Washington,WA,Clark,53011,011,https://dashboard.birdcast.info/region/US-WA-011
+Washington,WA,Cowlitz,53015,015,https://dashboard.birdcast.info/region/US-WA-015
+Washington,WA,Grays Harbor,53027,027,https://dashboard.birdcast.info/region/US-WA-027
+Washington,WA,Island,53029,029,https://dashboard.birdcast.info/region/US-WA-029
+Washington,WA,Jefferson,53031,031,https://dashboard.birdcast.info/region/US-WA-031
+Washington,WA,King,53033,033,https://dashboard.birdcast.info/region/US-WA-033
+Washington,WA,Kitsap,53035,035,https://dashboard.birdcast.info/region/US-WA-035
+Washington,WA,Klickitat,53039,039,https://dashboard.birdcast.info/region/US-WA-039
+Washington,WA,Lewis,53041,041,https://dashboard.birdcast.info/region/US-WA-041
+Washington,WA,Mason,53045,045,https://dashboard.birdcast.info/region/US-WA-045
+Washington,WA,Pacific,53049,049,https://dashboard.birdcast.info/region/US-WA-049
+Washington,WA,Pierce,53053,053,https://dashboard.birdcast.info/region/US-WA-053
+Washington,WA,San Juan,53055,055,https://dashboard.birdcast.info/region/US-WA-055
+Washington,WA,Skagit,53057,057,https://dashboard.birdcast.info/region/US-WA-057
+Washington,WA,Skamania,53059,059,https://dashboard.birdcast.info/region/US-WA-059
+Washington,WA,Snohomish,53061,061,https://dashboard.birdcast.info/region/US-WA-061
+Washington,WA,Thurston,53067,067,https://dashboard.birdcast.info/region/US-WA-067
+Washington,WA,Wahkiakum,53069,069,https://dashboard.birdcast.info/region/US-WA-069
+Washington,WA,Whatcom,53073,073,https://dashboard.birdcast.info/region/US-WA-073

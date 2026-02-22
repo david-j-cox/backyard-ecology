@@ -69,8 +69,8 @@ from dotenv import load_dotenv
 PHASE_CHANGES = '../data/phase_change_data.csv'
 RAW_DATA = '../data/raw_data_all_locations.csv'
 DAILY_SUMS = '../data/daily_summaries_all_locations.csv'
-BIRDCAST_PARQUET = '../../birdcast-data-grabber/data/birdcast_data.parquet'
-BIRDCAST_CSV = '../../birdcast-data-grabber/data/birdcast_data.csv'
+BIRDCAST_PARQUET = '../data/birdcast_data.parquet'
+BIRDCAST_CSV = '../data/birdcast_data.csv'
 load_dotenv()
 
 # Time-binning config

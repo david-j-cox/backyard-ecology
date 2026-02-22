@@ -1,0 +1,274 @@
+state,state_abbr,county,GEOID,county_fips3,birdcast_url
+Connecticut,CT,Fairfield,09001,001,https://dashboard.birdcast.info/region/US-CT-001
+Connecticut,CT,New Haven,09009,009,https://dashboard.birdcast.info/region/US-CT-009
+Delaware,DE,Kent,10001,001,https://dashboard.birdcast.info/region/US-DE-001
+Delaware,DE,New Castle,10003,003,https://dashboard.birdcast.info/region/US-DE-003
+Delaware,DE,Sussex,10005,005,https://dashboard.birdcast.info/region/US-DE-005
+District of Columbia,DC,District of Columbia,11001,001,https://dashboard.birdcast.info/region/US-DC-001
+Florida,FL,Alachua,12001,001,https://dashboard.birdcast.info/region/US-FL-001
+Florida,FL,Baker,12003,003,https://dashboard.birdcast.info/region/US-FL-003
+Florida,FL,Bradford,12007,007,https://dashboard.birdcast.info/region/US-FL-007
+Florida,FL,Brevard,12009,009,https://dashboard.birdcast.info/region/US-FL-009
+Florida,FL,Broward,12011,011,https://dashboard.birdcast.info/region/US-FL-011
+Florida,FL,Clay,12019,019,https://dashboard.birdcast.info/region/US-FL-019
+Florida,FL,Collier,12021,021,https://dashboard.birdcast.info/region/US-FL-021
+Florida,FL,Columbia,12023,023,https://dashboard.birdcast.info/region/US-FL-023
+Florida,FL,DeSoto,12027,027,https://dashboard.birdcast.info/region/US-FL-027
+Florida,FL,Duval,12031,031,https://dashboard.birdcast.info/region/US-FL-031
+Florida,FL,Flagler,12035,035,https://dashboard.birdcast.info/region/US-FL-035
+Florida,FL,Glades,12043,043,https://dashboard.birdcast.info/region/US-FL-043
+Florida,FL,Hardee,12049,049,https://dashboard.birdcast.info/region/US-FL-049
+Florida,FL,Hendry,12051,051,https://dashboard.birdcast.info/region/US-FL-051
+Florida,FL,Highlands,12055,055,https://dashboard.birdcast.info/region/US-FL-055
+Florida,FL,Indian River,12061,061,https://dashboard.birdcast.info/region/US-FL-061
+Florida,FL,Lake,12069,069,https://dashboard.birdcast.info/region/US-FL-069
+Florida,FL,Marion,12083,083,https://dashboard.birdcast.info/region/US-FL-083
+Florida,FL,Martin,12085,085,https://dashboard.birdcast.info/region/US-FL-085
+Florida,FL,Miami-Dade,12086,086,https://dashboard.birdcast.info/region/US-FL-086
+Florida,FL,Monroe,12087,087,https://dashboard.birdcast.info/region/US-FL-087
+Florida,FL,Nassau,12089,089,https://dashboard.birdcast.info/region/US-FL-089
+Florida,FL,Okeechobee,12093,093,https://dashboard.birdcast.info/region/US-FL-093
+Florida,FL,Orange,12095,095,https://dashboard.birdcast.info/region/US-FL-095
+Florida,FL,Osceola,12097,097,https://dashboard.birdcast.info/region/US-FL-097
+Florida,FL,Palm Beach,12099,099,https://dashboard.birdcast.info/region/US-FL-099
+Florida,FL,Polk,12105,105,https://dashboard.birdcast.info/region/US-FL-105
+Florida,FL,Putnam,12107,107,https://dashboard.birdcast.info/region/US-FL-107
+Florida,FL,Seminole,12117,117,https://dashboard.birdcast.info/region/US-FL-117
+Florida,FL,St. Johns,12109,109,https://dashboard.birdcast.info/region/US-FL-109
+Florida,FL,St. Lucie,12111,111,https://dashboard.birdcast.info/region/US-FL-111
+Florida,FL,Sumter,12119,119,https://dashboard.birdcast.info/region/US-FL-119
+Florida,FL,Union,12125,125,https://dashboard.birdcast.info/region/US-FL-125
+Florida,FL,Volusia,12127,127,https://dashboard.birdcast.info/region/US-FL-127
+Georgia,GA,Brantley,13025,025,https://dashboard.birdcast.info/region/US-GA-025
+Georgia,GA,Bryan,13029,029,https://dashboard.birdcast.info/region/US-GA-029
+Georgia,GA,Camden,13039,039,https://dashboard.birdcast.info/region/US-GA-039
+Georgia,GA,Charlton,13049,049,https://dashboard.birdcast.info/region/US-GA-049
+Georgia,GA,Chatham,13051,051,https://dashboard.birdcast.info/region/US-GA-051
+Georgia,GA,Clinch,13065,065,https://dashboard.birdcast.info/region/US-GA-065
+Georgia,GA,Effingham,13103,103,https://dashboard.birdcast.info/region/US-GA-103
+Georgia,GA,Glynn,13127,127,https://dashboard.birdcast.info/region/US-GA-127
+Georgia,GA,Liberty,13179,179,https://dashboard.birdcast.info/region/US-GA-179
+Georgia,GA,Long,13183,183,https://dashboard.birdcast.info/region/US-GA-183
+Georgia,GA,McIntosh,13191,191,https://dashboard.birdcast.info/region/US-GA-191
+Georgia,GA,Pierce,13229,229,https://dashboard.birdcast.info/region/US-GA-229
+Georgia,GA,Ware,13299,299,https://dashboard.birdcast.info/region/US-GA-299
+Georgia,GA,Wayne,13305,305,https://dashboard.birdcast.info/region/US-GA-305
+Maryland,MD,Anne Arundel,24003,003,https://dashboard.birdcast.info/region/US-MD-003
+Maryland,MD,Baltimore,24005,005,https://dashboard.birdcast.info/region/US-MD-005
+Maryland,MD,Baltimore,24510,510,https://dashboard.birdcast.info/region/US-MD-510
+Maryland,MD,Calvert,24009,009,https://dashboard.birdcast.info/region/US-MD-009
+Maryland,MD,Caroline,24011,011,https://dashboard.birdcast.info/region/US-MD-011
+Maryland,MD,Carroll,24013,013,https://dashboard.birdcast.info/region/US-MD-013
+Maryland,MD,Cecil,24015,015,https://dashboard.birdcast.info/region/US-MD-015
+Maryland,MD,Charles,24017,017,https://dashboard.birdcast.info/region/US-MD-017
+Maryland,MD,Dorchester,24019,019,https://dashboard.birdcast.info/region/US-MD-019
+Maryland,MD,Frederick,24021,021,https://dashboard.birdcast.info/region/US-MD-021
+Maryland,MD,Harford,24025,025,https://dashboard.birdcast.info/region/US-MD-025
+Maryland,MD,Howard,24027,027,https://dashboard.birdcast.info/region/US-MD-027
+Maryland,MD,Kent,24029,029,https://dashboard.birdcast.info/region/US-MD-029
+Maryland,MD,Montgomery,24031,031,https://dashboard.birdcast.info/region/US-MD-031
+Maryland,MD,Prince George's,24033,033,https://dashboard.birdcast.info/region/US-MD-033
+Maryland,MD,Queen Anne's,24035,035,https://dashboard.birdcast.info/region/US-MD-035
+Maryland,MD,St. Mary's,24037,037,https://dashboard.birdcast.info/region/US-MD-037
+Maryland,MD,Talbot,24041,041,https://dashboard.birdcast.info/region/US-MD-041
+Maryland,MD,Washington,24043,043,https://dashboard.birdcast.info/region/US-MD-043
+New Jersey,NJ,Atlantic,34001,001,https://dashboard.birdcast.info/region/US-NJ-001
+New Jersey,NJ,Bergen,34003,003,https://dashboard.birdcast.info/region/US-NJ-003
+New Jersey,NJ,Burlington,34005,005,https://dashboard.birdcast.info/region/US-NJ-005
+New Jersey,NJ,Camden,34007,007,https://dashboard.birdcast.info/region/US-NJ-007
+New Jersey,NJ,Cape May,34009,009,https://dashboard.birdcast.info/region/US-NJ-009
+New Jersey,NJ,Cumberland,34011,011,https://dashboard.birdcast.info/region/US-NJ-011
+New Jersey,NJ,Essex,34013,013,https://dashboard.birdcast.info/region/US-NJ-013
+New Jersey,NJ,Gloucester,34015,015,https://dashboard.birdcast.info/region/US-NJ-015
+New Jersey,NJ,Hudson,34017,017,https://dashboard.birdcast.info/region/US-NJ-017
+New Jersey,NJ,Hunterdon,34019,019,https://dashboard.birdcast.info/region/US-NJ-019
+New Jersey,NJ,Mercer,34021,021,https://dashboard.birdcast.info/region/US-NJ-021
+New Jersey,NJ,Middlesex,34023,023,https://dashboard.birdcast.info/region/US-NJ-023
+New Jersey,NJ,Monmouth,34025,025,https://dashboard.birdcast.info/region/US-NJ-025
+New Jersey,NJ,Morris,34027,027,https://dashboard.birdcast.info/region/US-NJ-027
+New Jersey,NJ,Ocean,34029,029,https://dashboard.birdcast.info/region/US-NJ-029
+New Jersey,NJ,Passaic,34031,031,https://dashboard.birdcast.info/region/US-NJ-031
+New Jersey,NJ,Salem,34033,033,https://dashboard.birdcast.info/region/US-NJ-033
+New Jersey,NJ,Somerset,34035,035,https://dashboard.birdcast.info/region/US-NJ-035
+New Jersey,NJ,Sussex,34037,037,https://dashboard.birdcast.info/region/US-NJ-037
+New Jersey,NJ,Union,34039,039,https://dashboard.birdcast.info/region/US-NJ-039
+New Jersey,NJ,Warren,34041,041,https://dashboard.birdcast.info/region/US-NJ-041
+New York,NY,Bronx,36005,005,https://dashboard.birdcast.info/region/US-NY-005
+New York,NY,Kings,36047,047,https://dashboard.birdcast.info/region/US-NY-047
+New York,NY,Nassau,36059,059,https://dashboard.birdcast.info/region/US-NY-059
+New York,NY,New York,36061,061,https://dashboard.birdcast.info/region/US-NY-061
+New York,NY,Orange,36071,071,https://dashboard.birdcast.info/region/US-NY-071
+New York,NY,Putnam,36079,079,https://dashboard.birdcast.info/region/US-NY-079
+New York,NY,Queens,36081,081,https://dashboard.birdcast.info/region/US-NY-081
+New York,NY,Richmond,36085,085,https://dashboard.birdcast.info/region/US-NY-085
+New York,NY,Rockland,36087,087,https://dashboard.birdcast.info/region/US-NY-087
+New York,NY,Suffolk,36103,103,https://dashboard.birdcast.info/region/US-NY-103
+New York,NY,Westchester,36119,119,https://dashboard.birdcast.info/region/US-NY-119
+North Carolina,NC,Alamance,37001,001,https://dashboard.birdcast.info/region/US-NC-001
+North Carolina,NC,Beaufort,37013,013,https://dashboard.birdcast.info/region/US-NC-013
+North Carolina,NC,Bertie,37015,015,https://dashboard.birdcast.info/region/US-NC-015
+North Carolina,NC,Bladen,37017,017,https://dashboard.birdcast.info/region/US-NC-017
+North Carolina,NC,Brunswick,37019,019,https://dashboard.birdcast.info/region/US-NC-019
+North Carolina,NC,Camden,37029,029,https://dashboard.birdcast.info/region/US-NC-029
+North Carolina,NC,Caswell,37033,033,https://dashboard.birdcast.info/region/US-NC-033
+North Carolina,NC,Chatham,37037,037,https://dashboard.birdcast.info/region/US-NC-037
+North Carolina,NC,Chowan,37041,041,https://dashboard.birdcast.info/region/US-NC-041
+North Carolina,NC,Columbus,37047,047,https://dashboard.birdcast.info/region/US-NC-047
+North Carolina,NC,Craven,37049,049,https://dashboard.birdcast.info/region/US-NC-049
+North Carolina,NC,Cumberland,37051,051,https://dashboard.birdcast.info/region/US-NC-051
+North Carolina,NC,Duplin,37061,061,https://dashboard.birdcast.info/region/US-NC-061
+North Carolina,NC,Durham,37063,063,https://dashboard.birdcast.info/region/US-NC-063
+North Carolina,NC,Edgecombe,37065,065,https://dashboard.birdcast.info/region/US-NC-065
+North Carolina,NC,Franklin,37069,069,https://dashboard.birdcast.info/region/US-NC-069
+North Carolina,NC,Gates,37073,073,https://dashboard.birdcast.info/region/US-NC-073
+North Carolina,NC,Granville,37077,077,https://dashboard.birdcast.info/region/US-NC-077
+North Carolina,NC,Greene,37079,079,https://dashboard.birdcast.info/region/US-NC-079
+North Carolina,NC,Guilford,37081,081,https://dashboard.birdcast.info/region/US-NC-081
+North Carolina,NC,Halifax,37083,083,https://dashboard.birdcast.info/region/US-NC-083
+North Carolina,NC,Harnett,37085,085,https://dashboard.birdcast.info/region/US-NC-085
+North Carolina,NC,Hertford,37091,091,https://dashboard.birdcast.info/region/US-NC-091
+North Carolina,NC,Hoke,37093,093,https://dashboard.birdcast.info/region/US-NC-093
+North Carolina,NC,Johnston,37101,101,https://dashboard.birdcast.info/region/US-NC-101
+North Carolina,NC,Jones,37103,103,https://dashboard.birdcast.info/region/US-NC-103
+North Carolina,NC,Lee,37105,105,https://dashboard.birdcast.info/region/US-NC-105
+North Carolina,NC,Lenoir,37107,107,https://dashboard.birdcast.info/region/US-NC-107
+North Carolina,NC,Martin,37117,117,https://dashboard.birdcast.info/region/US-NC-117
+North Carolina,NC,Montgomery,37123,123,https://dashboard.birdcast.info/region/US-NC-123
+North Carolina,NC,Moore,37125,125,https://dashboard.birdcast.info/region/US-NC-125
+North Carolina,NC,Nash,37127,127,https://dashboard.birdcast.info/region/US-NC-127
+North Carolina,NC,New Hanover,37129,129,https://dashboard.birdcast.info/region/US-NC-129
+North Carolina,NC,Northampton,37131,131,https://dashboard.birdcast.info/region/US-NC-131
+North Carolina,NC,Orange,37135,135,https://dashboard.birdcast.info/region/US-NC-135
+North Carolina,NC,Pasquotank,37139,139,https://dashboard.birdcast.info/region/US-NC-139
+North Carolina,NC,Pender,37141,141,https://dashboard.birdcast.info/region/US-NC-141
+North Carolina,NC,Perquimans,37143,143,https://dashboard.birdcast.info/region/US-NC-143
+North Carolina,NC,Person,37145,145,https://dashboard.birdcast.info/region/US-NC-145
+North Carolina,NC,Pitt,37147,147,https://dashboard.birdcast.info/region/US-NC-147
+North Carolina,NC,Randolph,37151,151,https://dashboard.birdcast.info/region/US-NC-151
+North Carolina,NC,Richmond,37153,153,https://dashboard.birdcast.info/region/US-NC-153
+North Carolina,NC,Robeson,37155,155,https://dashboard.birdcast.info/region/US-NC-155
+North Carolina,NC,Sampson,37163,163,https://dashboard.birdcast.info/region/US-NC-163
+North Carolina,NC,Scotland,37165,165,https://dashboard.birdcast.info/region/US-NC-165
+North Carolina,NC,Tyrrell,37177,177,https://dashboard.birdcast.info/region/US-NC-177
+North Carolina,NC,Vance,37181,181,https://dashboard.birdcast.info/region/US-NC-181
+North Carolina,NC,Wake,37183,183,https://dashboard.birdcast.info/region/US-NC-183
+North Carolina,NC,Warren,37185,185,https://dashboard.birdcast.info/region/US-NC-185
+North Carolina,NC,Washington,37187,187,https://dashboard.birdcast.info/region/US-NC-187
+North Carolina,NC,Wayne,37191,191,https://dashboard.birdcast.info/region/US-NC-191
+North Carolina,NC,Wilson,37195,195,https://dashboard.birdcast.info/region/US-NC-195
+Pennsylvania,PA,Adams,42001,001,https://dashboard.birdcast.info/region/US-PA-001
+Pennsylvania,PA,Berks,42011,011,https://dashboard.birdcast.info/region/US-PA-011
+Pennsylvania,PA,Bucks,42017,017,https://dashboard.birdcast.info/region/US-PA-017
+Pennsylvania,PA,Carbon,42025,025,https://dashboard.birdcast.info/region/US-PA-025
+Pennsylvania,PA,Chester,42029,029,https://dashboard.birdcast.info/region/US-PA-029
+Pennsylvania,PA,Cumberland,42041,041,https://dashboard.birdcast.info/region/US-PA-041
+Pennsylvania,PA,Dauphin,42043,043,https://dashboard.birdcast.info/region/US-PA-043
+Pennsylvania,PA,Delaware,42045,045,https://dashboard.birdcast.info/region/US-PA-045
+Pennsylvania,PA,Franklin,42055,055,https://dashboard.birdcast.info/region/US-PA-055
+Pennsylvania,PA,Lancaster,42071,071,https://dashboard.birdcast.info/region/US-PA-071
+Pennsylvania,PA,Lebanon,42075,075,https://dashboard.birdcast.info/region/US-PA-075
+Pennsylvania,PA,Lehigh,42077,077,https://dashboard.birdcast.info/region/US-PA-077
+Pennsylvania,PA,Monroe,42089,089,https://dashboard.birdcast.info/region/US-PA-089
+Pennsylvania,PA,Montgomery,42091,091,https://dashboard.birdcast.info/region/US-PA-091
+Pennsylvania,PA,Northampton,42095,095,https://dashboard.birdcast.info/region/US-PA-095
+Pennsylvania,PA,Philadelphia,42101,101,https://dashboard.birdcast.info/region/US-PA-101
+Pennsylvania,PA,Pike,42103,103,https://dashboard.birdcast.info/region/US-PA-103
+Pennsylvania,PA,Schuylkill,42107,107,https://dashboard.birdcast.info/region/US-PA-107
+Pennsylvania,PA,York,42133,133,https://dashboard.birdcast.info/region/US-PA-133
+South Carolina,SC,Beaufort,45013,013,https://dashboard.birdcast.info/region/US-SC-013
+South Carolina,SC,Berkeley,45015,015,https://dashboard.birdcast.info/region/US-SC-015
+South Carolina,SC,Charleston,45019,019,https://dashboard.birdcast.info/region/US-SC-019
+South Carolina,SC,Clarendon,45027,027,https://dashboard.birdcast.info/region/US-SC-027
+South Carolina,SC,Colleton,45029,029,https://dashboard.birdcast.info/region/US-SC-029
+South Carolina,SC,Darlington,45031,031,https://dashboard.birdcast.info/region/US-SC-031
+South Carolina,SC,Dillon,45033,033,https://dashboard.birdcast.info/region/US-SC-033
+South Carolina,SC,Dorchester,45035,035,https://dashboard.birdcast.info/region/US-SC-035
+South Carolina,SC,Florence,45041,041,https://dashboard.birdcast.info/region/US-SC-041
+South Carolina,SC,Georgetown,45043,043,https://dashboard.birdcast.info/region/US-SC-043
+South Carolina,SC,Horry,45051,051,https://dashboard.birdcast.info/region/US-SC-051
+South Carolina,SC,Jasper,45053,053,https://dashboard.birdcast.info/region/US-SC-053
+South Carolina,SC,Marion,45067,067,https://dashboard.birdcast.info/region/US-SC-067
+South Carolina,SC,Marlboro,45069,069,https://dashboard.birdcast.info/region/US-SC-069
+South Carolina,SC,Williamsburg,45089,089,https://dashboard.birdcast.info/region/US-SC-089
+Virginia,VA,Albemarle,51003,003,https://dashboard.birdcast.info/region/US-VA-003
+Virginia,VA,Alexandria,51510,510,https://dashboard.birdcast.info/region/US-VA-510
+Virginia,VA,Amelia,51007,007,https://dashboard.birdcast.info/region/US-VA-007
+Virginia,VA,Arlington,51013,013,https://dashboard.birdcast.info/region/US-VA-013
+Virginia,VA,Brunswick,51025,025,https://dashboard.birdcast.info/region/US-VA-025
+Virginia,VA,Buckingham,51029,029,https://dashboard.birdcast.info/region/US-VA-029
+Virginia,VA,Caroline,51033,033,https://dashboard.birdcast.info/region/US-VA-033
+Virginia,VA,Charles City,51036,036,https://dashboard.birdcast.info/region/US-VA-036
+Virginia,VA,Charlotte,51037,037,https://dashboard.birdcast.info/region/US-VA-037
+Virginia,VA,Charlottesville,51540,540,https://dashboard.birdcast.info/region/US-VA-540
+Virginia,VA,Chesapeake,51550,550,https://dashboard.birdcast.info/region/US-VA-550
+Virginia,VA,Chesterfield,51041,041,https://dashboard.birdcast.info/region/US-VA-041
+Virginia,VA,Clarke,51043,043,https://dashboard.birdcast.info/region/US-VA-043
+Virginia,VA,Colonial Heights,51570,570,https://dashboard.birdcast.info/region/US-VA-570
+Virginia,VA,Culpeper,51047,047,https://dashboard.birdcast.info/region/US-VA-047
+Virginia,VA,Cumberland,51049,049,https://dashboard.birdcast.info/region/US-VA-049
+Virginia,VA,Danville,51590,590,https://dashboard.birdcast.info/region/US-VA-590
+Virginia,VA,Dinwiddie,51053,053,https://dashboard.birdcast.info/region/US-VA-053
+Virginia,VA,Emporia,51595,595,https://dashboard.birdcast.info/region/US-VA-595
+Virginia,VA,Essex,51057,057,https://dashboard.birdcast.info/region/US-VA-057
+Virginia,VA,Fairfax,51059,059,https://dashboard.birdcast.info/region/US-VA-059
+Virginia,VA,Fairfax,51600,600,https://dashboard.birdcast.info/region/US-VA-600
+Virginia,VA,Falls Church,51610,610,https://dashboard.birdcast.info/region/US-VA-610
+Virginia,VA,Fauquier,51061,061,https://dashboard.birdcast.info/region/US-VA-061
+Virginia,VA,Fluvanna,51065,065,https://dashboard.birdcast.info/region/US-VA-065
+Virginia,VA,Franklin,51620,620,https://dashboard.birdcast.info/region/US-VA-620
+Virginia,VA,Frederick,51069,069,https://dashboard.birdcast.info/region/US-VA-069
+Virginia,VA,Fredericksburg,51630,630,https://dashboard.birdcast.info/region/US-VA-630
+Virginia,VA,Gloucester,51073,073,https://dashboard.birdcast.info/region/US-VA-073
+Virginia,VA,Goochland,51075,075,https://dashboard.birdcast.info/region/US-VA-075
+Virginia,VA,Greene,51079,079,https://dashboard.birdcast.info/region/US-VA-079
+Virginia,VA,Greensville,51081,081,https://dashboard.birdcast.info/region/US-VA-081
+Virginia,VA,Halifax,51083,083,https://dashboard.birdcast.info/region/US-VA-083
+Virginia,VA,Hampton,51650,650,https://dashboard.birdcast.info/region/US-VA-650
+Virginia,VA,Hanover,51085,085,https://dashboard.birdcast.info/region/US-VA-085
+Virginia,VA,Henrico,51087,087,https://dashboard.birdcast.info/region/US-VA-087
+Virginia,VA,Hopewell,51670,670,https://dashboard.birdcast.info/region/US-VA-670
+Virginia,VA,Isle of Wight,51093,093,https://dashboard.birdcast.info/region/US-VA-093
+Virginia,VA,James City,51095,095,https://dashboard.birdcast.info/region/US-VA-095
+Virginia,VA,King George,51099,099,https://dashboard.birdcast.info/region/US-VA-099
+Virginia,VA,King William,51101,101,https://dashboard.birdcast.info/region/US-VA-101
+Virginia,VA,King and Queen,51097,097,https://dashboard.birdcast.info/region/US-VA-097
+Virginia,VA,Lancaster,51103,103,https://dashboard.birdcast.info/region/US-VA-103
+Virginia,VA,Loudoun,51107,107,https://dashboard.birdcast.info/region/US-VA-107
+Virginia,VA,Louisa,51109,109,https://dashboard.birdcast.info/region/US-VA-109
+Virginia,VA,Lunenburg,51111,111,https://dashboard.birdcast.info/region/US-VA-111
+Virginia,VA,Madison,51113,113,https://dashboard.birdcast.info/region/US-VA-113
+Virginia,VA,Manassas,51683,683,https://dashboard.birdcast.info/region/US-VA-683
+Virginia,VA,Manassas Park,51685,685,https://dashboard.birdcast.info/region/US-VA-685
+Virginia,VA,Mathews,51115,115,https://dashboard.birdcast.info/region/US-VA-115
+Virginia,VA,Mecklenburg,51117,117,https://dashboard.birdcast.info/region/US-VA-117
+Virginia,VA,Middlesex,51119,119,https://dashboard.birdcast.info/region/US-VA-119
+Virginia,VA,New Kent,51127,127,https://dashboard.birdcast.info/region/US-VA-127
+Virginia,VA,Newport News,51700,700,https://dashboard.birdcast.info/region/US-VA-700
+Virginia,VA,Norfolk,51710,710,https://dashboard.birdcast.info/region/US-VA-710
+Virginia,VA,Northumberland,51133,133,https://dashboard.birdcast.info/region/US-VA-133
+Virginia,VA,Nottoway,51135,135,https://dashboard.birdcast.info/region/US-VA-135
+Virginia,VA,Orange,51137,137,https://dashboard.birdcast.info/region/US-VA-137
+Virginia,VA,Page,51139,139,https://dashboard.birdcast.info/region/US-VA-139
+Virginia,VA,Petersburg,51730,730,https://dashboard.birdcast.info/region/US-VA-730
+Virginia,VA,Poquoson,51735,735,https://dashboard.birdcast.info/region/US-VA-735
+Virginia,VA,Portsmouth,51740,740,https://dashboard.birdcast.info/region/US-VA-740
+Virginia,VA,Powhatan,51145,145,https://dashboard.birdcast.info/region/US-VA-145
+Virginia,VA,Prince Edward,51147,147,https://dashboard.birdcast.info/region/US-VA-147
+Virginia,VA,Prince George,51149,149,https://dashboard.birdcast.info/region/US-VA-149
+Virginia,VA,Prince William,51153,153,https://dashboard.birdcast.info/region/US-VA-153
+Virginia,VA,Rappahannock,51157,157,https://dashboard.birdcast.info/region/US-VA-157
+Virginia,VA,Richmond,51159,159,https://dashboard.birdcast.info/region/US-VA-159
+Virginia,VA,Richmond,51760,760,https://dashboard.birdcast.info/region/US-VA-760
+Virginia,VA,Southampton,51175,175,https://dashboard.birdcast.info/region/US-VA-175
+Virginia,VA,Spotsylvania,51177,177,https://dashboard.birdcast.info/region/US-VA-177
+Virginia,VA,Stafford,51179,179,https://dashboard.birdcast.info/region/US-VA-179
+Virginia,VA,Suffolk,51800,800,https://dashboard.birdcast.info/region/US-VA-800
+Virginia,VA,Surry,51181,181,https://dashboard.birdcast.info/region/US-VA-181
+Virginia,VA,Sussex,51183,183,https://dashboard.birdcast.info/region/US-VA-183
+Virginia,VA,Warren,51187,187,https://dashboard.birdcast.info/region/US-VA-187
+Virginia,VA,Westmoreland,51193,193,https://dashboard.birdcast.info/region/US-VA-193
+Virginia,VA,Williamsburg,51830,830,https://dashboard.birdcast.info/region/US-VA-830
+Virginia,VA,Winchester,51840,840,https://dashboard.birdcast.info/region/US-VA-840
+Virginia,VA,York,51199,199,https://dashboard.birdcast.info/region/US-VA-199
+West Virginia,WV,Berkeley,54003,003,https://dashboard.birdcast.info/region/US-WV-003
+West Virginia,WV,Jefferson,54037,037,https://dashboard.birdcast.info/region/US-WV-037
