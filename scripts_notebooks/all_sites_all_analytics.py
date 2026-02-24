@@ -2986,6 +2986,131 @@ save_plot_for_dashboard(
 plt.close('all')
 
 
+# --- Cell 37b ---
+print("Generating species-level behavioral momentum plot...")
+
+def get_species_bm_fits(region, phase_changes_df, daily_summs_df, min_points=4):
+    """Fit 2-param BM extinction model per species per Seed->No Seed transition."""
+    loc_changes = (
+        phase_changes_df[phase_changes_df['LocationOfChange'] == region]
+        .copy()
+        .sort_values('DateChangeStarted')
+        .reset_index(drop=True)
+    )
+    rdf = daily_summs_df[daily_summs_df['source_sheet'] == region].copy()
+    rdf['Date_dt'] = pd.to_datetime(rdf['Date'])
+    rdf = rdf[rdf['Date_dt'] >= pd.to_datetime('2025-10-05')]
+
+    extinctions = loc_changes[
+        loc_changes['DescriptionOfChange'].str.lower().str.contains('extinct')
+    ].reset_index(drop=True)
+
+    records = []
+    for trans_idx, (_, ext_row) in enumerate(extinctions.iterrows()):
+        ext_start = pd.to_datetime(ext_row['DateChangeStarted'])
+        after = loc_changes[loc_changes['DateChangeStarted'] > ext_row['DateChangeStarted']]
+        ext_end = (
+            pd.to_datetime(after.iloc[0]['DateChangeStarted'])
+            if not after.empty
+            else rdf['Date_dt'].max() + pd.Timedelta(days=1)
+        )
+        seg = rdf[(rdf['Date_dt'] >= ext_start) & (rdf['Date_dt'] < ext_end)].copy()
+        species_daily = (
+            seg.groupby(['Date_dt', 'Bird'])['Feeder Visits']
+            .sum()
+            .reset_index()
+        )
+        for species, sp_data in species_daily.groupby('Bird'):
+            sp_data = sp_data.sort_values('Date_dt').copy()
+            sp_data['visits'] = sp_data['Feeder Visits'].replace(0, np.nan)
+            valid = sp_data.dropna(subset=['visits'])
+            if len(valid) < min_points:
+                continue
+            t = (valid['Date_dt'] - ext_start).dt.days.values.astype(float)
+            y = valid['visits'].values.astype(float)
+            try:
+                with _warnings.catch_warnings():
+                    _warnings.simplefilter('ignore')
+                    popt, _ = curve_fit(
+                        _bm_2param, t, y,
+                        p0=[float(y[0]), 0.15],
+                        bounds=([1e-3, 1e-6], [1e6, 10.0]),
+                        maxfev=10000
+                    )
+                yp = _bm_2param(t, *popt)
+                r2, mae, rmse = _fit_metrics(y, yp)
+                records.append({
+                    'Location': region,
+                    'Species': species,
+                    'Transition': trans_idx + 1,
+                    'B0': popt[0],
+                    'b': popt[1],
+                    'R2': r2,
+                    'MAE': mae,
+                    'RMSE': rmse,
+                    'n': len(valid),
+                })
+            except Exception:
+                pass
+    return records
+
+_sp_records = []
+for _loc in _bm_locs:
+    _sp_records.extend(get_species_bm_fits(_loc, phase_changes, daily_summs))
+species_bm_df = pd.DataFrame(_sp_records)
+
+if not species_bm_df.empty:
+    # Sort species by median b so most resistant (low b) are on the left
+    _sp_order = (
+        species_bm_df.groupby('Species')['b']
+        .median()
+        .sort_values()
+        .index.tolist()
+    )
+    _loc_colors = {
+        'Essex Fells, NJ': '#4e79a7',
+        'Jacksonville, FL': '#f28e2b',
+        'Southampton, UK':  '#59a14f',
+    }
+    fig_sp, ax_sp = plt.subplots(figsize=(max(14, len(_sp_order) * 1.0), 8))
+    sns.swarmplot(
+        data=species_bm_df,
+        x='Species', y='b',
+        hue='Location',
+        order=_sp_order,
+        palette=_loc_colors,
+        dodge=True,
+        size=9,
+        alpha=0.85,
+        ax=ax_sp,
+    )
+    ax_sp.set_xlabel('Species', fontsize=24, labelpad=12)
+    ax_sp.set_ylabel('b  (extinction rate)', fontsize=24, labelpad=12)
+    ax_sp.set_title(
+        'Behavioral Momentum by Species\n'
+        r'$B(t) = B_0 \cdot e^{-bt}$  —  higher b = faster extinction',
+        fontsize=16, fontweight='bold',
+    )
+    ax_sp.tick_params(axis='x', rotation=45)
+    ax_sp.set_xticklabels(ax_sp.get_xticklabels(), ha='right', fontsize=11)
+    ax_sp.spines['top'].set_visible(False)
+    ax_sp.spines['right'].set_visible(False)
+    ax_sp.yaxis.grid(True, linestyle='--', alpha=0.5)
+    ax_sp.set_axisbelow(True)
+    ax_sp.legend(title='Location', fontsize=12, title_fontsize=13,
+                 bbox_to_anchor=(1.01, 1), loc='upper left', frameon=False)
+    plt.tight_layout()
+    save_plot_for_dashboard(
+        fig_sp,
+        'bm_by_species',
+        'Behavioral Momentum by Species',
+        'Extinction rate (b) from B(t)=B0*exp(-bt) per species per No Seed transition'
+    )
+    plt.close('all')
+else:
+    print("  No species cleared the minimum data threshold — skipping BM species plot.")
+
+
 # ## Calculating Daily and Weekly Diversity
 
 # --- Cell 39 ---
