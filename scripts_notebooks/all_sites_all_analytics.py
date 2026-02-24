@@ -1328,13 +1328,13 @@ WEATHER_COLS = [
 # plt.show()
 
 # --- Cell 19 ---
-save_plot_for_dashboard(
-    fig, 
-    'cor_plot_weather_data', 
-    'Correlation Matrix of Weather Data by Location',
-    'Correlation matrix showing a regresson plot (lower diagonal), histogram (diagonal), and correlation coefficient (upper diagonal).'
-)
-plt.close('all')
+# save_plot_for_dashboard(
+#     fig,
+#     'cor_plot_weather_data',
+#     'Correlation Matrix of Weather Data by Location',
+#     'Correlation matrix showing a regresson plot (lower diagonal), histogram (diagonal), and correlation coefficient (upper diagonal).'
+# )
+# plt.close('all')
 
 # --- Cell 20 ---
 print("Generating weather cluster plots...")
@@ -2576,11 +2576,102 @@ phase_labels = {
     'Essex Fells, NJ': {'before': 'Seed', 'after': 'No\nSeed'},
 }
 
+# ========== BEHAVIORAL MOMENTUM FITTING ==========
+import warnings as _warnings
+
+def _bm_2param(t, B0, b):
+    """Extinction model: B(t) = B0 * exp(-b*t)"""
+    return B0 * np.exp(-b * t)
+
+def _bm_3param(t, B0, b, c):
+    """Extinction model with asymptote: B(t) = B0 * exp(-b*t) + c"""
+    return B0 * np.exp(-b * t) + c
+
+def _fit_metrics(y_obs, y_pred):
+    ss_res = np.sum((y_obs - y_pred) ** 2)
+    ss_tot = np.sum((y_obs - np.mean(y_obs)) ** 2)
+    r2 = 1.0 - ss_res / ss_tot if ss_tot > 0 else np.nan
+    mae = float(np.mean(np.abs(y_obs - y_pred)))
+    rmse = float(np.sqrt(np.mean((y_obs - y_pred) ** 2)))
+    return r2, mae, rmse
+
+def get_bm_fits(region, phase_changes_df, region_data_df):
+    """Fit 2- and 3-param BM extinction models for each Seed→Extinction transition."""
+    loc_changes = (
+        phase_changes_df[phase_changes_df['LocationOfChange'] == region]
+        .copy()
+        .sort_values('DateChangeStarted')
+        .reset_index(drop=True)
+    )
+    rdf = (
+        region_data_df[region_data_df['source_sheet'] == region]
+        .copy()
+        .sort_values('Date_dt')
+        .reset_index(drop=True)
+    )
+    rdf = rdf[rdf['Date_dt'] >= pd.to_datetime('2025-10-05')]
+    extinctions = loc_changes[
+        loc_changes['DescriptionOfChange'].str.lower().str.contains('extinct')
+    ].reset_index(drop=True)
+    fits = []
+    for _, ext_row in extinctions.iterrows():
+        ext_start = pd.to_datetime(ext_row['DateChangeStarted'])
+        after = loc_changes[loc_changes['DateChangeStarted'] > ext_row['DateChangeStarted']]
+        ext_end = (
+            pd.to_datetime(after.iloc[0]['DateChangeStarted'])
+            if not after.empty
+            else rdf['Date_dt'].max() + pd.Timedelta(days=1)
+        )
+        seg = rdf[(rdf['Date_dt'] >= ext_start) & (rdf['Date_dt'] < ext_end)].copy()
+        seg['visits'] = seg['Feeder Visits'].replace(0, np.nan)
+        valid = seg.dropna(subset=['visits'])
+        if len(valid) < 4:
+            fits.append({'start': ext_start, 'end': ext_end, '2p': None, '3p': None})
+            continue
+        t = (valid['Date_dt'] - ext_start).dt.days.values.astype(float)
+        y = valid['visits'].values.astype(float)
+        fit_res = {'start': ext_start, 'end': ext_end}
+        with _warnings.catch_warnings():
+            _warnings.simplefilter('ignore')
+            try:
+                popt, _ = curve_fit(
+                    _bm_2param, t, y,
+                    p0=[float(y[0]), 0.15],
+                    bounds=([1e-3, 1e-6], [1e6, 10.0]),
+                    maxfev=10000
+                )
+                yp = _bm_2param(t, *popt)
+                r2, mae, rmse = _fit_metrics(y, yp)
+                fit_res['2p'] = {'B0': popt[0], 'b': popt[1], 'R2': r2, 'MAE': mae, 'RMSE': rmse}
+            except Exception:
+                fit_res['2p'] = None
+            try:
+                c0 = max(float(np.percentile(y, 10)), 0.5)
+                popt, _ = curve_fit(
+                    _bm_3param, t, y,
+                    p0=[float(y[0]), 0.15, c0],
+                    bounds=([1e-3, 1e-6, 0], [1e6, 10.0, 1e6]),
+                    maxfev=10000
+                )
+                yp = _bm_3param(t, *popt)
+                r2, mae, rmse = _fit_metrics(y, yp)
+                fit_res['3p'] = {'B0': popt[0], 'b': popt[1], 'c': popt[2], 'R2': r2, 'MAE': mae, 'RMSE': rmse}
+            except Exception:
+                fit_res['3p'] = None
+        fits.append(fit_res)
+    return fits
+
+_bm_locs = ['Essex Fells, NJ', 'Jacksonville, FL', 'Southampton, UK']
+bm_fits = {loc: get_bm_fits(loc, phase_changes, merged_data) for loc in _bm_locs}
+
 # ---------- Figure ----------
-fig, axes = plt.subplots(
-    nrows=4, ncols=1, figsize=(10, 14),
-    sharex=True, gridspec_kw=dict(hspace=0.08)
-)
+fig = plt.figure(figsize=(22, 14))
+_gs = gridspec.GridSpec(4, 2, figure=fig, width_ratios=[2.2, 1.8], hspace=0.08, wspace=0.06)
+axes = [fig.add_subplot(_gs[0, 0])]
+for _i in range(1, 4):
+    axes.append(fig.add_subplot(_gs[_i, 0], sharex=axes[0]))
+ax_table = fig.add_subplot(_gs[:, 1])
+ax_table.axis('off')
 
 # IMPORTANT: store the exact midpoints that were actually plotted (after filtering/filling)
 plotted_mids_by_region = {}
@@ -2798,11 +2889,90 @@ for top_idx, bottom_idx, top_region, bottom_region in panel_pairs:
 
 # Bottom x-axis formatting
 axes[-1].set_xlabel('Date', fontsize=20, labelpad=12)
-for ax in axes:
-    ax.tick_params(axis='x', rotation=45)
+axes[-1].tick_params(axis='x', rotation=45)
+for ax in axes[:-1]:
+    ax.tick_params(axis='x', labelbottom=False)
+    ax.set_xlabel('')
 
-plt.tight_layout()
-plt.subplots_adjust(wspace=0.8)
+# ========== BEHAVIORAL MOMENTUM TABLE ==========
+
+def _fmt_cell(fit_d, model):
+    if fit_d is None:
+        return "\u2014"
+    if model == '2p':
+        return (
+            f"B\u2080={fit_d['B0']:.1f}  b={fit_d['b']:.3f}\n"
+            f"R\u00b2={fit_d['R2']:.3f}\n"
+            f"MAE={fit_d['MAE']:.1f}  RMSE={fit_d['RMSE']:.1f}"
+        )
+    else:
+        return (
+            f"B\u2080={fit_d['B0']:.1f}  b={fit_d['b']:.3f}\n"
+            f"c={fit_d['c']:.1f}\n"
+            f"R\u00b2={fit_d['R2']:.3f}\n"
+            f"MAE={fit_d['MAE']:.1f}  RMSE={fit_d['RMSE']:.1f}"
+        )
+
+def _get_cell(fits_list, idx, model):
+    if not fits_list or idx >= len(fits_list):
+        return "\u2014"
+    entry = fits_list[idx]
+    if entry is None:
+        return "\u2014"
+    return _fmt_cell(entry.get(model), model)
+
+_n_trans = {'Essex Fells, NJ': 2, 'Jacksonville, FL': 3, 'Southampton, UK': 2}
+_c2p = '#ddeeff'   # light blue — 2-param rows
+_c3p = '#fff3cc'   # light yellow — 3-param rows
+_cna = '#f2f2f2'   # light grey — N/A cells
+_cell_text = []
+_cell_colors = []
+for _loc in _bm_locs:
+    _fits = bm_fits.get(_loc, [])
+    _ntrans = _n_trans[_loc]
+    for _model, _rc in [('2p', _c2p), ('3p', _c3p)]:
+        _label = f"{_loc}\n({'2-param' if _model == '2p' else '3-param'})"
+        _row = [_label]
+        _rcolors = [_rc]
+        for _i in range(3):
+            if _i < _ntrans:
+                _row.append(_get_cell(_fits, _i, _model))
+                _rcolors.append(_rc)
+            else:
+                _row.append("\u2014")
+                _rcolors.append(_cna)
+        _cell_text.append(_row)
+        _cell_colors.append(_rcolors)
+
+_tbl = ax_table.table(
+    cellText=_cell_text,
+    colLabels=["Location & Model", "1st Extinction", "2nd Extinction", "3rd Extinction"],
+    cellLoc='center',
+    cellColours=_cell_colors,
+    colColours=['#909090'] * 4,
+    loc='center',
+    bbox=[0.0, 0.0, 1.0, 0.84],
+)
+_tbl.auto_set_font_size(False)
+_tbl.set_fontsize(11)
+for _j in range(4):
+    _tbl[0, _j].set_text_props(fontweight='bold', fontsize=12)
+
+ax_table.text(
+    0.5, 0.99, 'Behavioral Momentum',
+    ha='center', va='top', transform=ax_table.transAxes,
+    fontsize=14, fontweight='bold',
+)
+ax_table.text(
+    0.5, 0.92,
+    'B(t) = B\u2080 \u00b7 exp(\u2212bt)  [2-param, blue]\n'
+    'B(t) = B\u2080 \u00b7 exp(\u2212bt) + c  [3-param, yellow]',
+    ha='center', va='top', transform=ax_table.transAxes,
+    fontsize=11, style='italic',
+)
+
+fig.suptitle('Multiple Baseline of Feeder Visits', fontsize=16, fontweight='bold', y=1.005)
+plt.tight_layout(rect=[0, 0, 1, 0.99])
 
 
 # --- Cell 37 ---
