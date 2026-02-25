@@ -41,6 +41,7 @@ Thumbs.db
 *.log
 *.parquet
 !data/*.parquet
+data/county_level_birdweather.parquet
 
 # Temporary files
 *.tmp
