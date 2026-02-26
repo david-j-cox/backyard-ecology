@@ -2587,13 +2587,20 @@ def _bm_3param(t, B0, b, c):
     """Extinction model with asymptote: B(t) = B0 * exp(-b*t) + c"""
     return B0 * np.exp(-b * t) + c
 
-def _fit_metrics(y_obs, y_pred):
+def _fit_metrics(y_obs, y_pred, k):
+    n = len(y_obs)
     ss_res = np.sum((y_obs - y_pred) ** 2)
     ss_tot = np.sum((y_obs - np.mean(y_obs)) ** 2)
     r2 = 1.0 - ss_res / ss_tot if ss_tot > 0 else np.nan
     mae = float(np.mean(np.abs(y_obs - y_pred)))
     rmse = float(np.sqrt(np.mean((y_obs - y_pred) ** 2)))
-    return r2, mae, rmse
+    # AICc: corrected Akaike Information Criterion
+    if n > k + 1 and ss_res > 0:
+        aic = n * np.log(ss_res / n) + 2 * k
+        aicc = aic + (2 * k ** 2 + 2 * k) / (n - k - 1)
+    else:
+        aicc = np.nan
+    return r2, mae, rmse, aicc
 
 def get_bm_fits(region, phase_changes_df, region_data_df):
     """Fit 2- and 3-param BM extinction models for each Seed→Extinction transition."""
@@ -2641,8 +2648,8 @@ def get_bm_fits(region, phase_changes_df, region_data_df):
                     maxfev=10000
                 )
                 yp = _bm_2param(t, *popt)
-                r2, mae, rmse = _fit_metrics(y, yp)
-                fit_res['2p'] = {'B0': popt[0], 'b': popt[1], 'R2': r2, 'MAE': mae, 'RMSE': rmse}
+                r2, mae, rmse, aicc = _fit_metrics(y, yp, k=2)
+                fit_res['2p'] = {'B0': popt[0], 'b': popt[1], 'R2': r2, 'MAE': mae, 'RMSE': rmse, 'AICc': aicc}
             except Exception:
                 fit_res['2p'] = None
             try:
@@ -2654,8 +2661,8 @@ def get_bm_fits(region, phase_changes_df, region_data_df):
                     maxfev=10000
                 )
                 yp = _bm_3param(t, *popt)
-                r2, mae, rmse = _fit_metrics(y, yp)
-                fit_res['3p'] = {'B0': popt[0], 'b': popt[1], 'c': popt[2], 'R2': r2, 'MAE': mae, 'RMSE': rmse}
+                r2, mae, rmse, aicc = _fit_metrics(y, yp, k=3)
+                fit_res['3p'] = {'B0': popt[0], 'b': popt[1], 'c': popt[2], 'R2': r2, 'MAE': mae, 'RMSE': rmse, 'AICc': aicc}
             except Exception:
                 fit_res['3p'] = None
         fits.append(fit_res)
@@ -2899,17 +2906,18 @@ for ax in axes[:-1]:
 def _fmt_cell(fit_d, model):
     if fit_d is None:
         return "\u2014"
+    _aicc_str = f"{fit_d['AICc']:.1f}" if np.isfinite(fit_d.get('AICc', np.nan)) else "N/A"
     if model == '2p':
         return (
             f"B\u2080={fit_d['B0']:.1f}  b={fit_d['b']:.3f}\n"
-            f"R\u00b2={fit_d['R2']:.3f}\n"
+            f"R\u00b2={fit_d['R2']:.3f}  AICc={_aicc_str}\n"
             f"MAE={fit_d['MAE']:.1f}  RMSE={fit_d['RMSE']:.1f}"
         )
     else:
         return (
             f"B\u2080={fit_d['B0']:.1f}  b={fit_d['b']:.3f}\n"
             f"c={fit_d['c']:.1f}\n"
-            f"R\u00b2={fit_d['R2']:.3f}\n"
+            f"R\u00b2={fit_d['R2']:.3f}  AICc={_aicc_str}\n"
             f"MAE={fit_d['MAE']:.1f}  RMSE={fit_d['RMSE']:.1f}"
         )
 
@@ -2959,12 +2967,12 @@ for _j in range(4):
     _tbl[0, _j].set_text_props(fontweight='bold', fontsize=12)
 
 ax_table.text(
-    0.5, 0.99, 'Behavioral Momentum',
+    0.5, 0.97, 'Behavioral Momentum',
     ha='center', va='top', transform=ax_table.transAxes,
-    fontsize=14, fontweight='bold',
+    fontsize=18, fontweight='bold',
 )
 ax_table.text(
-    0.5, 0.92,
+    0.5, 0.91,
     'B(t) = B\u2080 \u00b7 exp(\u2212bt)  [2-param, blue]\n'
     'B(t) = B\u2080 \u00b7 exp(\u2212bt) + c  [3-param, yellow]',
     ha='center', va='top', transform=ax_table.transAxes,
@@ -3038,7 +3046,7 @@ def get_species_bm_fits(region, phase_changes_df, daily_summs_df, min_points=4):
                         maxfev=10000
                     )
                 yp = _bm_2param(t, *popt)
-                r2, mae, rmse = _fit_metrics(y, yp)
+                r2, mae, rmse, aicc = _fit_metrics(y, yp, k=2)
                 records.append({
                     'Location': region,
                     'Species': species,
@@ -3048,6 +3056,7 @@ def get_species_bm_fits(region, phase_changes_df, daily_summs_df, min_points=4):
                     'R2': r2,
                     'MAE': mae,
                     'RMSE': rmse,
+                    'AICc': aicc,
                     'n': len(valid),
                 })
             except Exception:
@@ -4131,9 +4140,9 @@ def plot_puc_data(station_name=None, puc_name=None, prob_threshold=prob_threshol
                 ax.set_xlabel('')
                 ax.tick_params(axis='x', labelbottom=False)
             
-            # Only show legend on first subplot (custom labels for each hue)
+            # Only show legend on first subplot, placed above the plot
             if row == 0 and col == 0:
-                ax.legend(fontsize=20, frameon=False, bbox_to_anchor=(0.05, 1.02), loc='upper left')
+                ax.legend(fontsize=20, frameon=False, bbox_to_anchor=(0.0, 1.18), loc='upper left')
             else:
                 ax.legend().remove()
         else:
@@ -4147,7 +4156,6 @@ def plot_puc_data(station_name=None, puc_name=None, prob_threshold=prob_threshol
         
         sns.despine(top=True, right=True, ax=ax)
 
-    plt.suptitle(f"{puc_name}", fontsize=40, y=1.05)
     plt.subplots_adjust(wspace=0.2, hspace=0.1)
     return fig
 

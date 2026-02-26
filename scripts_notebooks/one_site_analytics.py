@@ -210,9 +210,11 @@ for i, (ax, bird) in enumerate(zip(axes, birds)):
                 markeredgecolor='black', markeredgewidth=1,
                 linewidth=1, color='black')
 
-    # Phase-change lines (same positions for all birds)
-    for mid in [mid1, mid2, mid3, mid4, mid5, mid6, mid7]:
-        ax.axvline(x=mid, color='black', linestyle='--', linewidth=1)
+    # Phase-change lines: solid for transitions to/from No Seed on any
+    # alternative, dashed for transitions between two food conditions
+    for mid in [mid1, mid2, mid3, mid4, mid6, mid7]:
+        ax.axvline(x=mid, color='black', linestyle='-', linewidth=1)
+    ax.axvline(x=mid5, color='black', linestyle='--', linewidth=1)
     ax.axhline(y=0, color='black', linewidth=1)
 
     sns.despine(ax=ax, top=True, right=True)
