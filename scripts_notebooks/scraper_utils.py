@@ -450,6 +450,62 @@ def save_to_csv(data_list, filename):
 
     logging.info(f"Data for {len(data_list)} region(s) saved to {filename}")
 
+def save_to_duckdb(data_list, table_name):
+    """
+    Save BirdCast data to DuckDB (INSERT OR REPLACE on region_code, date_key).
+    Derives date_key from migration_date (fallback: scrape_timestamp date).
+
+    Args:
+        data_list: List of data dictionaries or single dictionary
+        table_name: Target DuckDB table name
+    """
+    if not data_list:
+        return
+
+    if isinstance(data_list, dict):
+        data_list = [data_list]
+
+    try:
+        import pandas as pd
+        sys_path_entry = os.path.dirname(os.path.abspath(__file__))
+        import sys as _sys
+        if sys_path_entry not in _sys.path:
+            _sys.path.insert(0, sys_path_entry)
+        from db import get_connection, init_schema
+
+        df = pd.DataFrame(data_list)
+
+        # Derive date_key
+        if "migration_date" in df.columns and df["migration_date"].notna().any():
+            df["date_key"] = df["migration_date"].fillna("")
+        else:
+            df["date_key"] = ""
+
+        needs_fill = df["date_key"] == ""
+        if needs_fill.any() and "scrape_timestamp" in df.columns:
+            ts = pd.to_datetime(df.loc[needs_fill, "scrape_timestamp"], errors="coerce", utc=True)
+            df.loc[needs_fill, "date_key"] = ts.dt.date.astype(str)
+
+        # Stringify all columns (table is all-VARCHAR for dirty data resilience)
+        for col in df.columns:
+            if pd.api.types.is_datetime64_any_dtype(df[col]):
+                df[col] = df[col].dt.strftime("%Y-%m-%dT%H:%M:%S+00:00")
+            else:
+                df[col] = df[col].astype(str)
+                df[col] = df[col].where(df[col] != "nan", None)
+                df[col] = df[col].where(df[col] != "None", None)
+                df[col] = df[col].where(df[col] != "NaT", None)
+
+        with get_connection() as con:
+            init_schema(con)
+            con.execute(f"INSERT OR REPLACE INTO {table_name} SELECT * FROM df")
+            count = con.execute(f"SELECT COUNT(*) FROM {table_name}").fetchone()[0]
+            logging.info(f"[DuckDB] {table_name}: {count:,} total rows")
+
+    except Exception as e:
+        logging.warning(f"[DuckDB WARNING] Failed to write to {table_name}: {e}")
+
+
 def load_flyway_urls_from_csv(csv_filename):
     """
     Load BirdCast URLs from a flyway corridor analysis CSV file
