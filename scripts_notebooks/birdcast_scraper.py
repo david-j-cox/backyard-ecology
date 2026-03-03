@@ -60,6 +60,7 @@ def run_scraper():
         # Save to Parquet (primary format) and CSV (for compatibility)
         scraper.save_to_parquet(data)
         scraper.save_to_csv(data)
+        scraper_utils.save_to_duckdb(data, "birdcast_data")
 
         # Print summary
         scraper_utils.print_scraper_summary(data, "BirdCast Data Scraper", "birdcast_data.parquet & birdcast_data.csv")

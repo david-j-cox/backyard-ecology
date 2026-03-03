@@ -180,6 +180,15 @@ def main():
         logger.info("=" * 60)
         logger.info("Starting production scripts execution")
         logger.info("=" * 60)
+
+        # Pre-check: warn if DuckDB file doesn't exist locally
+        db_path = script_dir.parent / "data" / "backyard_ecology.duckdb"
+        if not db_path.exists():
+            logger.warning(
+                f"DuckDB file not found at {db_path}. "
+                "DuckDB dual-writes will create it fresh. "
+                "To seed from existing data, run: python scripts_notebooks/migrate_to_duckdb.py"
+            )
         
         # Determine which Python to use
         python_executable = get_python_executable()

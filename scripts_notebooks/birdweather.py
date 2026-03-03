@@ -339,6 +339,7 @@ def main():
                 saved_count = len(df)
                 print(f"  Saving {saved_count:,} records (checkpoint at {county_total_fetched:,} total fetched)...", flush=True)
                 append_to_parquet(df, output_file)
+                write_to_duckdb(df)
                 total_saved += saved_count
                 
                 # Reset accumulator and update last saved count
@@ -355,6 +356,7 @@ def main():
             saved_count = len(df)
             print(f"  Saving final {saved_count:,} records for {key}...", flush=True)
             append_to_parquet(df, output_file)
+            write_to_duckdb(df)
             total_saved += saved_count
             print(f"  Saved. Total records in file: {total_saved:,}")
         elif county_total_fetched > 0:
@@ -369,6 +371,39 @@ def main():
             print(f"  Counties: {sorted(final_df['county'].unique())}")
     else:
         print(f"\n⚠ No data was saved to {output_file}")
+
+def write_to_duckdb(df):
+    """
+    INSERT OR REPLACE county birdweather rows into DuckDB.
+    Wrapped in try/except so parquet path still works if DuckDB fails.
+    """
+    if df is None or df.empty:
+        return
+
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from db import get_connection, init_schema
+
+        # Stringify datetime columns for DuckDB VARCHAR storage
+        write_df = df.copy()
+        for col in write_df.columns:
+            if pd.api.types.is_datetime64_any_dtype(write_df[col]):
+                write_df[col] = write_df[col].dt.strftime("%Y-%m-%dT%H:%M:%S+00:00")
+        write_df = write_df.astype(str)
+        write_df = write_df.where(write_df != "nan", None)
+        write_df = write_df.where(write_df != "NaT", None)
+        write_df = write_df.where(write_df != "None", None)
+
+        with get_connection() as con:
+            init_schema(con)
+            con.execute("INSERT OR REPLACE INTO county_birdweather SELECT * FROM write_df")
+            count = con.execute("SELECT COUNT(*) FROM county_birdweather").fetchone()[0]
+            print(f"[DuckDB] county_birdweather: {count:,} total rows")
+
+    except Exception as e:
+        print(f"[DuckDB WARNING] Failed to write county birdweather to DuckDB: {e}")
+
 
 if __name__ == "__main__":
     main()
