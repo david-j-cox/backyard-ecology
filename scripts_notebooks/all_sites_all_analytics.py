@@ -4185,8 +4185,8 @@ plt.close('all')
 # --- Cell 53 ---
 print("Processing county-level PUC data...")
 # Read in all PUC data from surrounding county
-# Wrapped in try/except because county_level_birdweather.parquet is gitignored
-# and may not be available in CI environments
+# Wrapped in try/except because county_level_birdweather.parquet may not exist
+# on first CI run or if the BirdWeather fetch failed
 try:
     county_puc_data = pd.read_parquet('../data/county_level_birdweather.parquet')
 

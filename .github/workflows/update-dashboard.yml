@@ -44,6 +44,15 @@ jobs:
           ESSEX_BIRDWX_API_KEY=${{ secrets.ESSEX_BIRDWX_API_KEY }}
           EOF
 
+      - name: Download county BirdWeather data from release
+        run: |
+          gh release download county-birdweather \
+            --pattern "county_level_birdweather.parquet" \
+            --dir data/ --clobber \
+            || echo "WARNING: No existing county BirdWeather data found, starting fresh"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Phase 1 - Fetch data
         working-directory: scripts_notebooks
         run: |
@@ -58,6 +67,10 @@ jobs:
           echo "=== Fetching BirdWeather PUC data ==="
           python birdweather_specific_pucs.py &
           PID_PUC=$!
+
+          echo "=== Fetching BirdWeather county data ==="
+          python birdweather.py &
+          PID_BIRDWEATHER=$!
 
           echo "=== Scraping BirdCast migration data ==="
           python birdcast_scraper.py &
@@ -79,6 +92,7 @@ jobs:
           wait $PID_WEATHER || echo "WARNING: weather.py failed"
           wait $PID_MERGE || echo "WARNING: merge_sites_data.py failed"
           wait $PID_PUC || echo "WARNING: birdweather_specific_pucs.py failed"
+          wait $PID_BIRDWEATHER || echo "WARNING: birdweather.py failed"
           wait $PID_BIRDCAST || echo "WARNING: birdcast_scraper.py failed"
           wait $PID_ATLANTIC || echo "WARNING: atlantic_flyway_scraper.py failed"
           wait $PID_MISSISSIPPI || echo "WARNING: mississippi_flyway_scraper.py failed"
@@ -112,6 +126,21 @@ jobs:
             git commit -m "Daily dashboard update"
             git push
           fi
+
+      - name: Upload county BirdWeather data to release
+        if: always()
+        run: |
+          if [ ! -f data/county_level_birdweather.parquet ]; then
+            echo "No county BirdWeather parquet to upload"
+            exit 0
+          fi
+          gh release view county-birdweather >/dev/null 2>&1 \
+            || gh release create county-birdweather \
+              --title "County BirdWeather data" \
+              --notes "Incremental county-level BirdWeather detection data (managed by CI pipeline)"
+          gh release upload county-birdweather data/county_level_birdweather.parquet --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Deploy to GitHub Pages (runs after update job)
   deploy:
