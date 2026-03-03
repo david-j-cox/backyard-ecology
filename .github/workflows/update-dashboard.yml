@@ -53,6 +53,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Download DuckDB from release
+        run: |
+          gh release download data \
+            --pattern "backyard_ecology.duckdb" \
+            --dir data/ --clobber \
+            || echo "WARNING: No existing DB found, starting fresh"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Phase 1 - Fetch data
         working-directory: scripts_notebooks
         run: |
@@ -139,6 +148,19 @@ jobs:
               --title "County BirdWeather data" \
               --notes "Incremental county-level BirdWeather detection data (managed by CI pipeline)"
           gh release upload county-birdweather data/county_level_birdweather.parquet --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload DuckDB to release
+        if: always()
+        run: |
+          if [ ! -f data/backyard_ecology.duckdb ]; then
+            echo "No DuckDB file to upload"
+            exit 0
+          fi
+          gh release view data >/dev/null 2>&1 \
+            || gh release create data --title "DuckDB data store" --notes "Pipeline database"
+          gh release upload data data/backyard_ecology.duckdb --clobber
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

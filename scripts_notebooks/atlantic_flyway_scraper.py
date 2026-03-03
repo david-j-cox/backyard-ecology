@@ -52,6 +52,7 @@ def run_flyway_scraper():
     if data:
         # Save to Parquet (primary format)
         scraper.save_to_parquet(data)
+        scraper_utils.save_to_duckdb(data, "atlantic_flyway")
 
         # Print summary
         scraper_utils.print_scraper_summary(data, "Atlantic Flyway BirdCast Data Scraper", "atlantic_flyway_corridor.parquet")

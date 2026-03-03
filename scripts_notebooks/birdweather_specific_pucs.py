@@ -1020,12 +1020,57 @@ def main():
         
         # Append to CSV
         append_to_csv(all_nodes, output_path)
-        
+
+        # Dual-write: insert into DuckDB
+        write_to_duckdb(all_nodes)
+
         logger.info("Data fetch completed successfully")
-        
+
     except Exception as e:
         logger.error(f"Error fetching data: {e}", exc_info=True)
         sys.exit(1)
+
+
+def write_to_duckdb(nodes):
+    """
+    INSERT OR IGNORE new detections into study_site_puc_data.
+    Handles dynamic sensor columns via ALTER TABLE ADD COLUMN IF NOT EXISTS.
+    """
+    if not nodes:
+        return
+
+    try:
+        import pandas as pd
+        from db import get_connection, init_schema
+
+        rows = [flatten(node) for node in nodes]
+        df = pd.DataFrame(rows).astype(str)
+        df = df.where(df != "nan", None)
+        df = df.where(df != "None", None)
+
+        with get_connection() as con:
+            init_schema(con)
+
+            # Add any dynamic columns that aren't in the base schema
+            existing_cols = {
+                row[0]
+                for row in con.execute(
+                    "SELECT column_name FROM information_schema.columns "
+                    "WHERE table_name = 'study_site_puc_data'"
+                ).fetchall()
+            }
+            for col in df.columns:
+                if col not in existing_cols:
+                    con.execute(
+                        f'ALTER TABLE study_site_puc_data ADD COLUMN IF NOT EXISTS "{col}" VARCHAR'
+                    )
+
+            con.execute("INSERT OR IGNORE INTO study_site_puc_data SELECT * FROM df")
+            count = con.execute("SELECT COUNT(*) FROM study_site_puc_data").fetchone()[0]
+            logger.info(f"[DuckDB] study_site_puc_data: {count:,} total rows")
+
+    except Exception as e:
+        logger.warning(f"[DuckDB WARNING] Failed to write PUC data to DuckDB: {e}")
 
 
 if __name__ == "__main__":
