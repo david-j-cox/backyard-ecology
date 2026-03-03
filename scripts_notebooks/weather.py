@@ -508,6 +508,41 @@ def main():
                 # Stay comfortably under the 60 calls/minute limit
                 time.sleep(args.sleep)
 
+    # Dual-write: bulk-load CSVs into DuckDB
+    write_to_duckdb(hourly_path, sunrise_path)
+
+
+def write_to_duckdb(hourly_path: Path, sunrise_path: Path):
+    """
+    Bulk-load the CSV files into DuckDB (INSERT OR IGNORE).
+    Called at the end of main() as a dual-write alongside the CSV output.
+    """
+    try:
+        from db import get_connection, init_schema
+        import pandas as pd
+
+        with get_connection() as con:
+            init_schema(con)
+
+            if hourly_path.exists():
+                df = pd.read_csv(hourly_path, dtype=str)
+                df = df.where(df.notna(), None)
+                if not df.empty:
+                    con.execute("INSERT OR IGNORE INTO hourly_weather SELECT * FROM df")
+                    count = con.execute("SELECT COUNT(*) FROM hourly_weather").fetchone()[0]
+                    print(f"[DuckDB] hourly_weather: {count:,} total rows")
+
+            if sunrise_path.exists():
+                df = pd.read_csv(sunrise_path, dtype=str)
+                df = df.where(df.notna(), None)
+                if not df.empty:
+                    con.execute("INSERT OR IGNORE INTO sunrise_sunset SELECT * FROM df")
+                    count = con.execute("SELECT COUNT(*) FROM sunrise_sunset").fetchone()[0]
+                    print(f"[DuckDB] sunrise_sunset: {count:,} total rows")
+
+    except Exception as e:
+        print(f"[DuckDB WARNING] Failed to write weather data to DuckDB: {e}")
+
 
 if __name__ == "__main__":
     main()

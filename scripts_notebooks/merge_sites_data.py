@@ -336,11 +336,50 @@ def main():
         process_raw_data(excel_file, raw_data_sheets, multi_site_excel, output_dir, logger)
         process_daily_summaries(excel_file, daily_summaries_sheets, multi_site_excel, output_dir, logger)
         
+        # Dual-write: load CSVs into DuckDB
+        write_to_duckdb(output_dir, logger)
+
         logger.info("Data merging process completed successfully")
-        
+
     except Exception as e:
         logger.error(f"Error processing data: {e}", exc_info=True)
         sys.exit(1)
+
+
+def write_to_duckdb(output_dir: Path, logger: logging.Logger) -> None:
+    """
+    Bulk-load the just-written CSVs into DuckDB (INSERT OR REPLACE).
+    Wrapped in try/except so CSV path still works if DuckDB fails.
+    """
+    try:
+        from db import get_connection, init_schema
+
+        with get_connection() as con:
+            init_schema(con)
+
+            mappings = [
+                ("phase_change_data.csv", "phase_changes"),
+                ("raw_data_all_locations.csv", "raw_data"),
+                ("daily_summaries_all_locations.csv", "daily_summaries"),
+            ]
+
+            for filename, table_name in mappings:
+                csv_path = output_dir / filename
+                if not csv_path.exists():
+                    logger.warning(f"[DuckDB] {filename} not found, skipping")
+                    continue
+
+                df = pd.read_csv(csv_path, dtype=str)
+                df = df.where(df.notna(), None)
+                if df.empty:
+                    continue
+
+                con.execute(f'INSERT OR REPLACE INTO {table_name} SELECT * FROM df')
+                count = con.execute(f"SELECT COUNT(*) FROM {table_name}").fetchone()[0]
+                logger.info(f"[DuckDB] {table_name}: {count:,} total rows")
+
+    except Exception as e:
+        logger.warning(f"[DuckDB WARNING] Failed to write merge data to DuckDB: {e}")
 
 
 if __name__ == '__main__':
