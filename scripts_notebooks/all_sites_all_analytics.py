@@ -4268,6 +4268,16 @@ try:
         suffixes=('_study_site', '_county')
     )
 
+    # Ensure county count is always >= study site count.
+    # The study site PUC should be a subset of county PUCs, but they are
+    # collected independently so the county scrape may miss the local station.
+    # When study site exceeds county, add study site into county total.
+    site_exceeds = count_by_date_merge['count_study_site'] > count_by_date_merge['count_county']
+    count_by_date_merge.loc[site_exceeds, 'count_county'] = (
+        count_by_date_merge.loc[site_exceeds, 'count_county']
+        + count_by_date_merge.loc[site_exceeds, 'count_study_site']
+    )
+
     # --- Cell 56 ---
     # Load BirdCast migration data for overlay
     birdcast_region_to_station = {
@@ -4285,6 +4295,8 @@ try:
             birdcast_df.loc[birdcast_df['date'].isna(), 'scrape_timestamp'], errors='coerce'
         ).dt.normalize()
         birdcast_df = birdcast_df.dropna(subset=['date', 'total_birds'])
+        # Strip timezone so dates are compatible with PUC data for merging
+        birdcast_df['date'] = birdcast_df['date'].dt.tz_localize(None)
         # Keep one row per date per station (max total_birds if duplicates)
         birdcast_df = birdcast_df.groupby(['date', 'station_name'])['total_birds'].max().reset_index()
         # Insert NaN rows at gaps > 7 days so matplotlib doesn't draw connecting lines
@@ -4358,6 +4370,67 @@ try:
         'puc_audio_data_puc_site_to_county',
         'Auditory Data from Study Site vs County with Migration',
         'Auditory data from PUCs at each study site (---) vs. PUC data from surrounding county (—) with BirdCast nightly migration counts (···)'
+    )
+    plt.close('all')
+
+    # --- Cell 57 ---
+    # Faceted small multiples -- one panel per station
+    # Three nested layers: migration (outermost fill) > county (middle fill) > study site (line)
+    print("Generating faceted study site vs county plot...")
+    plot_data = count_by_date_merge[count_by_date_merge['date'] >= '2025-11-01'].copy()
+    stations = [s for s in plot_data['station_name'].unique() if s != 'St. Johns']
+    n_stations = len(stations)
+
+    fig, axes = plt.subplots(nrows=n_stations, ncols=1, figsize=(14, 5 * n_stations), sharex=True)
+    if n_stations == 1:
+        axes = [axes]
+
+    palette = sns.color_palette('Set1')
+    station_colors = {name: palette[i] for i, name in enumerate(plot_data['station_name'].unique())}
+
+    for i, station in enumerate(stations):
+        ax = axes[i]
+        sdf = plot_data[plot_data['station_name'] == station].sort_values('date')
+        color = station_colors.get(station, 'grey')
+
+        # Migration as outermost filled area (merge BirdCast onto PUC dates)
+        if has_birdcast:
+            bc_station = birdcast_df[(birdcast_df['date'] >= '2025-11-01') & (birdcast_df['station_name'] == station)].dropna(subset=['total_birds'])
+            if len(bc_station) > 0:
+                sdf_bc = sdf.merge(bc_station[['date', 'total_birds']], on='date', how='left')
+                ax.fill_between(sdf_bc['date'], 1, sdf_bc['total_birds'], alpha=0.1, color=color, label='Migration (BirdCast)')
+
+        # County as middle filled area
+        ax.fill_between(sdf['date'], 1, sdf['count_county'], alpha=0.25, color=color, label='County')
+        # Study site as solid line
+        ax.plot(sdf['date'], sdf['count_study_site'], color=color, linewidth=2, label='Study Site')
+
+        ax.set_yscale('log')
+        ax.set_ylabel('Count', fontsize=18, labelpad=10)
+        ax.set_title(station, fontsize=20, fontweight='bold', pad=10)
+        ax.tick_params(labelsize=14)
+        ax.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: f'{x:,.0f}'))
+        sns.despine(top=True, right=True, ax=ax)
+        ax.grid(False)
+
+        # Legend on first panel only
+        if i == 0:
+            proxy = [
+                Line2D([0], [0], color='black', linewidth=2, label='Study Site'),
+                plt.Rectangle((0, 0), 1, 1, fc='grey', alpha=0.25, label='County'),
+            ]
+            if has_birdcast:
+                proxy.append(plt.Rectangle((0, 0), 1, 1, fc='grey', alpha=0.1, label='Migration (BirdCast)'))
+            ax.legend(handles=proxy, loc='upper right', fontsize=12, frameon=False)
+
+    axes[-1].set_xlabel('Date', fontsize=20, labelpad=10)
+    plt.tight_layout()
+
+    save_plot_for_dashboard(
+        fig,
+        'puc_site_county_faceted',
+        'Study Site vs County PUC Activity by Station',
+        'Faceted view showing nested spatial scales per station. Outermost fill = BirdCast nightly migration count, middle fill = county-level PUC activity, solid line = study site PUC activity. Log scale.'
     )
     plt.close('all')
 
