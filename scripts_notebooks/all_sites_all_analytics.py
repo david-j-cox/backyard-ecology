@@ -4269,34 +4269,95 @@ try:
     )
 
     # --- Cell 56 ---
-    fig, ax = plt.subplots(figsize=(10, 7))
+    # Load BirdCast migration data for overlay
+    birdcast_region_to_station = {
+        'US-FL-031': 'Jacksonville',
+        'US-NJ-013': 'Essex Fells',
+    }
+    try:
+        birdcast_df = pd.read_parquet(BIRDCAST_PARQUET)
+        birdcast_df = birdcast_df[birdcast_df['region_code'].isin(birdcast_region_to_station.keys())].copy()
+        birdcast_df['station_name'] = birdcast_df['region_code'].map(birdcast_region_to_station)
+        birdcast_df['total_birds'] = pd.to_numeric(birdcast_df['total_birds'], errors='coerce')
+        # Parse date from migration_date field, fall back to scrape_timestamp
+        birdcast_df['date'] = pd.to_datetime(birdcast_df['migration_start_utc'], errors='coerce').dt.normalize()
+        birdcast_df.loc[birdcast_df['date'].isna(), 'date'] = pd.to_datetime(
+            birdcast_df.loc[birdcast_df['date'].isna(), 'scrape_timestamp'], errors='coerce'
+        ).dt.normalize()
+        birdcast_df = birdcast_df.dropna(subset=['date', 'total_birds'])
+        # Keep one row per date per station (max total_birds if duplicates)
+        birdcast_df = birdcast_df.groupby(['date', 'station_name'])['total_birds'].max().reset_index()
+        # Insert NaN rows at gaps > 7 days so matplotlib doesn't draw connecting lines
+        gap_rows = []
+        for station in birdcast_df['station_name'].unique():
+            sdf = birdcast_df[birdcast_df['station_name'] == station].sort_values('date')
+            gaps = sdf['date'].diff()
+            for idx in gaps[gaps > pd.Timedelta(days=7)].index:
+                gap_rows.append({'date': sdf.loc[idx, 'date'] - pd.Timedelta(days=1), 'station_name': station, 'total_birds': np.nan})
+        if gap_rows:
+            birdcast_df = pd.concat([birdcast_df, pd.DataFrame(gap_rows)], ignore_index=True).sort_values(['station_name', 'date'])
+        has_birdcast = len(birdcast_df) > 0
+    except (FileNotFoundError, Exception):
+        has_birdcast = False
+
+    fig, ax = plt.subplots(figsize=(12, 7))
+    plot_data = count_by_date_merge[count_by_date_merge['date'] >= '2025-11-01']
     sns.lineplot(
         x='date', y='count_county',
-        data=count_by_date_merge[count_by_date_merge['date'] >= '2025-11-01'],
+        data=plot_data,
         hue='station_name', palette='Set1', alpha=0.7,
     )
     sns.lineplot(
         x='date', y='count_study_site',
-        data=count_by_date_merge[count_by_date_merge['date'] >= '2025-11-01'],
+        data=plot_data,
         hue='station_name', palette='Set1', alpha=0.7,
         linestyle='--', legend=False,
     )
-    plt.text(x=datetime(2025, 11, 25), y=2.0, s='Study Site ---', fontsize=14, ha='left', va='center')
-    plt.text(x=datetime(2025, 11, 25), y=3.5, s='County —', fontsize=14, ha='left', va='center')
+
+    # Overlay BirdCast migration counts on secondary y-axis
+    if has_birdcast:
+        ax2 = ax.twinx()
+        birdcast_plot = birdcast_df[birdcast_df['date'] >= '2025-11-01']
+        palette = sns.color_palette('Set1')
+        station_colors = {name: palette[i] for i, name in enumerate(plot_data['station_name'].unique())}
+        for station_name, sdf in birdcast_plot.groupby('station_name'):
+            sdf = sdf.sort_values('date')
+            color = station_colors.get(station_name, 'grey')
+            ax2.plot(sdf['date'], sdf['total_birds'], linestyle=':', marker='D', markersize=5, color=color, alpha=0.3)
+        ax2.set_ylabel('Migration Count (BirdCast)', fontsize=20, labelpad=10)
+        ax2.tick_params(labelsize=14)
+        ax2.set_yscale('log')
+        ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: f'{x:,.0f}'))
+        sns.despine(top=True, left=False, right=False, ax=ax2)
+
+    # Add line-style legend entries via proxy artists
+    proxy_handles = [
+        Line2D([0], [0], color='black', linestyle='--', linewidth=1.5, label='Study Site'),
+        Line2D([0], [0], color='black', linestyle='-', linewidth=1.5, label='County'),
+    ]
+    if has_birdcast:
+        proxy_handles.append(
+            Line2D([0], [0], color='black', linestyle=':', marker='D', markersize=4, linewidth=1.5, alpha=0.5, label='Migration (BirdCast)')
+        )
 
     ax.set_xlabel('Date', fontsize=24, labelpad=10)
     ax.set_ylabel('PUC Count', fontsize=24, labelpad=10)
-    plt.yscale('log')
-    plt.ylim(1, 50_000)
+    ax.set_yscale('log')
+    ax.set_ylim(1, 50_000)
     ax.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: f'{x:,.2f}'))
-    sns.despine(top=True, right=True, ax=ax)
-    ax.legend(loc='lower left', fontsize=14, frameon=False)
+    sns.despine(top=True, right=has_birdcast, ax=ax)
+    # Combine seaborn's hue legend with line-style proxies
+    hue_handles, hue_labels = ax.get_legend_handles_labels()
+    ax.legend(handles=hue_handles + proxy_handles, loc='lower left', fontsize=14, frameon=False)
+    ax.grid(False)
+    if has_birdcast:
+        ax2.grid(False)
 
     save_plot_for_dashboard(
         fig,
         'puc_audio_data_puc_site_to_county',
-        'Auditory Data from Study Site vs County',
-        'Auditory data from PUCs at each study site (---) vs. PUC data from surrounding county (—)'
+        'Auditory Data from Study Site vs County with Migration',
+        'Auditory data from PUCs at each study site (---) vs. PUC data from surrounding county (—) with BirdCast nightly migration counts (···)'
     )
     plt.close('all')
 
