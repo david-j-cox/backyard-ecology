@@ -136,6 +136,7 @@ def create_simple_dashboard():
         'puc_audio_data_nj_jcv', 
         'puc_audio_data_puc_21974_cox', 
         'puc_audio_data_puc_site_to_county',
+        'puc_site_county_faceted',
         'heatmap_counts',
         'heatmap_proportions',
         'heatmap_proportions_sunrise_sunset',
