@@ -250,8 +250,8 @@ def parse_args():
     ap.add_argument("--to", dest="to_date", default=date.today().isoformat(),
                     help="End date (YYYY-MM-DD). Default: today")
     ap.add_argument("--page-size", type=int, default=500, help="Detections per page. Default: 500")
-    ap.add_argument("--lookback", type=int, default=7,
-                    help="Number of recent days to check for incomplete data. Default: 7")
+    ap.add_argument("--lookback", type=int, default=30,
+                    help="Number of recent days to check for incomplete data. Default: 30")
     ap.add_argument("--force", action="store_true",
                     help="Repull all days in range regardless of existing counts")
     return ap.parse_args()
