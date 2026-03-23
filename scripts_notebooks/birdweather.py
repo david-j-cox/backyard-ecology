@@ -11,7 +11,7 @@ Usage:
 
 import time
 import argparse
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import requests
 from requests.exceptions import HTTPError, RequestException
 import pandas as pd
@@ -239,6 +239,10 @@ def append_to_parquet(df, filepath):
         df.to_parquet(filepath, engine="pyarrow", index=False)
 
 
+# If we have at least this fraction of the API's totalCount, the day is considered complete.
+COMPLETENESS_RATIO = 0.95
+
+
 def parse_args():
     ap = argparse.ArgumentParser(description="Download BirdWeather detections for Duval County (FL), St Johns County (FL), and Essex County (NJ).")
     ap.add_argument("--from", dest="from_date", default="2018-01-01",
@@ -246,131 +250,257 @@ def parse_args():
     ap.add_argument("--to", dest="to_date", default=date.today().isoformat(),
                     help="End date (YYYY-MM-DD). Default: today")
     ap.add_argument("--page-size", type=int, default=500, help="Detections per page. Default: 500")
-    ap.add_argument("--save-interval", type=int, default=10_000, help="Save every N records. Default: 10000")
+    ap.add_argument("--lookback", type=int, default=7,
+                    help="Number of recent days to check for incomplete data. Default: 7")
+    ap.add_argument("--force", action="store_true",
+                    help="Repull all days in range regardless of existing counts")
     return ap.parse_args()
+
+
+def get_existing_daily_counts(filepath):
+    """Return {(county, date): row_count} from existing parquet."""
+    if not filepath.exists():
+        return {}
+    df = pd.read_parquet(filepath)
+    df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce", utc=True)
+    df["_date"] = df["timestamp"].dt.date
+    return df.groupby(["county", "_date"]).size().to_dict()
+
+
+def remove_county_day(filepath, county, day):
+    """Remove all rows for a given county+date from the parquet file."""
+    if not filepath.exists():
+        return
+    df = pd.read_parquet(filepath)
+    df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce", utc=True)
+    df["_date"] = df["timestamp"].dt.date
+    mask = (df["county"] == county) & (df["_date"] == day)
+    removed = mask.sum()
+    if removed > 0:
+        df = df[~mask].drop(columns=["_date"])
+        df.to_parquet(filepath, engine="pyarrow", index=False)
+        print(f"  Removed {removed:,} incomplete rows for {county} on {day}")
+    else:
+        df.drop(columns=["_date"]).to_parquet(filepath, engine="pyarrow", index=False)
+
+
+def fetch_one_day(county_key, bbox, day, page_size=500, max_retries=3):
+    """Fetch all detections for one county on one day. Returns DataFrame or None on failure."""
+    period = {"from": day.isoformat(), "to": day.isoformat()}
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            all_nodes = []
+            for page_nodes in fetch_all_for_bbox(
+                bbox["ne"], bbox["sw"], period=period, page_size=page_size, pause=0.25
+            ):
+                all_nodes.extend(page_nodes)
+
+            if not all_nodes:
+                return pd.DataFrame()
+
+            rows = [flatten(node, county=county_key) for node in all_nodes]
+            df = pd.DataFrame(rows)
+            return convert_dates(df)
+        except Exception as e:
+            if attempt < max_retries:
+                wait = 30 * attempt
+                print(f"  Attempt {attempt}/{max_retries} failed for {county_key} {day}: {e}")
+                print(f"  Waiting {wait}s before retry...")
+                time.sleep(wait)
+            else:
+                print(f"  FAILED after {max_retries} attempts for {county_key} {day}: {e}")
+                return None
+
+
+def get_api_total_count(bbox, day):
+    """
+    Ask the API for the totalCount of detections for a bbox on a single day.
+    Uses first=1 to minimize data transfer -- we only need the count.
+    Returns the totalCount (int) or None on failure.
+    """
+    period = {"from": day.isoformat(), "to": day.isoformat()}
+    variables = {
+        "first": 1,
+        "after": None,
+        "period": period,
+        "ne": bbox["ne"],
+        "sw": bbox["sw"],
+    }
+    try:
+        resp = requests.post(
+            GRAPHQL_URL,
+            json={"query": DETECTIONS_QUERY, "variables": variables},
+            timeout=30,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        if "errors" in data:
+            return None
+        return data["data"]["detections"].get("totalCount")
+    except Exception:
+        return None
+
+
+def find_days_to_fetch(county_key, bbox, existing_counts, start, end, lookback, force):
+    """
+    Identify days that need fetching for a county.
+
+    For each day in the range, compares the local row count against the API's
+    totalCount. A day is flagged for (re)pull if:
+      - missing entirely (no local data)
+      - local count < COMPLETENESS_RATIO * API totalCount
+      - force mode is on
+    Days within the lookback window are always checked against the API.
+    Older days with any local data are only spot-checked if they look suspicious.
+    """
+    days_to_fetch = []
+    today = date.today()
+    lookback_start = today - timedelta(days=lookback)
+
+    day = start
+    while day <= end:
+        existing = existing_counts.get((county_key, day), 0)
+
+        if force:
+            days_to_fetch.append(day)
+            day += timedelta(days=1)
+            continue
+
+        if existing == 0:
+            # Missing day -- no need to hit the API, just fetch it
+            days_to_fetch.append(day)
+            day += timedelta(days=1)
+            continue
+
+        # For days with data: check against API totalCount
+        # Always check recent days; for older days, only check if count is low
+        should_check = day >= lookback_start
+        if not should_check:
+            # Skip old days that have data -- they're likely fine
+            day += timedelta(days=1)
+            continue
+
+        api_total = get_api_total_count(bbox, day)
+        if api_total is not None and api_total > 0:
+            ratio = existing / api_total
+            if ratio < COMPLETENESS_RATIO:
+                print(f"  {county_key} {day}: incomplete -- {existing:,} local vs {api_total:,} API ({ratio:.0%})")
+                days_to_fetch.append(day)
+            else:
+                print(f"  {county_key} {day}: OK -- {existing:,} local vs {api_total:,} API ({ratio:.0%})")
+        elif api_total == 0:
+            print(f"  {county_key} {day}: API reports 0 detections, skipping")
+        else:
+            # API check failed -- be safe and refetch recent days
+            print(f"  {county_key} {day}: API check failed, refetching to be safe")
+            days_to_fetch.append(day)
+
+        time.sleep(0.25)  # Be nice to the API during count checks
+        day += timedelta(days=1)
+
+    return days_to_fetch
+
 
 def main():
     args = parse_args()
-    period = {"from": args.from_date, "to": args.to_date}
-    save_interval = args.save_interval
-    
-    # Determine output path - save to data/ folder relative to project root
-    # If running from scripts_notebooks/, go up one level; if from root, use current dir
+
     script_dir = Path(__file__).parent.resolve()
     project_root = script_dir.parent if script_dir.name == "scripts_notebooks" else script_dir
     data_dir = project_root / "data"
     data_dir.mkdir(exist_ok=True)
     output_file = data_dir / "county_level_birdweather.parquet"
-    
-    # Check if file exists and load existing data to determine what to fetch
-    file_exists = output_file.exists()
-    existing_df = None
-    county_latest_dates = {}
-    
-    if file_exists:
-        print(f"Found existing file {output_file}. Will append new data (duplicates will be removed).")
-        existing_df = pd.read_parquet(output_file)
-        
-        if "county" in existing_df.columns and "timestamp" in existing_df.columns:
-            # Convert timestamp if it's not already datetime
-            if not pd.api.types.is_datetime64_any_dtype(existing_df["timestamp"]):
-                existing_df["timestamp"] = pd.to_datetime(existing_df["timestamp"], errors="coerce", utc=True)
-            
-            # Find latest date for each county
-            for county in existing_df["county"].unique():
-                county_data = existing_df[existing_df["county"] == county]
-                latest_date = county_data["timestamp"].max()
-                if pd.notna(latest_date):
-                    county_latest_dates[county] = latest_date
-                    print(f"  {county}: latest date = {latest_date.strftime('%Y-%m-%d')}")
-        
-        existing_counties = set(existing_df["county"].unique()) if "county" in existing_df.columns else set()
+
+    start = date.fromisoformat(args.from_date)
+    end = date.fromisoformat(args.to_date)
+
+    print(f"County BirdWeather fetch: {start} to {end}")
+    print(f"Lookback window: {args.lookback} days | Completeness threshold: {COMPLETENESS_RATIO:.0%} of API total")
+    if args.force:
+        print("FORCE mode: repulling all days regardless of existing counts")
+    print()
+
+    # Scan existing data to figure out what needs pulling
+    existing_counts = get_existing_daily_counts(output_file)
+    if existing_counts:
+        n_counties = len(set(c for c, _ in existing_counts))
+        n_days = len(existing_counts)
+        print(f"Found existing data: {n_counties} counties, {n_days} county-day records")
     else:
-        existing_counties = set()
+        print("No existing data found, starting fresh")
 
-    total_saved = 0
-    base_from_date = pd.to_datetime(period["from"], utc=True)
+    total_fetched = 0
+    total_skipped = 0
+    failed_days = []
 
-    for key, bbox in COUNTY_BBOXES.items():
-        # Determine the start date for this county
-        to_date = pd.to_datetime(period["to"], utc=True)
-        
-        if key in county_latest_dates:
-            # We have existing data - fetch from the day after the latest date
-            latest_date = county_latest_dates[key]
-            # Use the later of: latest_date+1day or the user's from_date
-            county_from_date = max(latest_date + pd.Timedelta(days=1), base_from_date)
-            
-            # Check if we need to fetch anything
-            if county_from_date > to_date:
-                print(f"\nSkipping {key} - existing data is up to date (latest: {latest_date.strftime('%Y-%m-%d')}, requested end: {period['to']})")
-                continue
-            
-            print(f"\nFetching detections for {key} (from {county_from_date.strftime('%Y-%m-%d')} to {period['to']}) ...")
-            print(f"  (Existing data goes up to {latest_date.strftime('%Y-%m-%d')})")
+    for county_key, bbox in COUNTY_BBOXES.items():
+        # For existing counties, only go back to the lookback window + any gaps.
+        # For new counties (no data at all), use the full --from date.
+        county_has_data = any(c == county_key for c, _ in existing_counts)
+        if county_has_data and not args.force:
+            # Find earliest date to scan: the later of --from or the oldest existing date
+            county_dates = [d for c, d in existing_counts if c == county_key]
+            county_start = max(start, min(county_dates))
         else:
-            # No existing data - use the user's from_date
-            county_from_date = base_from_date
-            print(f"\nFetching detections for {key} ({period['from']} to {period['to']}) ...")
-        
-        # Create period for this county
-        county_period = {
-            "from": county_from_date.strftime('%Y-%m-%d'),
-            "to": period["to"]
-        }
-        
-        # Accumulate nodes for this county
-        county_nodes = []
-        county_total_fetched = 0
-        last_saved_count = 0
-        
-        # Process pages as they come in
-        for page_nodes in fetch_all_for_bbox(bbox["ne"], bbox["sw"], period=county_period, page_size=args.page_size):
-            county_nodes.extend(page_nodes)
-            county_total_fetched += len(page_nodes)
-            
-            # Save every save_interval records
-            if county_total_fetched - last_saved_count >= save_interval:
-                # Save accumulated nodes
-                rows = [flatten(node, county=key) for node in county_nodes]
-                df = pd.DataFrame(rows)
-                df = convert_dates(df)
-                
-                saved_count = len(df)
-                print(f"  Saving {saved_count:,} records (checkpoint at {county_total_fetched:,} total fetched)...", flush=True)
-                append_to_parquet(df, output_file)
-                write_to_duckdb(df)
-                total_saved += saved_count
-                
-                # Reset accumulator and update last saved count
-                last_saved_count = county_total_fetched
-                county_nodes = []
-        
-        # Save any remaining nodes after county is complete
-        if county_nodes:
-            print(f"  Retrieved {county_total_fetched:,} total records for {key}")
-            rows = [flatten(node, county=key) for node in county_nodes]
-            df = pd.DataFrame(rows)
-            df = convert_dates(df)
-            
-            saved_count = len(df)
-            print(f"  Saving final {saved_count:,} records for {key}...", flush=True)
+            county_start = start
+
+        days_to_fetch = find_days_to_fetch(
+            county_key, bbox, existing_counts, county_start, end, args.lookback, args.force
+        )
+
+        if not days_to_fetch:
+            print(f"\n=== {county_key}: up to date, nothing to fetch ===")
+            total_skipped += 1
+            continue
+
+        print(f"\n=== {county_key}: {len(days_to_fetch)} days to fetch ===")
+
+        for day in days_to_fetch:
+            existing = existing_counts.get((county_key, day), 0)
+            if existing > 0:
+                status = f"(replacing: {existing} rows)"
+            else:
+                status = "(missing)"
+            print(f"\n  {county_key} {day} {status}")
+
+            # Remove old data before repulling
+            if existing > 0:
+                remove_county_day(output_file, county_key, day)
+
+            df = fetch_one_day(county_key, bbox, day, page_size=args.page_size)
+
+            if df is None:
+                failed_days.append((county_key, day))
+                continue
+
+            if df.empty:
+                print(f"  No detections for {county_key} on {day}")
+                continue
+
+            print(f"  Fetched {len(df):,} detections for {county_key} on {day}")
             append_to_parquet(df, output_file)
             write_to_duckdb(df)
-            total_saved += saved_count
-            print(f"  Saved. Total records in file: {total_saved:,}")
-        elif county_total_fetched > 0:
-            # All nodes were already saved in batches
-            print(f"  Retrieved {county_total_fetched:,} total records for {key} (all saved incrementally)")
-    
-    # Final summary
+            total_fetched += len(df)
+
+            time.sleep(1)
+
+    # Summary
+    print("\n" + "=" * 50)
+    print(f"Complete.")
+    print(f"  Fetched: {total_fetched:,} detections")
+    print(f"  Counties skipped (up to date): {total_skipped}")
+    if failed_days:
+        print(f"  FAILED ({len(failed_days)} days):")
+        for county, day in failed_days:
+            print(f"    {county} {day}")
+    else:
+        print(f"  No failures.")
+
     if output_file.exists():
         final_df = pd.read_parquet(output_file)
-        print(f"\n✓ Complete! Final file {output_file} contains {len(final_df):,} total records")
+        print(f"\nFinal file: {len(final_df):,} total rows")
         if "county" in final_df.columns:
             print(f"  Counties: {sorted(final_df['county'].unique())}")
-    else:
-        print(f"\n⚠ No data was saved to {output_file}")
 
 def write_to_duckdb(df):
     """
