@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """
 birdweather_specific_pucs.py
-Fetch BirdWeather detections for specific PYC devices (stations).
+Fetch BirdWeather detections for specific PUC devices (stations).
 
-This script fetches data for specified BirdWeather station IDs. On first run,
-it downloads all historical data. On subsequent runs, it only fetches data
-since the last timestamp in the saved file.
+Fetches data for specified BirdWeather station IDs using day-by-day pulls.
+Checks recent days against the API's totalCount to detect incomplete pulls
+(< 95% completeness) and automatically repulls gaps.
 
 Usage:
   python birdweather_specific_pucs.py
-  # Specify station IDs
   python birdweather_specific_pucs.py --stations STATION_ID_1 STATION_ID_2
+  python birdweather_specific_pucs.py --lookback 30   # check last 30 days
+  python birdweather_specific_pucs.py --force-full     # repull everything
 """
 
 import csv
@@ -19,7 +20,7 @@ import os
 import sys
 import time
 import argparse
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import List, Optional
 
@@ -87,6 +88,9 @@ DEFAULT_STATION_IDS: List[str] = [
     "21974",  # PUC-21974-COX
     "18618"   # PUC-18618
 ]
+
+# If we have at least this fraction of the API's totalCount, the day is considered complete.
+COMPLETENESS_RATIO = 0.95
 
 # GraphQL query for detections by station IDs with cursor pagination
 # Includes available sensor and station data
@@ -333,6 +337,185 @@ def get_last_timestamp(csv_path: Path) -> Optional[str]:
     except Exception as e:
         logger.error(f"Error reading existing file: {e}. Will fetch all historical data.")
         return None
+
+
+def get_existing_daily_counts(csv_path: Path) -> dict:
+    """Return {(station_id, date): row_count} from existing CSV."""
+    if not csv_path.exists():
+        return {}
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+    except Exception as e:
+        logger.warning(f"Error reading existing file for daily counts: {e}")
+        return {}
+
+    counts = {}
+    for row in rows:
+        ts = row.get('timestamp')
+        sid = row.get('station_id')
+        if not ts or not sid:
+            continue
+        try:
+            dt = datetime.fromisoformat(ts.replace('Z', '+00:00'))
+            day = dt.date()
+            key = (sid, day)
+            counts[key] = counts.get(key, 0) + 1
+        except Exception:
+            continue
+    return counts
+
+
+def get_api_total_count_for_station(station_id: str, api_key: Optional[str], day: date) -> Optional[int]:
+    """
+    Ask the API for the totalCount of detections for a station on a single day.
+    Uses first=1 to minimize data transfer -- we only need the count.
+    """
+    period = {"from": day.isoformat(), "to": day.isoformat()}
+    variables = {
+        "first": 1,
+        "after": None,
+        "period": period,
+        "stationIds": [station_id],
+    }
+    headers = {"Content-Type": "application/json"}
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+    try:
+        resp = requests.post(
+            GRAPHQL_URL,
+            json={"query": DETECTIONS_QUERY, "variables": variables},
+            headers=headers,
+            timeout=30,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        if "errors" in data:
+            return None
+        return data["data"]["detections"].get("totalCount")
+    except Exception:
+        return None
+
+
+def remove_station_day(csv_path: Path, station_id: str, day: date):
+    """Remove all rows for a given station+date from the CSV file."""
+    if not csv_path.exists():
+        return
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+            fieldnames = reader.fieldnames
+    except Exception:
+        return
+
+    kept = []
+    removed = 0
+    for row in rows:
+        ts = row.get('timestamp')
+        sid = row.get('station_id')
+        if sid == station_id and ts:
+            try:
+                dt = datetime.fromisoformat(ts.replace('Z', '+00:00'))
+                if dt.date() == day:
+                    removed += 1
+                    continue
+            except Exception:
+                pass
+        kept.append(row)
+
+    if removed > 0:
+        with open(csv_path, 'w', newline='', encoding='utf-8') as f:
+            w = csv.DictWriter(f, fieldnames=fieldnames)
+            w.writeheader()
+            w.writerows(kept)
+        logger.info(f"  Removed {removed:,} incomplete rows for station {station_id} on {day}")
+
+
+def find_days_to_fetch_for_station(
+    station_id: str, api_key: Optional[str], existing_counts: dict,
+    start: date, end: date, lookback: int, force: bool
+) -> List[date]:
+    """
+    Identify days that need fetching for a station.
+
+    For each day in the range, compares the local row count against the API's
+    totalCount. A day is flagged for (re)pull if:
+      - missing entirely (no local data)
+      - local count < COMPLETENESS_RATIO * API totalCount
+      - force mode is on
+    Days within the lookback window are always checked against the API.
+    Older days with any local data are skipped.
+    """
+    days_to_fetch = []
+    today = date.today()
+    lookback_start = today - timedelta(days=lookback)
+
+    day = start
+    while day <= end:
+        existing = existing_counts.get((station_id, day), 0)
+
+        if force:
+            days_to_fetch.append(day)
+            day += timedelta(days=1)
+            continue
+
+        if existing == 0:
+            days_to_fetch.append(day)
+            day += timedelta(days=1)
+            continue
+
+        should_check = day >= lookback_start
+        if not should_check:
+            day += timedelta(days=1)
+            continue
+
+        api_total = get_api_total_count_for_station(station_id, api_key, day)
+        if api_total is not None and api_total > 0:
+            ratio = existing / api_total
+            if ratio < COMPLETENESS_RATIO:
+                logger.info(f"  station {station_id} {day}: incomplete -- {existing:,} local vs {api_total:,} API ({ratio:.0%})")
+                days_to_fetch.append(day)
+            else:
+                logger.info(f"  station {station_id} {day}: OK -- {existing:,} local vs {api_total:,} API ({ratio:.0%})")
+        elif api_total == 0:
+            logger.info(f"  station {station_id} {day}: API reports 0 detections, skipping")
+        else:
+            logger.info(f"  station {station_id} {day}: API check failed, refetching to be safe")
+            days_to_fetch.append(day)
+
+        time.sleep(0.25)
+        day += timedelta(days=1)
+
+    return days_to_fetch
+
+
+def fetch_one_day_for_station(
+    station_id: str, api_key: Optional[str], day: date,
+    page_size: int = 500, max_retries: int = 3
+) -> Optional[List[dict]]:
+    """Fetch all detections for one station on one day. Returns list of nodes or None on failure."""
+    period = {"from": day.isoformat(), "to": day.isoformat()}
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            nodes = fetch_all_for_station(
+                station_id=station_id,
+                api_key=api_key,
+                period=period,
+                page_size=page_size,
+            )
+            return nodes
+        except Exception as e:
+            if attempt < max_retries:
+                wait = 30 * attempt
+                logger.warning(f"  Attempt {attempt}/{max_retries} failed for station {station_id} {day}: {e}")
+                logger.info(f"  Waiting {wait}s before retry...")
+                time.sleep(wait)
+            else:
+                logger.error(f"  FAILED after {max_retries} attempts for station {station_id} {day}: {e}")
+                return None
 
 
 def fetch_all_for_station(
@@ -800,235 +983,176 @@ def parse_args():
         action='store_true',
         help="Force full historical fetch, ignoring existing data"
     )
+    ap.add_argument(
+        "--lookback", type=int, default=30,
+        help="Number of recent days to check for incomplete data. Default: 30"
+    )
+    ap.add_argument(
+        "--from", dest="from_date", default="2025-11-01",
+        help="Start date (YYYY-MM-DD). Default: 2025-11-01"
+    )
+    ap.add_argument(
+        "--to", dest="to_date", default=date.today().isoformat(),
+        help="End date (YYYY-MM-DD). Default: today"
+    )
     return ap.parse_args()
+
+
+def fetch_sensor_readings_for_day(station_id, api_key, day, page_size):
+    """Fetch all sensor readings for a station on a single day."""
+    period = {"from": day.isoformat(), "to": day.isoformat()}
+    sensor_readings = {}
+
+    sensor_configs = [
+        (ENVIRONMENT_READINGS_QUERY, "environmentReadings", "environment"),
+        (LIGHT_READINGS_QUERY, "lightReadings", "light"),
+        (ACCEL_READINGS_QUERY, "accelReadings", "accel"),
+        (MAG_READINGS_QUERY, "magReadings", "mag"),
+    ]
+
+    for query, query_name, key in sensor_configs:
+        try:
+            readings = fetch_sensor_readings(
+                station_id=station_id,
+                query=query,
+                query_name=query_name,
+                api_key=api_key,
+                period=period,
+                page_size=page_size
+            )
+            if readings:
+                sensor_readings[key] = readings
+        except Exception as e:
+            logger.debug(f"Could not fetch {key} readings for station {station_id} on {day}: {e}")
+
+    return sensor_readings
 
 
 def main():
     # Get script directory for logging and paths
     script_dir = Path(__file__).parent.resolve()
-    
+
     # Set up logging to file and console
     log_file = setup_logging(script_dir)
-    
+
     args = parse_args()
-    
+
     # If output path is relative, make it relative to the data folder
-    # If it's absolute, use it as-is
     if Path(args.output).is_absolute():
         output_path = Path(args.output)
     else:
-        # Get the data folder (one level up from scripts_notebooks)
         data_dir = script_dir.parent / 'data'
-        data_dir.mkdir(exist_ok=True)  # Ensure data directory exists
+        data_dir.mkdir(exist_ok=True)
         output_path = data_dir / args.output
-    
+
     if not args.stations:
         logger.error("No station IDs provided. Please specify --stations or set DEFAULT_STATION_IDS in the script.")
         sys.exit(1)
-    
-    # Check API key availability for each station
-    missing_keys = []
-    for station_id in args.stations:
-        api_key = STATION_API_KEYS.get(station_id)
-        if api_key:
-            logger.debug(f"API key found for station {station_id}")
-        else:
-            logger.warning(f"No API key found for station {station_id} in STATION_API_KEYS mapping")
-            missing_keys.append(station_id)
-    
-    if missing_keys:
-        logger.warning(f"Stations without API keys: {missing_keys}. Will attempt unauthenticated requests.")
-    
-    logger.info(f"Starting fetch for {len(args.stations)} station(s)")
+
+    start = date.fromisoformat(args.from_date)
+    end = date.fromisoformat(args.to_date)
+
+    logger.info(f"PUC station fetch: {start} to {end}")
+    logger.info(f"Lookback window: {args.lookback} days | Completeness threshold: {COMPLETENESS_RATIO:.0%} of API total")
+    if args.force_full:
+        logger.info("FORCE mode: repulling all days regardless of existing counts")
     logger.info(f"Output file: {output_path}")
-    
-    # Determine date range
-    # Default start date: November 1, 2025
-    DEFAULT_START_DATE = "2025-11-01T00:00:00Z"
-    
-    period = None
-    if not args.force_full:
-        last_timestamp = get_last_timestamp(output_path)
-        if last_timestamp:
-            # Parse timestamp and add 1 second to avoid duplicates
-            try:
-                dt = datetime.fromisoformat(last_timestamp.replace('Z', '+00:00'))
-                # Use the timestamp as the 'from' date
-                period = {
-                    "from": last_timestamp,
-                    "to": datetime.now().isoformat() + "Z"
-                }
-                logger.info(f"Fetching data since last timestamp: {last_timestamp}")
-            except Exception as e:
-                logger.warning(f"Could not parse last timestamp: {e}. Using default date range.")
-                # Fall back to default date range
-                period = {
-                    "from": DEFAULT_START_DATE,
-                    "to": datetime.now().isoformat() + "Z"
-                }
-        else:
-            # No existing data - use default date range (Nov 1, 2025 to today)
-            period = {
-                "from": DEFAULT_START_DATE,
-                "to": datetime.now().isoformat() + "Z"
-            }
-            logger.info(f"No existing data found. Fetching data from {DEFAULT_START_DATE} to today.")
+
+    # Scan existing data to figure out what needs pulling
+    existing_counts = get_existing_daily_counts(output_path)
+    if existing_counts:
+        n_stations = len(set(s for s, _ in existing_counts))
+        n_days = len(existing_counts)
+        logger.info(f"Found existing data: {n_stations} stations, {n_days} station-day records")
     else:
-        # Force full fetch - use default date range
-        period = {
-            "from": DEFAULT_START_DATE,
-            "to": datetime.now().isoformat() + "Z"
-        }
-        logger.info(f"Force full fetch requested. Fetching data from {DEFAULT_START_DATE} to today.")
-    
-    # Fetch data for each station individually with its corresponding API key
-    all_nodes = []
-    try:
-        for station_input in args.stations:
-            # Convert station name to numeric ID if needed
-            station_id = STATION_NAME_TO_ID.get(station_input, station_input)
-            
-            # Get API key for this station (try both name and ID)
-            api_key = STATION_API_KEYS.get(station_id) or STATION_API_KEYS.get(station_input)
-            
-            if not api_key:
-                # Try to resolve the station ID (in case we have a name instead of ID)
-                resolved_id = resolve_station_id(station_input, None)
-                if resolved_id and resolved_id != station_input:
-                    station_id = resolved_id
-                    api_key = STATION_API_KEYS.get(station_id)
-            
-            logger.info(f"Using station ID: {station_id} for input: {station_input}")
-            
-            try:
-                # Fetch detections
-                nodes = fetch_all_for_station(
-                    station_id=station_id,
-                    api_key=api_key,
-                    period=period,
-                    page_size=args.page_size
-                )
-                logger.info(f"Retrieved {len(nodes)} detection records for station {station_input} (ID: {station_id})")
-                
-                # Fetch sensor readings
-                sensor_readings = {}
-                logger.info(f"Fetching sensor readings for station {station_id}...")
-                
-                # Fetch environment readings
-                try:
-                    logger.info(f"Attempting to fetch environment readings for station {station_id}...")
-                    env_readings = fetch_sensor_readings(
-                        station_id=station_id,
-                        query=ENVIRONMENT_READINGS_QUERY,
-                        query_name="environmentReadings",
-                        api_key=api_key,
-                        period=period,
-                        page_size=args.page_size
-                    )
-                    if env_readings:
-                        sensor_readings["environment"] = env_readings
-                        logger.info(f"Successfully retrieved {len(env_readings)} environment readings")
-                    else:
-                        logger.info(f"No environment readings returned for station {station_id}")
-                except Exception as e:
-                    logger.warning(f"Could not fetch environment readings for station {station_id}: {e}", exc_info=True)
-                
-                # Fetch light readings
-                try:
-                    logger.info(f"Attempting to fetch light readings for station {station_id}...")
-                    light_readings = fetch_sensor_readings(
-                        station_id=station_id,
-                        query=LIGHT_READINGS_QUERY,
-                        query_name="lightReadings",
-                        api_key=api_key,
-                        period=period,
-                        page_size=args.page_size
-                    )
-                    if light_readings:
-                        sensor_readings["light"] = light_readings
-                        logger.info(f"Successfully retrieved {len(light_readings)} light readings")
-                    else:
-                        logger.info(f"No light readings returned for station {station_id}")
-                except Exception as e:
-                    logger.warning(f"Could not fetch light readings for station {station_id}: {e}", exc_info=True)
-                
-                # Fetch accelerometer readings
-                try:
-                    logger.info(f"Attempting to fetch accelerometer readings for station {station_id}...")
-                    accel_readings = fetch_sensor_readings(
-                        station_id=station_id,
-                        query=ACCEL_READINGS_QUERY,
-                        query_name="accelReadings",
-                        api_key=api_key,
-                        period=period,
-                        page_size=args.page_size
-                    )
-                    if accel_readings:
-                        sensor_readings["accel"] = accel_readings
-                        logger.info(f"Successfully retrieved {len(accel_readings)} accelerometer readings")
-                    else:
-                        logger.info(f"No accelerometer readings returned for station {station_id}")
-                except Exception as e:
-                    logger.warning(f"Could not fetch accelerometer readings for station {station_id}: {e}", exc_info=True)
-                
-                # Fetch magnetometer readings
-                try:
-                    logger.info(f"Attempting to fetch magnetometer readings for station {station_id}...")
-                    mag_readings = fetch_sensor_readings(
-                        station_id=station_id,
-                        query=MAG_READINGS_QUERY,
-                        query_name="magReadings",
-                        api_key=api_key,
-                        period=period,
-                        page_size=args.page_size
-                    )
-                    if mag_readings:
-                        sensor_readings["mag"] = mag_readings
-                        logger.info(f"Successfully retrieved {len(mag_readings)} magnetometer readings")
-                    else:
-                        logger.info(f"No magnetometer readings returned for station {station_id}")
-                except Exception as e:
-                    logger.warning(f"Could not fetch magnetometer readings for station {station_id}: {e}", exc_info=True)
-                
-                # Log sensor reading summary
-                total_sensor_readings = sum(len(readings) for readings in sensor_readings.values())
-                if total_sensor_readings > 0:
-                    logger.info(f"Sensor reading summary for station {station_id}:")
-                    for sensor_type, readings in sensor_readings.items():
-                        logger.info(f"  - {sensor_type}: {len(readings)} readings")
-                else:
-                    logger.warning(f"No sensor readings retrieved for station {station_id}")
-                
-                # Merge sensor data with detections
-                if sensor_readings:
-                    nodes = merge_sensor_data_with_detections(nodes, sensor_readings)
-                    logger.info(f"Merged sensor data with detections for station {station_id}")
-                else:
-                    logger.warning(f"No sensor readings to merge for station {station_id}")
-                
-                all_nodes.extend(nodes)
-            except Exception as e:
-                logger.error(f"Error fetching data for station {station_input} (ID: {station_id}): {e}")
-                # Continue with other stations even if one fails
+        logger.info("No existing data found, starting fresh")
+
+    total_fetched = 0
+    total_skipped = 0
+    failed_days = []
+
+    for station_input in args.stations:
+        # Convert station name to numeric ID if needed
+        station_id = STATION_NAME_TO_ID.get(station_input, station_input)
+
+        # Get API key for this station
+        api_key = STATION_API_KEYS.get(station_id) or STATION_API_KEYS.get(station_input)
+
+        if not api_key:
+            resolved_id = resolve_station_id(station_input, None)
+            if resolved_id and resolved_id != station_input:
+                station_id = resolved_id
+                api_key = STATION_API_KEYS.get(station_id)
+
+        if not api_key:
+            logger.warning(f"No API key for station {station_id} -- will attempt unauthenticated requests")
+
+        # Determine scan range for this station
+        station_has_data = any(s == station_id for s, _ in existing_counts)
+        if station_has_data and not args.force_full:
+            station_dates = [d for s, d in existing_counts if s == station_id]
+            station_start = max(start, min(station_dates))
+        else:
+            station_start = start
+
+        days_to_fetch = find_days_to_fetch_for_station(
+            station_id, api_key, existing_counts, station_start, end,
+            args.lookback, args.force_full
+        )
+
+        if not days_to_fetch:
+            logger.info(f"\n=== Station {station_id}: up to date, nothing to fetch ===")
+            total_skipped += 1
+            continue
+
+        logger.info(f"\n=== Station {station_id}: {len(days_to_fetch)} days to fetch ===")
+
+        for day in days_to_fetch:
+            existing = existing_counts.get((station_id, day), 0)
+            status = f"(replacing: {existing} rows)" if existing > 0 else "(missing)"
+            logger.info(f"\n  Station {station_id} {day} {status}")
+
+            # Remove old data before repulling
+            if existing > 0:
+                remove_station_day(output_path, station_id, day)
+
+            nodes = fetch_one_day_for_station(
+                station_id, api_key, day, page_size=args.page_size
+            )
+
+            if nodes is None:
+                failed_days.append((station_id, day))
                 continue
-        
-        logger.info(f"Retrieved {len(all_nodes)} total records from all stations")
-        
-        if not all_nodes:
-            logger.warning("No records retrieved from any station.")
-            return
-        
-        # Append to CSV
-        append_to_csv(all_nodes, output_path)
 
-        # Dual-write: insert into DuckDB
-        write_to_duckdb(all_nodes)
+            if not nodes:
+                logger.info(f"  No detections for station {station_id} on {day}")
+                continue
 
-        logger.info("Data fetch completed successfully")
+            # Fetch and merge sensor readings for this day
+            sensor_readings = fetch_sensor_readings_for_day(
+                station_id, api_key, day, args.page_size
+            )
+            if sensor_readings:
+                nodes = merge_sensor_data_with_detections(nodes, sensor_readings)
 
-    except Exception as e:
-        logger.error(f"Error fetching data: {e}", exc_info=True)
-        sys.exit(1)
+            logger.info(f"  Fetched {len(nodes):,} detections for station {station_id} on {day}")
+            append_to_csv(nodes, output_path)
+            write_to_duckdb(nodes)
+            total_fetched += len(nodes)
+
+            time.sleep(1)
+
+    # Summary
+    logger.info("\n" + "=" * 50)
+    logger.info(f"Complete.")
+    logger.info(f"  Fetched: {total_fetched:,} detections")
+    logger.info(f"  Stations skipped (up to date): {total_skipped}")
+    if failed_days:
+        logger.info(f"  FAILED ({len(failed_days)} days):")
+        for sid, day in failed_days:
+            logger.info(f"    station {sid} {day}")
+    else:
+        logger.info(f"  No failures.")
 
 
 def write_to_duckdb(nodes):
