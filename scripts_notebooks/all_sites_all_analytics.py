@@ -581,6 +581,7 @@ bird_colors = {
     'Dark-eyed Junco': '#3C4043',           # Dark Gray
     'Downy Woodpecker': '#4B0082',          # Indigo (dark blue-purple)
     'Eastern Bluebird': '#0000FF',          # Blue
+    'Eastern Gray Squirrel': '#808080',     # Gray
     'Eastern Phoebe': '#3C4043',            # Dark Gray
     'Coal tit': '#2F4F4F',                  # Dark slate gray
     'Common Ground Dove': '#D2B48C',        # Tan
@@ -629,7 +630,8 @@ bird_edge_colors = {
     'Dark-eyed Junco': 'black',
     'Downy Woodpecker': 'black',
     'Eastern Bluebird': '#8B4513',
-    'Eastern Phoebe': '#FFD700', 
+    'Eastern Gray Squirrel': 'black',
+    'Eastern Phoebe': '#FFD700',
     'Gray Catbird': 'black',
     'Great tit': 'black',
     'Hairy Woodpecker': 'black',
@@ -675,7 +677,8 @@ bird_markers = {
     'Dark-eyed Junco': '^',
     'Downy Woodpecker': 'o',
     'Eastern Bluebird': 'o',
-    'Eastern Phoebe': '^', 
+    'Eastern Gray Squirrel': 's',
+    'Eastern Phoebe': '^',
     'Gray Catbird': 'o',
     'Great tit': 'o',
     'Hairy Woodpecker': '^',
