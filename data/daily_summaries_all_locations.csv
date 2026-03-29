@@ -1201,11 +1201,17 @@ Date,source_sheet,Bird,Feeder Visits
 2026-03-19,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,1.0
 2026-03-19,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,1.0
 2026-03-19,"Jacksonville, FL 32259 Daily Su",Mourning Dove,3.0
+2026-03-20,"Jacksonville, FL 32259 Daily Su",Common Ground Dove,1.0
 2026-03-20,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,1.0
-2026-03-21,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,1.0
+2026-03-21,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,3.0
 2026-03-24,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,1.0
 2026-03-25,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,6.0
 2026-03-26,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,16.0
+2026-03-27,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,15.0
+2026-03-27,"Jacksonville, FL 32259 Daily Su",Eastern Gray Squirrel,22.0
+2026-03-27,"Jacksonville, FL 32259 Daily Su",Yellow-rumped Warbler,14.0
+2026-03-28,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,28.0
+2026-03-28,"Jacksonville, FL 32259 Daily Su",Eastern Bluebird,2.0
 2025-09-16,"Essex Fells, NJ 07021 Daily Sum",,0.0
 2025-09-17,"Essex Fells, NJ 07021 Daily Sum",,0.0
 2025-09-18,"Essex Fells, NJ 07021 Daily Sum",,0.0
@@ -2065,6 +2071,44 @@ Date,source_sheet,Bird,Feeder Visits
 2026-03-26,"Essex Fells, NJ 07021 Daily Sum",Hairy Woodpecker,0.0
 2026-03-26,"Essex Fells, NJ 07021 Daily Sum",Song Sparrow,0.0
 2026-03-26,"Essex Fells, NJ 07021 Daily Sum",American Robin,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,59.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,20.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,28.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,35.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",House Finch,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Mourning Dove,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Common Grackle,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Red-breasted Nuthatch,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",House Sparrow,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",White-throated Sparrow,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Hairy Woodpecker,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",Song Sparrow,0.0
+2026-03-27,"Essex Fells, NJ 07021 Daily Sum",American Robin,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Northern Cardinal,58.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Tufted Titmouse,61.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Blue Jay,45.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Downy Woodpecker,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",White-breasted Nuthatch,57.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,3.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",House Finch,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Mourning Dove,16.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Common Grackle,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Red-breasted Nuthatch,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",House Sparrow,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",White-throated Sparrow,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Hairy Woodpecker,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",Song Sparrow,0.0
+2026-03-28,"Essex Fells, NJ 07021 Daily Sum",American Robin,0.0
 2025-11-02,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,18.0
 2025-11-03,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,20.0
 2025-11-04,"Auburn, AL 36830 Daily Sum",Tufted Titmouse,17.0
