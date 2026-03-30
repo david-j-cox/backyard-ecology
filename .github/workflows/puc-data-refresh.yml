@@ -1,0 +1,106 @@
+name: PUC Data Refresh
+
+on:
+  schedule:
+    # 1:00 AM ET every day (ET = UTC-5, so 06:00 UTC)
+    # During daylight saving time (EDT = UTC-4), this runs at 2:00 AM ET
+    - cron: '0 6 * * *'
+
+  # Manual trigger from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "puc-data-refresh"
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create .env file
+        run: |
+          cat > .env << 'EOF'
+          WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}
+          JAX_BIRDWX_API_KEY=${{ secrets.JAX_BIRDWX_API_KEY }}
+          ESSEX_BIRDWX_API_KEY=${{ secrets.ESSEX_BIRDWX_API_KEY }}
+          EOF
+
+      - name: Download county BirdWeather data from release
+        run: |
+          gh release download county-birdweather \
+            --pattern "county_level_birdweather.parquet" \
+            --dir data/ --clobber \
+            || echo "WARNING: No existing county BirdWeather data found, starting fresh"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download DuckDB from release
+        run: |
+          gh release download data \
+            --pattern "backyard_ecology.duckdb" \
+            --dir data/ --clobber \
+            || echo "WARNING: No existing DB found, starting fresh"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run PUC data refresh
+        working-directory: scripts_notebooks
+        run: python puc_data_refresh.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ logs/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "PUC data refresh"
+            git pull --rebase origin main
+            git push
+          fi
+
+      - name: Upload county BirdWeather data to release
+        if: always()
+        run: |
+          if [ ! -f data/county_level_birdweather.parquet ]; then
+            echo "No county BirdWeather parquet to upload"
+            exit 0
+          fi
+          gh release view county-birdweather >/dev/null 2>&1 \
+            || gh release create county-birdweather \
+              --title "County BirdWeather data" \
+              --notes "Incremental county-level BirdWeather detection data (managed by CI pipeline)"
+          gh release upload county-birdweather data/county_level_birdweather.parquet --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload DuckDB to release
+        if: always()
+        run: |
+          if [ ! -f data/backyard_ecology.duckdb ]; then
+            echo "No DuckDB file to upload"
+            exit 0
+          fi
+          gh release view data >/dev/null 2>&1 \
+            || gh release create data --title "DuckDB data store" --notes "Pipeline database"
+          gh release upload data data/backyard_ecology.duckdb --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,7 @@
+Location & Model,1st Extinction,2nd Extinction,3rd Extinction
+"Essex Fells, NJ | (2-param)",B₀=25.9  b=1.215 | R²=0.953  AICc=14.9 | MAE=1.4  RMSE=1.6,B₀=101.4  b=1.497 | R²=0.978  AICc=39.0 | MAE=3.4  RMSE=4.1,—
+"Essex Fells, NJ | (3-param)",B₀=24.2  b=1.592 | c=1.9 | R²=0.991  AICc=4.5 | MAE=0.6  RMSE=0.7,B₀=98.2  b=1.760 | c=3.6 | R²=0.991  AICc=32.3 | MAE=2.1  RMSE=2.6,—
+"Jacksonville, FL | (2-param)",B₀=50.6  b=1.045 | R²=0.945  AICc=34.7 | MAE=2.4  RMSE=3.1,B₀=48.8  b=0.671 | R²=0.797  AICc=61.8 | MAE=4.4  RMSE=5.3,—
+"Jacksonville, FL | (3-param)",B₀=48.5  b=1.275 | c=2.6 | R²=0.972  AICc=29.5 | MAE=1.8  RMSE=2.2,B₀=46.3  b=1.051 | c=4.6 | R²=0.899  AICc=52.9 | MAE=3.3  RMSE=3.8,—
+"Southampton, UK | (2-param)",B₀=102.0  b=0.744 | R²=0.940  AICc=48.5 | MAE=5.3  RMSE=7.1,B₀=72.0  b=0.881 | R²=0.778  AICc=65.8 | MAE=6.5  RMSE=8.8,—
+"Southampton, UK | (3-param)",B₀=97.1  b=0.907 | c=6.1 | R²=0.965  AICc=46.6 | MAE=4.3  RMSE=5.4,B₀=67.1  b=1.379 | c=7.0 | R²=0.876  AICc=61.0 | MAE=5.1  RMSE=6.5,—
