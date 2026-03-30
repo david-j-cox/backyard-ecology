@@ -1,21 +1,21 @@
-DateChangeStarted,DescriptionOfChange,LocationOfChange
-2025-10-26,Extinction,"Essex Fells, NJ"
-2025-11-02,Extinction,"Jacksonville, FL"
-2025-11-05,Seed,"Essex Fells, NJ"
-2025-11-10,Extinction,"Southampton, UK"
-2025-11-16,Seed,"Jacksonville, FL"
-2025-11-21,Seed,"Southampton, UK"
-2025-11-23,Extinction,"Essex Fells, NJ"
-2025-12-01,Extinction,"Jacksonville, FL"
-2025-12-09,Seed,"Essex Fells, NJ"
-2025-12-16,Extinction,"Southampton, UK"
-2025-12-20,Seed,"Jacksonville, FL"
-2025-12-24,Feeder Removed,"Essex Fells, NJ"
-2025-12-30,Seed,"Southampton, UK"
-2026-01-12,Low Dove Mix,"Essex Fells, NJ"
-2026-01-19,Feeder Removed,"Essex Fells, NJ"
-2026-01-20,Low Dove Mix (One Side),"Jacksonville, FL"
-2026-01-30,Low Dove Mix (Both Sides),"Jacksonville, FL"
-2026-02-15,Extinction,"Jacksonville, FL"
-2026-03-25,Low Dove Mix .30/.30/.30/.10 ratio (Both Sides),"Essex Fells, NJ"
-2026-03-25,Low Dove Mix .30/.30/.30/.10 ratio (Both Sides),"Jacksonville, FL"
+DateChangeStarted,DescriptionOfChange,LocationOfChange,SeedRatio
+2025-10-26,Extinction,"Essex Fells, NJ",
+2025-11-02,Extinction,"Jacksonville, FL",
+2025-11-05,Seed,"Essex Fells, NJ",
+2025-11-10,Extinction,"Southampton, UK",
+2025-11-16,Seed,"Jacksonville, FL",
+2025-11-21,Seed,"Southampton, UK",
+2025-11-23,Extinction,"Essex Fells, NJ",
+2025-12-01,Extinction,"Jacksonville, FL",
+2025-12-09,Seed,"Essex Fells, NJ",
+2025-12-16,Extinction,"Southampton, UK",
+2025-12-20,Seed,"Jacksonville, FL",
+2025-12-24,Feeder Removed,"Essex Fells, NJ",
+2025-12-30,Seed,"Southampton, UK",
+2026-01-12,Low Dove Mix,"Essex Fells, NJ",
+2026-01-19,Feeder Removed,"Essex Fells, NJ",
+2026-01-20,Low Dove Mix (One Side),"Jacksonville, FL",
+2026-01-30,Low Dove Mix (Both Sides),"Jacksonville, FL",
+2026-02-15,Extinction,"Jacksonville, FL",
+2026-03-25,Low Dove Mix (Both Sides),"Essex Fells, NJ",Low Dove Mix .30/.30/.30/.10 ratio (Both Sides)
+2026-03-25,Low Dove Mix (Both Sides),"Jacksonville, FL",Low Dove Mix .30/.30/.30/.10 ratio (Both Sides)
