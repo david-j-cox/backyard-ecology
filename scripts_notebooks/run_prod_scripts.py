@@ -6,12 +6,13 @@ This script orchestrates the execution of:
 Phase 1 (parallel - data fetching):
   1. weather.py - Fetches weather data from OpenWeather API
   2. merge_sites_data.py - Downloads and merges data from Google Sheets
-  3. birdweather_specific_pucs.py - Fetches BirdWeather PUC data
-  4. birdweather.py - Fetches BirdWeather county data
 
 Phase 2 (parallel - analytics, after data is fresh):
-  5. all_sites_all_analytics.py - Multi-site analysis and dashboard plots
-  6. one_site_analytics.py - Single-site (Jacksonville) peck/seed analysis
+  3. all_sites_all_analytics.py - Multi-site analysis and dashboard plots
+  4. one_site_analytics.py - Single-site (Jacksonville) peck/seed analysis
+
+Note: BirdWeather PUC data (birdweather_specific_pucs.py, birdweather.py)
+is handled by the separate puc_data_refresh.py script on its own schedule.
 """
 
 import logging
@@ -203,8 +204,6 @@ def main():
         data_scripts = {
             'weather.py': script_dir / 'weather.py',
             'merge_sites_data.py': script_dir / 'merge_sites_data.py',
-            'birdweather_specific_pucs.py': script_dir / 'birdweather_specific_pucs.py',
-            'birdweather.py': script_dir / 'birdweather.py'
         }
 
         # -------------------------------------------------------

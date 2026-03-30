@@ -73,14 +73,6 @@ jobs:
           python merge_sites_data.py &
           PID_MERGE=$!
 
-          echo "=== Fetching BirdWeather PUC data ==="
-          python birdweather_specific_pucs.py &
-          PID_PUC=$!
-
-          echo "=== Fetching BirdWeather county data ==="
-          python birdweather.py &
-          PID_BIRDWEATHER=$!
-
           echo "=== Scraping BirdCast migration data ==="
           python birdcast_scraper.py &
           PID_BIRDCAST=$!
@@ -98,10 +90,10 @@ jobs:
           PID_PACIFIC=$!
 
           # Wait for all data scripts (don't fail the whole job if one errors)
+          # PUC data (birdweather_specific_pucs.py, birdweather.py) is handled
+          # by the separate puc-data-refresh workflow that runs earlier at 1 AM ET.
           wait $PID_WEATHER || echo "WARNING: weather.py failed"
           wait $PID_MERGE || echo "WARNING: merge_sites_data.py failed"
-          wait $PID_PUC || echo "WARNING: birdweather_specific_pucs.py failed"
-          wait $PID_BIRDWEATHER || echo "WARNING: birdweather.py failed"
           wait $PID_BIRDCAST || echo "WARNING: birdcast_scraper.py failed"
           wait $PID_ATLANTIC || echo "WARNING: atlantic_flyway_scraper.py failed"
           wait $PID_MISSISSIPPI || echo "WARNING: mississippi_flyway_scraper.py failed"
