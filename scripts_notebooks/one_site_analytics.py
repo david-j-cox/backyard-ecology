@@ -105,6 +105,7 @@ boundary4 = pd.to_datetime('2025-12-20')
 boundary5 = pd.to_datetime('2026-01-20')
 boundary6 = pd.to_datetime('2026-01-30')
 boundary7 = pd.to_datetime('2026-02-15')
+boundary8 = pd.to_datetime('2026-03-25')
 
 # Global midpoints for phase-change lines (using all data)
 prev1 = peck_data.loc[peck_data['Date'] < boundary1, 'Date'].max()
@@ -134,6 +135,10 @@ mid6 = prev6 + (next6 - prev6) / 2
 prev7 = peck_data.loc[peck_data['Date'] < boundary7, 'Date'].max()
 next7 = peck_data.loc[peck_data['Date'] >= boundary7, 'Date'].min()
 mid7 = prev7 + (next7 - prev7) / 2
+
+prev8 = peck_data.loc[peck_data['Date'] < boundary8, 'Date'].max()
+next8 = peck_data.loc[peck_data['Date'] >= boundary8, 'Date'].min()
+mid8 = prev8 + (next8 - prev8) / 2
 
 # Phase label midpoints
 phase_a_start = peck_data['Date'].min()
@@ -165,8 +170,12 @@ phase_g_end = prev7
 mid_g = (phase_g_start + (phase_g_end - phase_g_start) / 2)
 
 phase_h_start = next7
-phase_h_end = peck_data['Date'].max()
-mid_h = (phase_h_start + (phase_h_end - phase_h_start) / 2) + pd.Timedelta(days=0)
+phase_h_end = prev8
+mid_h = (phase_h_start + (phase_h_end - phase_h_start) / 2)
+
+phase_i_start = next8
+phase_i_end = peck_data['Date'].max()
+mid_i = (phase_i_start + (phase_i_end - phase_i_start) / 2)
 
 # --- Filter birds with at least 5 days of data ---
 days_per_bird = peck_data.groupby('Bird')['Date'].nunique()
@@ -201,10 +210,12 @@ for i, (ax, bird) in enumerate(zip(axes, birds)):
     data_phase_e = df[(df['Date'] >= boundary4) & (df['Date'] < boundary5)]
     data_phase_f = df[(df['Date'] >= boundary5) & (df['Date'] < boundary6)]
     data_phase_g = df[(df['Date'] >= boundary6) & (df['Date'] < boundary7)]
-    data_phase_h = df[df['Date'] >= boundary7]
+    data_phase_h = df[(df['Date'] >= boundary7) & (df['Date'] < boundary8)]
+    data_phase_i = df[df['Date'] >= boundary8]
 
     for phase_data in [data_phase_a, data_phase_b, data_phase_c, data_phase_d,
-                       data_phase_e, data_phase_f, data_phase_g, data_phase_h]:
+                       data_phase_e, data_phase_f, data_phase_g, data_phase_h,
+                       data_phase_i]:
         ax.plot(phase_data['Date'], phase_data['log_ratio_left_right'],
                 marker='o', markersize=4, markerfacecolor='black',
                 markeredgecolor='black', markeredgewidth=1,
@@ -212,14 +223,14 @@ for i, (ax, bird) in enumerate(zip(axes, birds)):
 
     # Phase-change lines: solid for transitions to/from No Seed on any
     # alternative, dashed for transitions between two food conditions
-    for mid in [mid1, mid2, mid3, mid4, mid6, mid7]:
+    for mid in [mid1, mid2, mid3, mid4, mid6, mid7, mid8]:
         ax.axvline(x=mid, color='black', linestyle='-', linewidth=1)
     ax.axvline(x=mid5, color='black', linestyle='--', linewidth=1)
     ax.axhline(y=0, color='black', linewidth=1)
 
     sns.despine(ax=ax, top=True, right=True)
     ax.set_ylim(-max_y, max_y)
-    ax.set_xlim(pd.to_datetime('2025-10-01'), phase_g_end + pd.Timedelta(days=14))
+    ax.set_xlim(pd.to_datetime('2025-10-01'), phase_i_end + pd.Timedelta(days=14))
 
     ax.set_title(bird, fontsize=14)
 
@@ -245,8 +256,10 @@ for ax in axes[:-2]:
     ax.text(mid_f, y_label_bottom, 'Low\nDove', ha='center', va='center', fontsize=7)
     ax.text(mid_g, y_label_top, 'Low\nDove', ha='center', va='center', fontsize=7)
     ax.text(mid_g, y_label_bottom, 'No\nSeed', ha='center', va='center', fontsize=7)
-    ax.text(mid_h, y_label_top, 'No\nSeed', ha='left', va='center', fontsize=7)
-    ax.text(mid_h, y_label_bottom, 'No\nSeed', ha='left', va='center', fontsize=7)
+    ax.text(mid_h, y_label_top, 'No\nSeed', ha='center', va='center', fontsize=7)
+    ax.text(mid_h, y_label_bottom, 'No\nSeed', ha='center', va='center', fontsize=7)
+    ax.text(mid_i, y_label_top, 'Low\nDove', ha='center', va='center', fontsize=7)
+    ax.text(mid_i, y_label_bottom, 'Low\nDove', ha='center', va='center', fontsize=7)
 
 # Format x-ticks as MM-DD and rotate 45 degrees
 date_fmt = mdates.DateFormatter('%m-%d')
