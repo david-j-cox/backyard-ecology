@@ -25,9 +25,7 @@ from dotenv import load_dotenv
 # ---------------------------------
 # Config
 # ---------------------------------
-DATA_XLSX = '../data/multi_site_data.xlsx'
-RAW_SHEET = 'RawData'
-DAILY_SUMMS_SHEET = 'DailySummaries'
+RAW_DATA_CSV = '../data/raw_data_all_locations.csv'
 BIRDCAST_PARQUET = '../data/birdcast_data.parquet'
 load_dotenv()
 
@@ -71,12 +69,10 @@ def save_plot_for_dashboard(fig, filename, title, description=""):
 # Load data
 # ---------------------------------
 print("Loading data...")
-raw_data = pd.read_excel(DATA_XLSX, sheet_name=RAW_SHEET)
+raw_data = pd.read_csv(RAW_DATA_CSV)
+raw_data = raw_data[raw_data['source_sheet'] == 'jacksonville_fl_32259']
 raw_data = raw_data.dropna(subset=['RightPecks'])
 raw_data['Date'] = pd.to_datetime(raw_data['Date'])
-
-daily_summs = pd.read_excel(DATA_XLSX, sheet_name=DAILY_SUMMS_SHEET)
-daily_summs['Date'] = pd.to_datetime(daily_summs['Date'])
 
 # ---------------------------------
 # Peck data preparation
@@ -224,8 +220,10 @@ for i, (ax, bird) in enumerate(zip(axes, birds)):
     # Phase-change lines: solid for transitions to/from No Seed on any
     # alternative, dashed for transitions between two food conditions
     for mid in [mid1, mid2, mid3, mid4, mid6, mid7, mid8]:
-        ax.axvline(x=mid, color='black', linestyle='-', linewidth=1)
-    ax.axvline(x=mid5, color='black', linestyle='--', linewidth=1)
+        if pd.notna(mid):
+            ax.axvline(x=mid, color='black', linestyle='-', linewidth=1)
+    if pd.notna(mid5):
+        ax.axvline(x=mid5, color='black', linestyle='--', linewidth=1)
     ax.axhline(y=0, color='black', linewidth=1)
 
     sns.despine(ax=ax, top=True, right=True)
@@ -256,10 +254,12 @@ for ax in axes[:-2]:
     ax.text(mid_f, y_label_bottom, 'Low\nDove', ha='center', va='center', fontsize=7)
     ax.text(mid_g, y_label_top, 'Low\nDove', ha='center', va='center', fontsize=7)
     ax.text(mid_g, y_label_bottom, 'No\nSeed', ha='center', va='center', fontsize=7)
-    ax.text(mid_h, y_label_top, 'No\nSeed', ha='center', va='center', fontsize=7)
-    ax.text(mid_h, y_label_bottom, 'No\nSeed', ha='center', va='center', fontsize=7)
-    ax.text(mid_i, y_label_top, 'Low\nDove', ha='center', va='center', fontsize=7)
-    ax.text(mid_i, y_label_bottom, 'Low\nDove', ha='center', va='center', fontsize=7)
+    if pd.notna(mid_h):
+        ax.text(mid_h, y_label_top, 'No\nSeed', ha='center', va='center', fontsize=7)
+        ax.text(mid_h, y_label_bottom, 'No\nSeed', ha='center', va='center', fontsize=7)
+    if pd.notna(mid_i):
+        ax.text(mid_i, y_label_top, 'Low\nDove', ha='center', va='center', fontsize=7)
+        ax.text(mid_i, y_label_bottom, 'Low\nDove', ha='center', va='center', fontsize=7)
 
 # Format x-ticks as MM-DD and rotate 45 degrees
 date_fmt = mdates.DateFormatter('%m-%d')
@@ -306,7 +306,7 @@ for idx, bird in enumerate(unique_birds):
     ax = axes[idx]
 
     # Filter data for this bird
-    bird_data = raw_data[(raw_data['Bird'] == bird)]
+    bird_data = raw_data[(raw_data['Bird'] == bird)].copy()
     bird_data['TotalPecks'] = bird_data['RightPecks'] + bird_data['LeftPecks']
 
     # Process Golden Safflower pecks
