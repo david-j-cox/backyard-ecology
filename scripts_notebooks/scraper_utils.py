@@ -475,16 +475,27 @@ def save_to_duckdb(data_list, table_name):
 
         df = pd.DataFrame(data_list)
 
-        # Derive date_key
-        if "migration_date" in df.columns and df["migration_date"].notna().any():
-            df["date_key"] = df["migration_date"].fillna("")
-        else:
-            df["date_key"] = ""
+        # Drop rows where bird data is entirely missing (failed scrapes)
+        bird_cols = [c for c in ["total_birds", "peak_birds_in_flight"] if c in df.columns]
+        if bird_cols:
+            df = df.dropna(subset=bird_cols, how="all")
+            if df.empty:
+                logging.info(f"[DuckDB] No rows with bird data for {table_name}, skipping")
+                return
 
-        needs_fill = df["date_key"] == ""
-        if needs_fill.any() and "scrape_timestamp" in df.columns:
-            ts = pd.to_datetime(df.loc[needs_fill, "scrape_timestamp"], errors="coerce", utc=True)
-            df.loc[needs_fill, "date_key"] = ts.dt.date.astype(str)
+        # Derive date_key — mirror the parquet path: prefer migration_date,
+        # fall back to scrape_timestamp date in one step so the format is
+        # consistent for the same logical date across scrape runs.
+        scrape_dates = pd.Series("", index=df.index)
+        if "scrape_timestamp" in df.columns:
+            scrape_dates = (
+                pd.to_datetime(df["scrape_timestamp"], errors="coerce", utc=True)
+                .dt.date.astype(str)
+            )
+        if "migration_date" in df.columns and df["migration_date"].notna().any():
+            df["date_key"] = df["migration_date"].fillna(scrape_dates)
+        else:
+            df["date_key"] = scrape_dates
 
         # Stringify all columns (table is all-VARCHAR for dirty data resilience)
         for col in df.columns:
