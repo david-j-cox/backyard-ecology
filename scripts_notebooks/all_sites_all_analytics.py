@@ -2575,9 +2575,7 @@ overall_date_max = merged_data_filtered['Date_dt'].max() if not merged_data_filt
 overall_date_max_extended = overall_date_max + pd.Timedelta(days=7)
 
 # ---------- Phase labels configuration ----------
-phase_labels = {
-    'Essex Fells, NJ': {'before': 'Seed', 'after': 'No\nSeed'},
-}
+# Labels are now derived dynamically from phase_changes data
 
 # ========== BEHAVIORAL MOMENTUM FITTING ==========
 import warnings as _warnings
@@ -2685,6 +2683,7 @@ ax_table.axis('off')
 
 # IMPORTANT: store the exact midpoints that were actually plotted (after filtering/filling)
 plotted_mids_by_region = {}
+dashed_indices_by_region = {}
 
 for ax, region in zip(axes, regions_order):
 
@@ -2749,7 +2748,7 @@ for ax, region in zip(axes, regions_order):
             if mid is not None:
                 all_mids.append(mid)
 
-    # STORE the plotted midpoints for connectors
+    # STORE the plotted midpoints for connectors (dashed indices stored after computation below)
     plotted_mids_by_region[region] = all_mids
 
     # Plot data split at phase changes
@@ -2782,31 +2781,51 @@ for ax, region in zip(axes, regions_order):
             linewidth=0.5
         )
 
+    # Determine line style: dashed for within-condition changes
+    # (e.g., changing seed type), solid for across-condition changes
+    # (e.g., seed to no seed, or no seed to seed).
+    def _broad_condition(desc):
+        """Map a phase change description to 'seed' or 'no_seed'."""
+        d = str(desc).lower()
+        if 'extinct' in d or 'removed' in d:
+            return 'no_seed'
+        return 'seed'
+
+    dashed_indices = set()
+    if not all_changes.empty:
+        descs = all_changes['DescriptionOfChange'].tolist()
+        # Start with the baseline condition (Seed) before any changes
+        prev_condition = 'seed'
+        for ci in range(len(descs)):
+            curr_condition = _broad_condition(descs[ci])
+            if curr_condition == prev_condition:
+                dashed_indices.add(ci)
+            prev_condition = curr_condition
+    dashed_indices_by_region[region] = dashed_indices
+
     # Draw vertical lines for ALL phase changes
     for idx, mid in enumerate(all_mids):
         if mid is not None:
-            # Make second-to-last line dashed for Jacksonville, FL (keep your special case)
-            if region == 'Jacksonville, FL' and idx == len(all_mids) - 2:
+            if idx in dashed_indices:
                 ax.axvline(mid, color='black', linewidth=0.5, alpha=0.9, linestyle='--')
             else:
                 ax.axvline(mid, color='black', linewidth=1.5, alpha=0.9)
 
-    # Phase labels (only if configured)
-    if region in phase_labels:
+    # Phase labels for the first row only
+    if region == regions_order[0]:
         y_pos_log = 1200
 
-        if not all_changes.empty:
-            baseline_condition = phase_labels[region].get('before', 'Seed')
-
-            def to_condition(desc):
-                desc_lower = str(desc).lower()
-                if 'seed' in desc_lower and 'extinct' not in desc_lower:
-                    return 'Seed'
-                if 'extinct' in desc_lower or 'extinction' in desc_lower or 'no seed' in desc_lower:
-                    return 'No\nSeed'
+        def _to_label(desc):
+            d = str(desc).lower()
+            if 'removed' in d:
+                return 'Feeder\nRemoved'
+            if 'extinct' in d or 'no seed' in d:
                 return 'No\nSeed'
+            if 'seed' in d or 'mix' in d:
+                return 'Seed'
+            return ''
 
-            current_condition = baseline_condition
+        if not all_changes.empty:
             change_dates = sorted(all_changes['DateChangeStarted'].tolist())
             phase_boundaries = [date_min] + change_dates + [date_max]
 
@@ -2815,27 +2834,21 @@ for ax, region in zip(axes, regions_order):
                 phase_end = phase_boundaries[i + 1]
 
                 if i == 0:
-                    condition = baseline_condition
-                elif i == len(phase_boundaries) - 2:
                     condition = 'Seed'
                 else:
                     change_at_start = all_changes[all_changes['DateChangeStarted'] == phase_start]
                     if not change_at_start.empty:
-                        current_condition = to_condition(change_at_start.iloc[0]['DescriptionOfChange'])
-                    condition = current_condition
+                        condition = _to_label(change_at_start.iloc[0]['DescriptionOfChange'])
+                    else:
+                        condition = ''
 
-                x_center = phase_start + (phase_end - phase_start) / 2
-                if i == len(phase_boundaries) - 2:
-                    ax.text(x_center + pd.Timedelta(days=4), y_pos_log, condition,
-                            ha='center', va='center', fontsize=14)
-                else:
+                if condition:
+                    x_center = phase_start + (phase_end - phase_start) / 2
                     ax.text(x_center, y_pos_log, condition,
                             ha='center', va='center', fontsize=14)
 
-        else:
-            x_center = date_min + (date_max - date_min) / 2
-            ax.text(x_center, y_pos_log, phase_labels[region].get('before', ''),
-                    ha='center', va='center', fontsize=14)
+    # No condition labels for rows below the first — the connectors
+    # from the top row indicate which phase changes correspond.
 
     # Panel cosmetics
     ax.set_ylabel(f'{region}\nVisits', fontsize=18, rotation=0, ha='center', labelpad=90)
@@ -2883,7 +2896,9 @@ def draw_connector(fig, axes, top_ax_idx, bottom_ax_idx, top_mid, bottom_mid,
                transform=fig.transFigure, color=color, linewidth=linewidth, alpha=alpha)
     )
 
-# Connect in order: 1st-to-1st, 2nd-to-2nd, ...
+# Connect across-condition (solid) lines between adjacent panels.
+# Skip within-condition (dashed) lines — they are site-specific and
+# don't correspond to phase changes in the other panel.
 panel_pairs = [
     (0, 1, 'Essex Fells, NJ', 'Jacksonville, FL'),
     (1, 2, 'Jacksonville, FL', 'Southampton, UK'),
@@ -2892,10 +2907,24 @@ panel_pairs = [
 for top_idx, bottom_idx, top_region, bottom_region in panel_pairs:
     top_mids = plotted_mids_by_region.get(top_region, [])
     bottom_mids = plotted_mids_by_region.get(bottom_region, [])
+    top_dashed = dashed_indices_by_region.get(top_region, set())
+    bottom_dashed = dashed_indices_by_region.get(bottom_region, set())
 
-    n = min(len(top_mids), len(bottom_mids))
-    for i in range(n):
-        draw_connector(fig, axes, top_idx, bottom_idx, top_mids[i], bottom_mids[i])
+    # Filter to only solid (across-condition) midpoints
+    top_solid = [m for i, m in enumerate(top_mids) if i not in top_dashed and m is not None]
+    bottom_solid = [m for i, m in enumerate(bottom_mids) if i not in bottom_dashed and m is not None]
+
+    # Pair from the front, then connect last-to-last.
+    # If one side has more solid lines than the other, the extras
+    # in the middle are site-specific and get skipped.
+    n = min(len(top_solid), len(bottom_solid))
+    if n == 0:
+        continue
+    # Front pairs: first (n-1)
+    for i in range(n - 1):
+        draw_connector(fig, axes, top_idx, bottom_idx, top_solid[i], bottom_solid[i])
+    # Last pair: connect the final solid line from each
+    draw_connector(fig, axes, top_idx, bottom_idx, top_solid[-1], bottom_solid[-1])
 
 # Bottom x-axis formatting
 axes[-1].set_xlabel('Date', fontsize=20, labelpad=12)
