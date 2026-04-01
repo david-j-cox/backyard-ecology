@@ -212,6 +212,7 @@ def main():
         analytics_scripts = {
             'all_sites_all_analytics.py': script_dir / 'all_sites_all_analytics.py',
             'one_site_analytics.py': script_dir / 'one_site_analytics.py',
+            'flyway_heatmap.py': script_dir / 'flyway_heatmap.py',
         }
 
         all_scripts = {**data_scripts, **analytics_scripts}

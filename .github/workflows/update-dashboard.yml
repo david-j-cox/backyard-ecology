@@ -62,6 +62,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Download flyway heatmap from release
+        run: |
+          mkdir -p docs/dashboard_plots/interactive
+          gh release download dashboard-assets \
+            --pattern "all_flyways_total_birds.html" \
+            --dir docs/dashboard_plots/interactive/ --clobber \
+            || echo "WARNING: No existing flyway heatmap found, will generate fresh"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Phase 1 - Fetch data
         working-directory: scripts_notebooks
         run: |
@@ -110,6 +120,9 @@ jobs:
           echo "=== Running one-site analytics ==="
           python one_site_analytics.py
 
+          echo "=== Generating flyway heatmap ==="
+          python flyway_heatmap.py
+
           echo "=== Phase 2 complete ==="
 
       - name: Phase 3 - Generate dashboard HTML
@@ -121,6 +134,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/ docs/
+          git reset -- docs/dashboard_plots/interactive/
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
@@ -157,6 +171,21 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload flyway heatmap to release
+        if: always()
+        run: |
+          if [ ! -f docs/dashboard_plots/interactive/all_flyways_total_birds.html ]; then
+            echo "No flyway heatmap to upload"
+            exit 0
+          fi
+          gh release view dashboard-assets >/dev/null 2>&1 \
+            || gh release create dashboard-assets \
+              --title "Dashboard interactive assets" \
+              --notes "Large interactive HTML plots for the dashboard (managed by CI pipeline)"
+          gh release upload dashboard-assets docs/dashboard_plots/interactive/all_flyways_total_birds.html --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   # Deploy to GitHub Pages (runs after update job)
   deploy:
     needs: update
@@ -174,6 +203,16 @@ jobs:
 
       - name: Pull latest
         run: git pull origin main
+
+      - name: Download flyway heatmap for Pages deploy
+        run: |
+          mkdir -p docs/dashboard_plots/interactive
+          gh release download dashboard-assets \
+            --pattern "all_flyways_total_birds.html" \
+            --dir docs/dashboard_plots/interactive/ --clobber \
+            || echo "WARNING: No flyway heatmap found for Pages deploy"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
