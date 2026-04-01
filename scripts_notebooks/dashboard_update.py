@@ -137,6 +137,7 @@ def create_simple_dashboard():
         'puc_audio_data_puc_21974_cox', 
         'puc_audio_data_puc_site_to_county',
         'puc_site_county_faceted',
+        'all_flyways_total_birds',
         'heatmap_counts',
         'heatmap_proportions',
         'heatmap_proportions_sunrise_sunset',
