@@ -183,6 +183,9 @@ def create_simple_dashboard():
                 """
             elif plot_type == 'plotly':
                 html_path = plot.get('html_path', '')
+                # Fix path to include dashboard_plots folder
+                if html_path.startswith('interactive/'):
+                    html_path = f"dashboard_plots/{html_path}"
                 html_content += f"""
                 <div class="plot-card">
                     <h1>{title}</h1>
