@@ -11,7 +11,7 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -31,6 +31,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Download flyway heatmap from release
+        run: |
+          mkdir -p docs/dashboard_plots/interactive
+          gh release download dashboard-assets \
+            --pattern "all_flyways_total_birds.html" \
+            --dir docs/dashboard_plots/interactive/ --clobber \
+            || echo "WARNING: No flyway heatmap found for Pages deploy"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
