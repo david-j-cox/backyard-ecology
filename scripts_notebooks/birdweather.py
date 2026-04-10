@@ -230,9 +230,12 @@ def append_to_parquet(df, filepath):
         # Read existing file and append
         existing_df = pd.read_parquet(filepath)
         combined_df = pd.concat([existing_df, df], ignore_index=True)
-        # Remove duplicates based on id if it exists
+        # Remove duplicates based on (id, county) so the same detection can
+        # legitimately appear in overlapping county bounding boxes without one
+        # county's fetch "stealing" it from the other.
+        dedup_cols = ["id", "county"] if "county" in combined_df.columns else ["id"]
         if "id" in combined_df.columns:
-            combined_df = combined_df.drop_duplicates(subset=["id"], keep="last")
+            combined_df = combined_df.drop_duplicates(subset=dedup_cols, keep="last")
         combined_df.to_parquet(filepath, engine="pyarrow", index=False)
     else:
         # Create new file
