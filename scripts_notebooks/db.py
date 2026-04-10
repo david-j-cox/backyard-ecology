@@ -165,7 +165,7 @@ def init_schema(con):
 
     con.execute("""
         CREATE TABLE IF NOT EXISTS county_birdweather (
-            id                  VARCHAR PRIMARY KEY,
+            id                  VARCHAR,
             "timestamp"         VARCHAR,
             certainty           VARCHAR,
             confidence          VARCHAR,
@@ -181,9 +181,29 @@ def init_schema(con):
             sound_url           VARCHAR,
             sound_start         VARCHAR,
             sound_end           VARCHAR,
-            county              VARCHAR
+            county              VARCHAR,
+            PRIMARY KEY (id, county)
         )
     """)
+
+    # Migrate county_birdweather from old single-column PK (id) to composite
+    # PK (id, county).  The old schema caused INSERT OR REPLACE to overwrite
+    # across counties for detections in overlapping bounding boxes.
+    try:
+        pk_cols = [
+            row[0]
+            for row in con.execute(
+                "SELECT column_name FROM information_schema.key_column_usage "
+                "WHERE table_name = 'county_birdweather'"
+            ).fetchall()
+        ]
+        if pk_cols == ["id"]:
+            print("[DuckDB] Migrating county_birdweather PK from (id) to (id, county)...")
+            con.execute("ALTER TABLE county_birdweather DROP CONSTRAINT county_birdweather_pkey")
+            con.execute("ALTER TABLE county_birdweather ADD PRIMARY KEY (id, county)")
+            print("[DuckDB] Migration complete.")
+    except Exception:
+        pass  # Table may not exist yet or schema introspection differs by version
 
     # BirdCast tables share the same schema.
     # All columns are VARCHAR to handle dirty scraped data; analytics casts as needed.
