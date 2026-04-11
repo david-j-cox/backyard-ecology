@@ -19411,6 +19411,17 @@ Date,Bird,Time,LeftPecks,RightPecks,LeftSeed,RightSeed,source_sheet,Notes,CoolDo
 2026-04-07,Dark-eyed Junco,08:29:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
 2026-04-07,White-breasted Nuthatch,12:08:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
 2026-04-07,Tufted Titmouse,12:35:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
+2026-04-08,Mourning Dove,06:11:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
+2026-04-08,Mourning Dove,06:17:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
+2026-04-08,Dark-eyed Junco,09:19:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
+2026-04-08,Northern Cardinal,12:29:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
+2026-04-08,Northern Cardinal,13:52:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
+2026-04-09,,,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
+2026-04-10,White-throated Sparrow,07:21:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
+2026-04-10,Tufted Titmouse,08:57:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
+2026-04-10,Downy Woodpecker,09:40:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
+2026-04-10,White-breasted Nuthatch,13:07:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
+2026-04-10,Northern Cardinal,19:35:00,,,No Seed,No Seed,essex_fells_nj_07021,,1 min
 2025-10-05,Northern Cardinal,15:45:00,0.0,5.0,Special Finch Food,Golden Safflower,jacksonville_fl_32259,,
 2025-10-05,Northern Cardinal,15:47:00,1.0,1.0,Special Finch Food,Golden Safflower,jacksonville_fl_32259,,
 2025-10-05,Northern Cardinal,16:13:00,0.0,3.0,Special Finch Food,Golden Safflower,jacksonville_fl_32259,,
@@ -37952,6 +37963,32 @@ Date,Bird,Time,LeftPecks,RightPecks,LeftSeed,RightSeed,source_sheet,Notes,CoolDo
 2026-04-09,Eastern Gray Squirrel,19:43:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
 2026-04-09,Northern Cardinal,19:52:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
 2026-04-09,Eastern Bluebird,19:56:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Northern Cardinal,08:10:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Eastern Gray Squirrel,08:13:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Northern Cardinal,09:47:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Carolina Chickadee,10:44:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Mourning Dove,11:46:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Mourning Dove,11:47:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Mourning Dove,11:48:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Northern Cardinal,14:26:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Northern Cardinal,14:28:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Northern Cardinal,14:57:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Northern Cardinal,15:08:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Eastern Bluebird,15:09:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Eastern Bluebird,15:10:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Eastern Bluebird,15:10:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Eastern Bluebird,15:10:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Eastern Bluebird,15:11:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Eastern Bluebird,15:12:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Carolina Wren,15:22:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Carolina Wren,15:48:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Carolina Wren,16:28:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Carolina Wren,16:30:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Carolina Wren,16:31:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Tufted Titmouse,19:34:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Northern Cardinal,19:34:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Northern Cardinal,19:49:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
+2026-04-10,Northern Cardinal,19:49:00,,,"Sunflower, Safflower, Mealworm, Peanuts","Sunflower, Safflower, Mealworm, Peanuts",jacksonville_fl_32259,,
 2025-10-05,Great tit,12:56:00,,,,,southampton_uk,,
 2025-10-05,Great tit,16:58:00,,,,,southampton_uk,,
 2025-10-06,Great tit,09:17:00,,,,,southampton_uk,,
