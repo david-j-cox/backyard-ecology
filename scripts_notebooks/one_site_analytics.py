@@ -27,7 +27,32 @@ from dotenv import load_dotenv
 # ---------------------------------
 RAW_DATA_CSV = '../data/raw_data_all_locations.csv'
 BIRDCAST_PARQUET = '../data/birdcast_data.parquet'
+PHASE_CHANGES_CSV = '../data/phase_change_data.csv'
+SITE_SHEET = 'jacksonville_fl_32259'
+SITE_PHASE_LOCATION = 'Jacksonville, FL'
 load_dotenv()
+
+# Map raw seed strings to short two-line plot labels
+SEED_LABELS = {
+    'Special Finch Food': 'Finch\nFood',
+    'Golden Safflower': 'Safflower',
+    'Sunflower, Safflower, Mealworm, Peanuts': 'Low\nDove',
+}
+NO_SEED_LABEL = 'No\nSeed'
+
+
+def label_for_seed(seed):
+    if seed is None or (isinstance(seed, float) and pd.isna(seed)):
+        return NO_SEED_LABEL
+    return SEED_LABELS.get(seed, str(seed))
+
+
+def dominant_seed(series):
+    """Return the most common known seed value in a phase, or None if all missing."""
+    known = series[series.isin(SEED_LABELS.keys())]
+    if len(known) > 0:
+        return known.mode().iloc[0]
+    return None
 
 # Create dashboard output directory
 DASHBOARD_DIR = '../docs/dashboard_plots'
@@ -70,9 +95,23 @@ def save_plot_for_dashboard(fig, filename, title, description=""):
 # ---------------------------------
 print("Loading data...")
 raw_data = pd.read_csv(RAW_DATA_CSV)
-raw_data = raw_data[raw_data['source_sheet'] == 'jacksonville_fl_32259']
+raw_data = raw_data[raw_data['source_sheet'] == SITE_SHEET]
 raw_data = raw_data.dropna(subset=['RightPecks'])
 raw_data['Date'] = pd.to_datetime(raw_data['Date'])
+
+# Load phase changes for this site (canonical source of truth)
+print("Loading phase changes...")
+phase_changes_all = pd.read_csv(PHASE_CHANGES_CSV)
+phase_changes_all['LocationOfChange'] = phase_changes_all['LocationOfChange'].astype(str).str.strip()
+site_phase_changes = phase_changes_all[
+    phase_changes_all['LocationOfChange'] == SITE_PHASE_LOCATION
+].copy()
+site_phase_changes['DateChangeStarted'] = pd.to_datetime(
+    site_phase_changes['DateChangeStarted'], errors='coerce'
+)
+phase_boundaries = sorted(
+    pd.to_datetime(site_phase_changes['DateChangeStarted'].dropna().unique())
+)
 
 # ---------------------------------
 # Peck data preparation
@@ -94,84 +133,48 @@ peck_data['log_ratio_left_right'] = np.log(peck_data['left_pecks'] / peck_data['
 print("Generating seed preference plot...")
 peck_data['Date'] = pd.to_datetime(peck_data['Date'])
 
-boundary1 = pd.to_datetime('2025-11-01')
-boundary2 = pd.to_datetime('2025-11-16')
-boundary3 = pd.to_datetime('2025-12-01')
-boundary4 = pd.to_datetime('2025-12-20')
-boundary5 = pd.to_datetime('2026-01-20')
-boundary6 = pd.to_datetime('2026-01-30')
-boundary7 = pd.to_datetime('2026-02-15')
-boundary8 = pd.to_datetime('2026-03-25')
+# Build phases dynamically from phase_change_data.csv.
+# Each phase spans [phase_start, next_phase_start) and is annotated with
+# the dominant LeftSeed/RightSeed actually observed in raw_data for that window.
+data_min = peck_data['Date'].min()
+data_max = peck_data['Date'].max()
 
-# Global midpoints for phase-change lines (using all data)
-prev1 = peck_data.loc[peck_data['Date'] < boundary1, 'Date'].max()
-next1 = peck_data.loc[peck_data['Date'] >= boundary1, 'Date'].min()
-mid1 = prev1 + (next1 - prev1) / 2
+phase_starts = [data_min] + [b for b in phase_boundaries if data_min < b <= data_max]
+phase_ends = phase_starts[1:] + [data_max + pd.Timedelta(days=1)]
 
-prev2 = peck_data.loc[peck_data['Date'] < boundary2, 'Date'].max()
-next2 = peck_data.loc[peck_data['Date'] >= boundary2, 'Date'].min()
-mid2 = prev2 + (next2 - prev2) / 2
+phases = []
+for start, end in zip(phase_starts, phase_ends):
+    window = raw_data[(raw_data['Date'] >= start) & (raw_data['Date'] < end)]
+    if window.empty:
+        continue
+    actual_first = window['Date'].min()
+    actual_last = window['Date'].max()
+    phases.append({
+        'start': start,
+        'end': end,
+        'first_date': actual_first,
+        'last_date': actual_last,
+        'mid': actual_first + (actual_last - actual_first) / 2,
+        'left_label': label_for_seed(dominant_seed(window['LeftSeed'])),
+        'right_label': label_for_seed(dominant_seed(window['RightSeed'])),
+    })
 
-prev3 = peck_data.loc[peck_data['Date'] < boundary3, 'Date'].max()
-next3 = peck_data.loc[peck_data['Date'] >= boundary3, 'Date'].min()
-mid3 = prev3 + (next3 - prev3) / 2
-
-prev4 = peck_data.loc[peck_data['Date'] < boundary4, 'Date'].max()
-next4 = peck_data.loc[peck_data['Date'] >= boundary4, 'Date'].min()
-mid4 = prev4 + (next4 - prev4) / 2
-
-prev5 = peck_data.loc[peck_data['Date'] < boundary5, 'Date'].max()
-next5 = peck_data.loc[peck_data['Date'] >= boundary5, 'Date'].min()
-mid5 = prev5 + (next5 - prev5) / 2
-
-prev6 = peck_data.loc[peck_data['Date'] < boundary6, 'Date'].max()
-next6 = peck_data.loc[peck_data['Date'] >= boundary6, 'Date'].min()
-mid6 = prev6 + (next6 - prev6) / 2
-
-prev7 = peck_data.loc[peck_data['Date'] < boundary7, 'Date'].max()
-next7 = peck_data.loc[peck_data['Date'] >= boundary7, 'Date'].min()
-mid7 = prev7 + (next7 - prev7) / 2
-
-prev8 = peck_data.loc[peck_data['Date'] < boundary8, 'Date'].max()
-next8 = peck_data.loc[peck_data['Date'] >= boundary8, 'Date'].min()
-mid8 = prev8 + (next8 - prev8) / 2
-
-# Phase label midpoints
-phase_a_start = peck_data['Date'].min()
-phase_a_end = prev1
-mid_a = phase_a_start + (phase_a_end - phase_a_start) / 2
-
-phase_b_start = next1
-phase_b_end = prev2
-mid_b = phase_b_start + (phase_b_end - phase_b_start) / 2
-
-phase_c_start = next2
-phase_c_end = prev3
-mid_c = phase_c_start + (phase_c_end - phase_c_start) / 2
-
-phase_d_start = next3
-phase_d_end = prev4
-mid_d = phase_d_start + (phase_d_end - phase_d_start) / 2
-
-phase_e_start = next4
-phase_e_end = prev5
-mid_e = phase_e_start + (phase_e_end - phase_e_start) / 2
-
-phase_f_start = next5
-phase_f_end = prev6
-mid_f = (phase_f_start + (phase_f_end - phase_f_start) / 2)
-
-phase_g_start = next6
-phase_g_end = prev7
-mid_g = (phase_g_start + (phase_g_end - phase_g_start) / 2)
-
-phase_h_start = next7
-phase_h_end = prev8
-mid_h = (phase_h_start + (phase_h_end - phase_h_start) / 2)
-
-phase_i_start = next8
-phase_i_end = peck_data['Date'].max()
-mid_i = (phase_i_start + (phase_i_end - phase_i_start) / 2)
+# Transition midpoints + line styles.
+# Solid line: at least one adjacent phase has "No Seed" on either side.
+# Dashed line: transition between two food-only conditions.
+transitions = []
+for i in range(len(phases) - 1):
+    prev_phase = phases[i]
+    next_phase = phases[i + 1]
+    mid = prev_phase['last_date'] + (next_phase['first_date'] - prev_phase['last_date']) / 2
+    involves_no_seed = NO_SEED_LABEL in (
+        prev_phase['left_label'], prev_phase['right_label'],
+        next_phase['left_label'], next_phase['right_label'],
+    )
+    transitions.append({
+        'mid': mid,
+        'linestyle': '-' if involves_no_seed else '--',
+    })
 
 # --- Filter birds with at least 5 days of data ---
 days_per_bird = peck_data.groupby('Bird')['Date'].nunique()
@@ -198,37 +201,26 @@ max_y = max(
 for i, (ax, bird) in enumerate(zip(axes, birds)):
     df = peck_data[peck_data['Bird'] == bird].sort_values('Date')
 
-    # Split by phase
-    data_phase_a = df[df['Date'] < boundary1]
-    data_phase_b = df[(df['Date'] >= boundary1) & (df['Date'] < boundary2)]
-    data_phase_c = df[(df['Date'] >= boundary2) & (df['Date'] < boundary3)]
-    data_phase_d = df[(df['Date'] >= boundary3) & (df['Date'] < boundary4)]
-    data_phase_e = df[(df['Date'] >= boundary4) & (df['Date'] < boundary5)]
-    data_phase_f = df[(df['Date'] >= boundary5) & (df['Date'] < boundary6)]
-    data_phase_g = df[(df['Date'] >= boundary6) & (df['Date'] < boundary7)]
-    data_phase_h = df[(df['Date'] >= boundary7) & (df['Date'] < boundary8)]
-    data_phase_i = df[df['Date'] >= boundary8]
-
-    for phase_data in [data_phase_a, data_phase_b, data_phase_c, data_phase_d,
-                       data_phase_e, data_phase_f, data_phase_g, data_phase_h,
-                       data_phase_i]:
-        ax.plot(phase_data['Date'], phase_data['log_ratio_left_right'],
+    # Plot each phase as a separate line so the trace breaks at boundaries
+    for phase in phases:
+        phase_df = df[(df['Date'] >= phase['start']) & (df['Date'] < phase['end'])]
+        if phase_df.empty:
+            continue
+        ax.plot(phase_df['Date'], phase_df['log_ratio_left_right'],
                 marker='o', markersize=4, markerfacecolor='black',
                 markeredgecolor='black', markeredgewidth=1,
                 linewidth=1, color='black')
 
-    # Phase-change lines: solid for transitions to/from No Seed on any
-    # alternative, dashed for transitions between two food conditions
-    for mid in [mid1, mid2, mid3, mid4, mid6, mid7, mid8]:
-        if pd.notna(mid):
-            ax.axvline(x=mid, color='black', linestyle='-', linewidth=1)
-    if pd.notna(mid5):
-        ax.axvline(x=mid5, color='black', linestyle='--', linewidth=1)
+    # Phase-change lines (solid/dashed determined dynamically above)
+    for transition in transitions:
+        if pd.notna(transition['mid']):
+            ax.axvline(x=transition['mid'], color='black',
+                       linestyle=transition['linestyle'], linewidth=1)
     ax.axhline(y=0, color='black', linewidth=1)
 
     sns.despine(ax=ax, top=True, right=True)
     ax.set_ylim(-max_y, max_y)
-    ax.set_xlim(pd.to_datetime('2025-10-01'), phase_i_end + pd.Timedelta(days=14))
+    ax.set_xlim(data_min - pd.Timedelta(days=4), data_max + pd.Timedelta(days=14))
 
     ax.set_title(bird, fontsize=14)
 
@@ -236,30 +228,16 @@ for i, (ax, bird) in enumerate(zip(axes, birds)):
 for j in range(len(birds), len(axes)):
     axes[j].axis('off')
 
-# Phase labels in the first row
+# Phase labels (top = Left feeder seed, bottom = Right feeder seed)
 y_label_top = max_y * 0.9
 y_label_bottom = -y_label_top
-for ax in axes[:-2]:
-    ax.text(mid_a, y_label_top, 'Finch\nFood', ha='center', va='center', fontsize=7)
-    ax.text(mid_a, y_label_bottom, 'Safflower', ha='center', va='center', fontsize=7)
-    ax.text(mid_b, y_label_top, 'No\nSeed', ha='center', va='center', fontsize=7)
-    ax.text(mid_b, y_label_bottom, 'No\nSeed', ha='center', va='center', fontsize=7)
-    ax.text(mid_c, y_label_top, 'Safflower', ha='center', va='center', fontsize=7)
-    ax.text(mid_c, y_label_bottom, 'Finch\nFood', ha='center', va='center', fontsize=7)
-    ax.text(mid_d, y_label_top, 'No\nSeed', ha='center', va='center', fontsize=7)
-    ax.text(mid_d, y_label_bottom, 'No\nSeed', ha='center', va='center', fontsize=7)
-    ax.text(mid_e, y_label_top, 'Finch\nFood', ha='center', va='center', fontsize=7)
-    ax.text(mid_e, y_label_bottom, 'Safflower', ha='center', va='center', fontsize=7)
-    ax.text(mid_f, y_label_top, 'Finch\nFood', ha='center', va='center', fontsize=7)
-    ax.text(mid_f, y_label_bottom, 'Low\nDove', ha='center', va='center', fontsize=7)
-    ax.text(mid_g, y_label_top, 'Low\nDove', ha='center', va='center', fontsize=7)
-    ax.text(mid_g, y_label_bottom, 'No\nSeed', ha='center', va='center', fontsize=7)
-    if pd.notna(mid_h):
-        ax.text(mid_h, y_label_top, 'No\nSeed', ha='center', va='center', fontsize=7)
-        ax.text(mid_h, y_label_bottom, 'No\nSeed', ha='center', va='center', fontsize=7)
-    if pd.notna(mid_i):
-        ax.text(mid_i, y_label_top, 'Low\nDove', ha='center', va='center', fontsize=7)
-        ax.text(mid_i, y_label_bottom, 'Low\nDove', ha='center', va='center', fontsize=7)
+for ax in axes[:n_birds]:
+    for phase in phases:
+        if pd.notna(phase['mid']):
+            ax.text(phase['mid'], y_label_top, phase['left_label'],
+                    ha='center', va='center', fontsize=7)
+            ax.text(phase['mid'], y_label_bottom, phase['right_label'],
+                    ha='center', va='center', fontsize=7)
 
 # Format x-ticks as MM-DD and rotate 45 degrees
 date_fmt = mdates.DateFormatter('%m-%d')

@@ -31,6 +31,7 @@ from mpl_toolkits.mplot3d import Axes3D  # Register 3D projection
 import plotly.express as px
 import plotly.graph_objects as go
 import seaborn as sns
+import matplotlib.dates as mdates
 import matplotlib.gridspec as gridspec
 import matplotlib.ticker as mtick
 
@@ -817,40 +818,62 @@ for i, location in enumerate(locations):
                 alpha=0.7
             )
     
-    # Add phase change vertical lines for this location
+    # Add phase change vertical lines for this location.
+    # Track each label with its anchor date so we can detect overlap and
+    # rotate any label that would collide with the next one.
+    phase_label_artists = []  # list of (anchor_date, text_artist)
     for _, phase_row in location_phase_changes.iterrows():
         change_date = pd.to_datetime(phase_row['DateChangeStarted'])
         description = phase_row['DescriptionOfChange']
-        
+
         # Find the date before the change date
         location_dates = location_data['Date'].unique()
         location_dates = pd.to_datetime(location_dates)
         location_dates = np.sort(location_dates)
-        
-        # Find the date before the change date
+
         before_change_idx = np.where(location_dates < change_date)[0]
         if len(before_change_idx) > 0:
             date_before = location_dates[before_change_idx[-1]]
-            # Calculate halfway point
             halfway_date = date_before + (change_date - date_before) / 2
-            
-            # Add vertical line
+
             ax.axvline(x=halfway_date, color='black', linestyle='-', linewidth=1.5, alpha=0.8)
-            
-            # Add description text
-            ymax = daily_summs['Feeder Visits'].max()
+
+            anchor_date = halfway_date + pd.Timedelta(days=0.5)
             if len(description.split(" ")) <= 2:
-                ax.text(halfway_date + pd.Timedelta(days=0.5), 800, description.replace(" ", "\n"), 
-                    rotation=0, ha='left', va='top', fontsize=10)
+                label_text = description.replace(" ", "\n")
             else:
-                ax.text(halfway_date + pd.Timedelta(days=0.5), 800, description.replace(" (", "\n("), 
-                    rotation=0, ha='left', va='top', fontsize=10)
-    
-    # Add "Seed" phase label at the beginning (to the right of y-axis)
+                label_text = description.replace(" (", "\n(")
+            text_artist = ax.text(anchor_date, 800, label_text,
+                                  rotation=0, ha='left', va='top', fontsize=10)
+            phase_label_artists.append((anchor_date, text_artist))
+
+    # Add "Seed" baseline label at the beginning (to the right of y-axis)
     if not location_data.empty:
         first_date = pd.to_datetime('2025-09-22')
-        ax.text(first_date + pd.Timedelta(days=0.5), 800, 'Seed', 
-                rotation=0, ha='left', va='top', fontsize=10)
+        anchor_date = first_date + pd.Timedelta(days=0.5)
+        seed_artist = ax.text(anchor_date, 800, 'Seed',
+                              rotation=0, ha='left', va='top', fontsize=10)
+        phase_label_artists.append((anchor_date, seed_artist))
+
+    # Auto-rotate any label that would horizontally overlap the next one.
+    # Uses real rendered text widths in data coordinates so it adapts as
+    # phases are added or descriptions change.
+    phase_label_artists.sort(key=lambda x: x[0])
+    if len(phase_label_artists) > 1:
+        fig.canvas.draw()
+        renderer = fig.canvas.get_renderer()
+        inv = ax.transData.inverted()
+        for j in range(len(phase_label_artists) - 1):
+            cur_anchor, cur_artist = phase_label_artists[j]
+            next_anchor, _ = phase_label_artists[j + 1]
+            bbox_pixels = cur_artist.get_window_extent(renderer=renderer)
+            bbox_data = bbox_pixels.transformed(inv)
+            next_x = mdates.date2num(pd.to_datetime(next_anchor))
+            if bbox_data.x1 >= next_x:
+                cur_artist.set_rotation(90)
+                cur_artist.set_va('top')
+                cur_artist.set_ha('left')
+                cur_artist.set_rotation_mode('anchor')
     
     # Set labels and formatting for each subplot
     # Only show ylabel on left column (i % 2 == 0)
