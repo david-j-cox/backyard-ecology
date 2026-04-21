@@ -567,6 +567,7 @@ daily_summs['source_sheet'] = daily_summs['source_sheet'].map(locations_dict)
 # --- Cell 4 ---
 # Define custom colors for each bird species
 bird_colors = {
+    'American Crow': '#1a1a1a',             # Near-black with crow sheen
     'American Goldfinch': '#FEB813',        # Bright Yellow
     'American Robin': '#FF6347',            # Tomato red-orange
     'Black-capped Chickadee': '#FFFFFF',    # White
@@ -614,7 +615,8 @@ bird_colors = {
 
 # Define marker edge colors for birds that need black outlines
 bird_edge_colors = {
-    'American Goldfinch': 'black', 
+    'American Crow': '#2a3a5a',
+    'American Goldfinch': 'black',
     'American Robin': 'black',
     'Black-capped Chickadee': 'black',
     'Blue Jay': 'black',
@@ -661,6 +663,7 @@ bird_edge_colors = {
 
 # Define marker symbols for each bird species
 bird_markers = {
+    'American Crow': 'D',
     'American Goldfinch': '^',
     'American Robin': '^',
     'Black-capped Chickadee': 'o',
@@ -792,7 +795,7 @@ for i, location in enumerate(locations):
                     ax.plot(
                         segment['Date'], 
                         segment['Feeder Visits'], 
-                        marker=bird_markers[bird], 
+                        marker=bird_markers.get(bird, 'o'),
                         markersize=8,
                         markerfacecolor=marker_color,
                         markeredgecolor=edge_color,
