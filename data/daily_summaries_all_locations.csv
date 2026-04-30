@@ -1347,7 +1347,7 @@ Date,source_sheet,Bird,Feeder Visits
 2026-04-25,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,0.0
 2026-04-25,"Essex Fells, NJ 07021 Daily Sum",House Finch,7.0
 2026-04-25,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,0.0
-2026-04-25,"Essex Fells, NJ 07021 Daily Sum",Black-cappped Chickadee,7.0
+2026-04-25,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,7.0
 2026-04-25,"Essex Fells, NJ 07021 Daily Sum",Mourning Dove,1.0
 2026-04-25,"Essex Fells, NJ 07021 Daily Sum",Common Grackle,0.0
 2026-04-25,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
@@ -1369,7 +1369,7 @@ Date,source_sheet,Bird,Feeder Visits
 2026-04-26,"Essex Fells, NJ 07021 Daily Sum",Dark-eyed Junco,0.0
 2026-04-26,"Essex Fells, NJ 07021 Daily Sum",House Finch,34.0
 2026-04-26,"Essex Fells, NJ 07021 Daily Sum",Red-bellied Woodpecker,12.0
-2026-04-26,"Essex Fells, NJ 07021 Daily Sum",Black-cappped Chickadee,5.0
+2026-04-26,"Essex Fells, NJ 07021 Daily Sum",Black-capped Chickadee,5.0
 2026-04-26,"Essex Fells, NJ 07021 Daily Sum",Mourning Dove,20.0
 2026-04-26,"Essex Fells, NJ 07021 Daily Sum",Common Grackle,0.0
 2026-04-26,"Essex Fells, NJ 07021 Daily Sum",Carolina Wren,0.0
@@ -2229,6 +2229,31 @@ Date,source_sheet,Bird,Feeder Visits
 2026-04-25,"Jacksonville, FL 32259 Daily Su",Eastern Gray Squirrel,2.0
 2026-04-25,"Jacksonville, FL 32259 Daily Su",Carolina Wren,2.0
 2026-04-25,"Jacksonville, FL 32259 Daily Su",Mourning Dove,9.0
+2026-04-26,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,47.0
+2026-04-26,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,1.0
+2026-04-26,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,4.0
+2026-04-26,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,13.0
+2026-04-26,"Jacksonville, FL 32259 Daily Su",Eastern Gray Squirrel,2.0
+2026-04-26,"Jacksonville, FL 32259 Daily Su",Carolina Wren,2.0
+2026-04-26,"Jacksonville, FL 32259 Daily Su",Eastern Bluebird,6.0
+2026-04-27,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,31.0
+2026-04-27,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,7.0
+2026-04-27,"Jacksonville, FL 32259 Daily Su",Carolina Wren,2.0
+2026-04-27,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,3.0
+2026-04-27,"Jacksonville, FL 32259 Daily Su",Eastern Gray Squirrel,4.0
+2026-04-28,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,47.0
+2026-04-28,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,9.0
+2026-04-28,"Jacksonville, FL 32259 Daily Su",Eastern Gray Squirrel,4.0
+2026-04-28,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,15.0
+2026-04-28,"Jacksonville, FL 32259 Daily Su",Pine Warbler,3.0
+2026-04-28,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,1.0
+2026-04-29,"Jacksonville, FL 32259 Daily Su",Northern Cardinal,72.0
+2026-04-29,"Jacksonville, FL 32259 Daily Su",Red-bellied Woodpecker,34.0
+2026-04-29,"Jacksonville, FL 32259 Daily Su",Tufted Titmouse,21.0
+2026-04-29,"Jacksonville, FL 32259 Daily Su",Pine Warbler,8.0
+2026-04-29,"Jacksonville, FL 32259 Daily Su",Carolina Chickadee,13.0
+2026-04-29,"Jacksonville, FL 32259 Daily Su",Carolina Wren,2.0
+2026-04-29,"Jacksonville, FL 32259 Daily Su",Eastern Gray Squirrel,2.0
 2025-10-05,Southampton daily summaries,Blue tit,0.0
 2025-10-06,Southampton daily summaries,Blue tit,0.0
 2025-10-07,Southampton daily summaries,Blue tit,0.0
