@@ -135,9 +135,13 @@ def init_schema(con):
             "DateChangeStarted"     VARCHAR,
             "DescriptionOfChange"   VARCHAR,
             "LocationOfChange"      VARCHAR,
+            "SeedRatio"             VARCHAR,
             PRIMARY KEY ("DateChangeStarted", "LocationOfChange")
         )
     """)
+    # SeedRatio was added to the source Google Sheet after the initial schema
+    # was deployed; backfill the column on existing databases.
+    con.execute('ALTER TABLE phase_changes ADD COLUMN IF NOT EXISTS "SeedRatio" VARCHAR')
 
     # Base columns for study_site_puc_data — dynamic sensor columns
     # are added at runtime via ALTER TABLE ADD COLUMN IF NOT EXISTS.

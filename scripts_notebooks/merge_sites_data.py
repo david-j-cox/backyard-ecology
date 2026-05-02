@@ -374,6 +374,27 @@ def write_to_duckdb(output_dir: Path, logger: logging.Logger) -> None:
                 if df.empty:
                     continue
 
+                # Drop rows missing any PK column. The Google Sheets carry
+                # placeholder days with no bird visits (Bird/Time blank) that
+                # violate the PK NOT NULL constraint and would roll back the
+                # whole transaction otherwise.
+                pk_cols = [
+                    row[0] for row in con.execute(
+                        "SELECT column_name FROM information_schema.key_column_usage "
+                        "WHERE table_name = ?",
+                        [table_name],
+                    ).fetchall()
+                ]
+                pk_cols = [c for c in pk_cols if c in df.columns]
+                if pk_cols:
+                    before = len(df)
+                    df = df.dropna(subset=pk_cols)
+                    dropped = before - len(df)
+                    if dropped:
+                        logger.info(f"[DuckDB] {table_name}: dropped {dropped} rows missing PK columns")
+                if df.empty:
+                    continue
+
                 con.execute(f'INSERT OR REPLACE INTO {table_name} SELECT * FROM df')
                 count = con.execute(f"SELECT COUNT(*) FROM {table_name}").fetchone()[0]
                 logger.info(f"[DuckDB] {table_name}: {count:,} total rows")
