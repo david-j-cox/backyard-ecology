@@ -37,8 +37,11 @@ SEED_LABELS = {
     'Special Finch Food': 'Finch\nFood',
     'Golden Safflower': 'Safflower',
     'Sunflower, Safflower, Mealworm, Peanuts': 'Low\nDove',
+    'Safflower, Mealworm': 'Saff +\nMworm',
+    'Peanuts, Sunflower': 'Pnuts +\nSunfl',
 }
 NO_SEED_LABEL = 'No\nSeed'
+SHORT_PHASE_DAYS = 3  # phases shorter than this skip their text label
 
 
 def label_for_seed(seed):
@@ -155,6 +158,7 @@ for start, end in zip(phase_starts, phase_ends):
         'first_date': actual_first,
         'last_date': actual_last,
         'mid': actual_first + (actual_last - actual_first) / 2,
+        'duration_days': (end - start).days,
         'left_label': label_for_seed(dominant_seed(window['LeftSeed'])),
         'right_label': label_for_seed(dominant_seed(window['RightSeed'])),
     })
@@ -233,11 +237,14 @@ y_label_top = max_y * 0.9
 y_label_bottom = -y_label_top
 for ax in axes[:n_birds]:
     for phase in phases:
-        if pd.notna(phase['mid']):
-            ax.text(phase['mid'], y_label_top, phase['left_label'],
-                    ha='center', va='center', fontsize=7)
-            ax.text(phase['mid'], y_label_bottom, phase['right_label'],
-                    ha='center', va='center', fontsize=7)
+        if pd.isna(phase['mid']):
+            continue
+        if phase['duration_days'] < SHORT_PHASE_DAYS:
+            continue
+        ax.text(phase['mid'], y_label_top, phase['left_label'],
+                ha='center', va='center', fontsize=7)
+        ax.text(phase['mid'], y_label_bottom, phase['right_label'],
+                ha='center', va='center', fontsize=7)
 
 # Format x-ticks as MM-DD and rotate 45 degrees
 date_fmt = mdates.DateFormatter('%m-%d')
