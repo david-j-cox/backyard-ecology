@@ -145,36 +145,63 @@ def scrape_single_url(session, url):
         if region_match:
             data['region_code'] = region_match.group(1)
 
-        # Try to find region name in the page content
         text_content = soup.get_text()
-        region_name_match = re.search(r'Migration Dashboard\s+([A-Za-z\s,]+?)(?:\s+Search|$)', text_content)
-        if region_name_match:
-            data['region_name'] = region_name_match.group(1).strip()
 
-        # Try to find "xxx Birds crossed" pattern
-        birds_crossed_match = re.search(r'(\d{1,3}(?:,?\d{3})*)\s+Birds crossed.*last night', text_content, re.IGNORECASE)
-        if birds_crossed_match:
-            total_birds_str = birds_crossed_match.group(1).replace(',', '')
-            try:
-                data['total_birds'] = int(total_birds_str)
-            except ValueError:
-                logging.warning(f"Could not parse total birds: {total_birds_str}")
+        # Region name: prefer <title> "<County>, <State> - Migration Dashboard - BirdCast",
+        # fall back to text regex for older page layouts.
+        title_tag = soup.find('title')
+        if title_tag:
+            title_text = title_tag.get_text(strip=True)
+            title_match = re.match(r'(.+?)\s*-\s*Migration Dashboard', title_text)
+            if title_match:
+                data['region_name'] = title_match.group(1).strip()
+        if not data['region_name']:
+            region_name_match = re.search(r'Migration Dashboard\s+([A-Za-z\s,]+?)(?:\s+Search|$)', text_content)
+            if region_name_match:
+                data['region_name'] = region_name_match.group(1).strip()
 
-        # Try to find "Peak of xxx birds in flight" pattern (old format)
-        peak_birds_match = re.search(r'Peak of (\d{1,3}(?:,?\d{3})*) birds in flight', text_content, re.IGNORECASE)
-        if not peak_birds_match:
-            # Try new format: "PEAK MIGRATION TRAFFIC: 134,500 Birds in flight"
-            peak_birds_match = re.search(r'PEAK MIGRATION TRAFFIC:\s*(\d{1,3}(?:,?\d{3})*)\s*Birds in flight', text_content, re.IGNORECASE)
-        if not peak_birds_match:
-            # Try alternative format: "134,500 Birds in flight (est.)"
-            peak_birds_match = re.search(r'(\d{1,3}(?:,?\d{3})*)\s*Birds in flight \(est\.\)', text_content, re.IGNORECASE)
+        # Total birds: read the hidden span next to #total-passed. The visible span
+        # animates from 0, so its DOM text is "0" — the real count lives in the
+        # adjacent .is-visuallyHidden span and is identical for completed nights
+        # ("Birds crossed ... last night") and in-progress nights ("Birds have
+        # crossed ... so far tonight").
+        total_passed = soup.find(id='total-passed')
+        if total_passed:
+            hidden = total_passed.find_next_sibling('span', class_='is-visuallyHidden')
+            if hidden:
+                hidden_text = hidden.get_text(strip=True).replace(',', '')
+                if hidden_text.isdigit():
+                    data['total_birds'] = int(hidden_text)
+        if data['total_birds'] is None:
+            # Fallback to legacy text patterns
+            birds_crossed_match = re.search(r'(\d{1,3}(?:,?\d{3})*)\s+Birds (?:have )?crossed.*?(?:last night|so far tonight)', text_content, re.IGNORECASE)
+            if birds_crossed_match:
+                total_birds_str = birds_crossed_match.group(1).replace(',', '')
+                try:
+                    data['total_birds'] = int(total_birds_str)
+                except ValueError:
+                    logging.warning(f"Could not parse total birds: {total_birds_str}")
 
-        if peak_birds_match:
-            peak_birds_str = peak_birds_match.group(1).replace(',', '')
-            try:
-                data['peak_birds_in_flight'] = int(peak_birds_str)
-            except ValueError:
-                logging.warning(f"Could not parse peak birds: {peak_birds_str}")
+        # Peak birds in flight: read #birds-in-flight directly. Its text holds
+        # the formatted number (e.g. "299,600") for both completed and live nights.
+        birds_in_flight = soup.find(id='birds-in-flight')
+        if birds_in_flight:
+            bif_text = birds_in_flight.get_text(strip=True).replace(',', '')
+            if bif_text.isdigit():
+                data['peak_birds_in_flight'] = int(bif_text)
+        if data['peak_birds_in_flight'] is None:
+            # Fallback to legacy text patterns
+            peak_birds_match = re.search(r'Peak of (\d{1,3}(?:,?\d{3})*) birds in flight', text_content, re.IGNORECASE)
+            if not peak_birds_match:
+                peak_birds_match = re.search(r'PEAK MIGRATION TRAFFIC:\s*(\d{1,3}(?:,?\d{3})*)\s*Birds in flight', text_content, re.IGNORECASE)
+            if not peak_birds_match:
+                peak_birds_match = re.search(r'(\d{1,3}(?:,?\d{3})*)\s*Birds (?:now )?in flight \(est\.\)', text_content, re.IGNORECASE)
+            if peak_birds_match:
+                peak_birds_str = peak_birds_match.group(1).replace(',', '')
+                try:
+                    data['peak_birds_in_flight'] = int(peak_birds_str)
+                except ValueError:
+                    logging.warning(f"Could not parse peak birds: {peak_birds_str}")
 
         # Try to find flight direction - multiple patterns
         direction_match = re.search(r'flying ([A-Z]{1,3})', text_content)  # Old format
@@ -211,19 +238,25 @@ def scrape_single_url(session, url):
         # Look for patterns like "Fri, Oct 24, 2025, 6:00 PM EDT"
         time_patterns = re.findall(r'([A-Za-z]{3}, [A-Za-z]{3} \d{1,2}, \d{4}, \d{1,2}:\d{2} [AP]M [A-Z]{3})', text_content)
 
-        if len(time_patterns) >= 2:
-            # Usually the first is start time, second is end time
+        if len(time_patterns) >= 1:
             data['migration_start_raw'] = time_patterns[0]
-            data['migration_end_raw'] = time_patterns[1]
-
-            # Parse to UTC
             data['migration_start_utc'] = parse_datetime_string(time_patterns[0])
+        if len(time_patterns) >= 2:
+            data['migration_end_raw'] = time_patterns[1]
             data['migration_end_utc'] = parse_datetime_string(time_patterns[1])
 
         # Try to find migration date (like "Friday night, Oct 24")
         date_match = re.search(r'([A-Za-z]+ night, [A-Za-z]+ \d{1,2})', text_content)
         if date_match:
             data['migration_date'] = date_match.group(1)
+        elif data['migration_start_raw']:
+            # Live "so far tonight" pages omit the human-readable date.
+            # Derive it from the migration start timestamp.
+            try:
+                start_dt = date_parser.parse(data['migration_start_raw'])
+                data['migration_date'] = start_dt.strftime('%A night, %b ') + str(start_dt.day)
+            except Exception:
+                pass
 
         logging.info(f"Successfully scraped data from {url}")
         return data
