@@ -76,7 +76,7 @@ jobs:
         working-directory: scripts_notebooks
         run: |
           echo "=== Fetching weather data ==="
-          python weather.py --out ../data/hourly_weather.csv --sunrise-out ../data/sunrise_sunset.csv &
+          python weather.py --hourly-output ../data/hourly_weather.csv --sunrise-output ../data/sunrise_sunset.csv &
           PID_WEATHER=$!
 
           echo "=== Merging site data ==="
@@ -135,6 +135,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/ docs/
           git reset -- docs/dashboard_plots/interactive/
+          git reset -- data/flyway_heatmaps/
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else

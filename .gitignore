@@ -46,6 +46,7 @@ data/county_level_birdweather.parquet
 
 # Large interactive dashboard assets (persisted via GitHub Release)
 docs/dashboard_plots/interactive/
+data/flyway_heatmaps/
 
 # Temporary files
 *.tmp
