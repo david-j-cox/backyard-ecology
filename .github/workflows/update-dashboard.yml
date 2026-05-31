@@ -75,9 +75,16 @@ jobs:
       - name: Phase 1 - Fetch data
         working-directory: scripts_notebooks
         run: |
-          echo "=== Fetching weather data ==="
-          python weather.py --hourly-output ../data/hourly_weather.csv --sunrise-output ../data/sunrise_sunset.csv &
-          PID_WEATHER=$!
+          # DISABLED: OpenWeather API fetching is turned off to avoid OpenWeather
+          # rate-limiting (HTTP 429) that was making thousands of calls and timing
+          # out the run. Downstream Phase 2/3 plots that depend on weather (e.g.
+          # visits by wind speed/temperature, species clustermap) continue to read
+          # the existing committed data/hourly_weather.csv and data/sunrise_sunset.csv
+          # from disk - they just won't refresh with new weather. To re-enable,
+          # uncomment the three lines below and the matching `wait $PID_WEATHER` line.
+          # echo "=== Fetching weather data ==="
+          # python weather.py --hourly-output ../data/hourly_weather.csv --sunrise-output ../data/sunrise_sunset.csv &
+          # PID_WEATHER=$!
 
           echo "=== Merging site data ==="
           python merge_sites_data.py &
@@ -102,7 +109,7 @@ jobs:
           # Wait for all data scripts (don't fail the whole job if one errors)
           # PUC data (birdweather_specific_pucs.py, birdweather.py) is handled
           # by the separate puc-data-refresh workflow that runs earlier at 1 AM ET.
-          wait $PID_WEATHER || echo "WARNING: weather.py failed"
+          # wait $PID_WEATHER || echo "WARNING: weather.py failed"  # DISABLED with weather fetch above
           wait $PID_MERGE || echo "WARNING: merge_sites_data.py failed"
           wait $PID_BIRDCAST || echo "WARNING: birdcast_scraper.py failed"
           wait $PID_ATLANTIC || echo "WARNING: atlantic_flyway_scraper.py failed"
