@@ -1302,3 +1302,8 @@ scrape_timestamp,url,region_code,region_name,total_birds,peak_birds_in_flight,fl
 2026-06-14T12:14:04.313444+00:00,https://dashboard.birdcast.info/region/US-NJ-013,US-NJ-013,"Essex County, New Jersey",5000,900,ENE,15,500,"Sat, Jun 13, 2026, 8:30 PM EDT",2026-06-13T20:30:00+00:00,"Sun, Jun 14, 2026, 5:20 AM EDT",2026-06-14T05:20:00+00:00,"Saturday night, Jun 13"
 2026-06-14T12:14:05.363622+00:00,https://dashboard.birdcast.info/region/US-CA-013,US-CA-013,"Contra Costa County, California",21300,5500,NNE,9,1300,"Sat, Jun 13, 2026, 8:30 PM PDT",2026-06-13T20:30:00+00:00,"Sun, Jun 14, 2026, 4:50 AM PDT",2026-06-14T04:50:00+00:00,"Saturday night, Jun 13"
 2026-06-14T12:14:06.506998+00:00,https://dashboard.birdcast.info/region/US-AL-081,US-AL-081,"Lee County, Alabama",5100,4300,ENE,8,2300,"Sat, Jun 13, 2026, 7:50 PM CDT",2026-06-13T19:50:00+00:00,"Sun, Jun 14, 2026, 5:30 AM CDT",2026-06-14T05:30:00+00:00,"Saturday night, Jun 13"
+2026-06-15T13:33:21.897581+00:00,https://dashboard.birdcast.info/region/US-FL-031,US-FL-031,"Duval County, Florida",,,,,,,,,,"Monday night, Jun 15"
+2026-06-15T13:33:22.815174+00:00,https://dashboard.birdcast.info/region/US-CO-013,US-CO-013,"Boulder County, Colorado",,,,,,,,,,"Monday night, Jun 15"
+2026-06-15T13:33:23.681383+00:00,https://dashboard.birdcast.info/region/US-NJ-013,US-NJ-013,"Essex County, New Jersey",,,,,,,,,,"Monday night, Jun 15"
+2026-06-15T13:33:24.549316+00:00,https://dashboard.birdcast.info/region/US-CA-013,US-CA-013,"Contra Costa County, California",,,,,,,,,,"Monday night, Jun 15"
+2026-06-15T13:33:25.419504+00:00,https://dashboard.birdcast.info/region/US-AL-081,US-AL-081,"Lee County, Alabama",,,,,,,,,,"Monday night, Jun 15"
