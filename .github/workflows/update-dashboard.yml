@@ -147,8 +147,22 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Daily dashboard update"
-            git pull --rebase origin main
-            git push
+            # Retry pull --rebase + push to survive transient GitHub push
+            # errors (e.g. "remote: fatal error in commit_refs"). Rebase each
+            # attempt so a concurrent commit to main doesn't wedge us.
+            pushed=false
+            for attempt in 1 2 3; do
+              if git pull --rebase origin main && git push; then
+                pushed=true
+                break
+              fi
+              echo "Push attempt $attempt failed; retrying in $((attempt * 15))s..."
+              sleep $((attempt * 15))
+            done
+            if [ "$pushed" != "true" ]; then
+              echo "ERROR: all push attempts failed"
+              exit 1
+            fi
           fi
 
       - name: Upload county BirdWeather data to release
