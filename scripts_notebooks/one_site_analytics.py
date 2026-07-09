@@ -72,9 +72,11 @@ TIME_BIN_MINUTES = 30       # 30-minute bins
 # Function to save matplotlib plots
 def save_plot_for_dashboard(fig, filename, title, description=""):
     """Save matplotlib figure for dashboard with metadata."""
-    # Save as high-res PNG
+    # Save as web-resolution PNG (dpi=120). Matches all_sites_all_analytics
+    # so dashboard images stay crisp but small enough for reliable Pages
+    # deploys as the dataset grows.
     png_path = f'{DASHBOARD_DIR}/images/{filename}.png'
-    fig.savefig(png_path, dpi=300, bbox_inches='tight', facecolor='white')
+    fig.savefig(png_path, dpi=120, bbox_inches='tight', facecolor='white')
 
     # Create metadata file
     metadata = {

@@ -99,9 +99,12 @@ print(f"Dashboard plots will be saved to: {DASHBOARD_DIR}")
 # Function to save matplotlib plots
 def save_plot_for_dashboard(fig, filename, title, description=""):
     """Save matplotlib figure for dashboard with metadata."""
-    # Save as high-res PNG
+    # Save as web-resolution PNG. dpi=120 keeps figures crisp on retina
+    # displays (~3000px wide for the large panels) while cutting file size
+    # ~4x vs dpi=300. This keeps the Pages deploy artifact small enough to
+    # deploy reliably as more days of data accumulate.
     png_path = f'{DASHBOARD_DIR}/images/{filename}.png'
-    fig.savefig(png_path, dpi=300, bbox_inches='tight', facecolor='white')
+    fig.savefig(png_path, dpi=120, bbox_inches='tight', facecolor='white')
     
     # Create metadata file
     metadata = {
@@ -822,9 +825,11 @@ for i, location in enumerate(locations):
             )
     
     # Add phase change vertical lines for this location.
-    # Track each label with its anchor date so we can detect overlap and
-    # rotate any label that would collide with the next one.
-    phase_label_artists = []  # list of (anchor_date, text_artist)
+    # First collect each label with its anchor date (drawing the vertical
+    # lines as we go), then place the labels staggered across a few height
+    # tiers so adjacent phase annotations never overlap - this scales as
+    # more phases accumulate, instead of colliding once dates get dense.
+    phase_labels = []  # list of (anchor_date, label_text)
     for _, phase_row in location_phase_changes.iterrows():
         change_date = pd.to_datetime(phase_row['DateChangeStarted'])
         description = phase_row['DescriptionOfChange']
@@ -846,38 +851,31 @@ for i, location in enumerate(locations):
                 label_text = description.replace(" ", "\n")
             else:
                 label_text = description.replace(" (", "\n(")
-            text_artist = ax.text(anchor_date, 800, label_text,
-                                  rotation=0, ha='left', va='top', fontsize=10)
-            phase_label_artists.append((anchor_date, text_artist))
+            phase_labels.append((anchor_date, label_text))
 
     # Add "Seed" baseline label at the beginning (to the right of y-axis)
     if not location_data.empty:
         first_date = pd.to_datetime('2025-09-22')
-        anchor_date = first_date + pd.Timedelta(days=0.5)
-        seed_artist = ax.text(anchor_date, 800, 'Seed',
-                              rotation=0, ha='left', va='top', fontsize=10)
-        phase_label_artists.append((anchor_date, seed_artist))
+        phase_labels.append((first_date + pd.Timedelta(days=0.5), 'Seed'))
 
-    # Auto-rotate any label that would horizontally overlap the next one.
-    # Uses real rendered text widths in data coordinates so it adapts as
-    # phases are added or descriptions change.
-    phase_label_artists.sort(key=lambda x: x[0])
-    if len(phase_label_artists) > 1:
-        fig.canvas.draw()
-        renderer = fig.canvas.get_renderer()
-        inv = ax.transData.inverted()
-        for j in range(len(phase_label_artists) - 1):
-            cur_anchor, cur_artist = phase_label_artists[j]
-            next_anchor, _ = phase_label_artists[j + 1]
-            bbox_pixels = cur_artist.get_window_extent(renderer=renderer)
-            bbox_data = bbox_pixels.transformed(inv)
-            next_x = mdates.date2num(pd.to_datetime(next_anchor))
-            if bbox_data.x1 >= next_x:
-                cur_artist.set_rotation(90)
-                cur_artist.set_va('top')
-                cur_artist.set_ha('left')
-                cur_artist.set_rotation_mode('anchor')
-    
+    # Place labels staggered across height tiers. The number of tiers grows
+    # with how tightly the phases are packed relative to the axis span, so
+    # labels only step down as far as needed to stay clear of each other.
+    # Positions use the x-axis transform (data x, axes-fraction y) so labels
+    # sit in the upper band regardless of the log y-scale.
+    phase_labels.sort(key=lambda x: x[0])
+    if phase_labels:
+        xs = np.array([mdates.date2num(pd.to_datetime(a)) for a, _ in phase_labels])
+        span = (xs.max() - xs.min()) or 1.0
+        min_gap = np.min(np.diff(xs)) if len(xs) > 1 else span
+        n_tiers = int(np.clip(np.ceil(span / max(min_gap * 6, 1)), 1, 4))
+        tier_y = np.linspace(0.97, 0.97 - 0.09 * (n_tiers - 1), n_tiers)
+        for k, (anchor_date, label_text) in enumerate(phase_labels):
+            ax.text(anchor_date, tier_y[k % n_tiers], label_text,
+                    transform=ax.get_xaxis_transform(),
+                    rotation=0, ha='left', va='top', fontsize=10, linespacing=0.9,
+                    bbox=dict(boxstyle='round,pad=0.15', fc='white', ec='none', alpha=0.6))
+
     # Set labels and formatting for each subplot
     # Only show ylabel on left column (i % 2 == 0)
     ax.set_ylabel('Number of Visits', fontsize=28, labelpad=12)
@@ -887,8 +885,8 @@ for i, location in enumerate(locations):
         ax.set_xlabel('')
     ax.set_title(location, fontsize=22, fontweight='bold', pad=20)
     
-    # Set x-axis ticks (every 5th day)
-    ticks = location_data['Date']
+    # X-axis dates: matplotlib's auto date locator picks a readable number
+    # of month ticks that stays clean as more days accumulate.
     ax.tick_params(labelsize=12)
     ax.tick_params(rotation=45, axis='x', pad=10)
     for label in ax.get_xticklabels():
@@ -2883,10 +2881,18 @@ for ax, region in zip(axes, regions_order):
     ax.set_yscale('log')
     ax.set_ylim(0.8, 1000)
 
-# Set xlim and xticks for all axes using overall dataset range
+# Set xlim and xticks for all axes using overall dataset range.
+# Space ticks so the count stays bounded (~18 max) as more days accumulate:
+# weekly early on, then every 2/3/4 weeks once the study runs longer. This
+# keeps the rotated date labels from overlapping into an unreadable smear.
+_tick_span_days = (overall_date_max_extended - overall_date_min).days
+_weeks = max(_tick_span_days / 7.0, 1)
+_week_step = int(np.ceil(_weeks / 18.0))  # weeks between ticks
+_tick_freq = f'{_week_step}W' if _week_step > 1 else 'W'
+_xticks = pd.date_range(start=overall_date_min, end=overall_date_max_extended, freq=_tick_freq)
 for ax in axes:
     ax.set_xlim(pd.to_datetime('2025-10-04'), overall_date_max_extended)
-    ax.set_xticks(pd.date_range(start=overall_date_min, end=overall_date_max_extended, freq='W'))
+    ax.set_xticks(_xticks)
 
 # Format y-axis for all axes
 fmt = plt.matplotlib.ticker.FuncFormatter(lambda y, _: f'{int(y):d}' if y >= 1 else f'{y:g}')
