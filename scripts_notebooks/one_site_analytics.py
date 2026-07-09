@@ -234,19 +234,31 @@ for i, (ax, bird) in enumerate(zip(axes, birds)):
 for j in range(len(birds), len(axes)):
     axes[j].axis('off')
 
-# Phase labels (top = Left feeder seed, bottom = Right feeder seed)
-y_label_top = max_y * 0.9
-y_label_bottom = -y_label_top
-for ax in axes[:n_birds]:
-    for phase in phases:
-        if pd.isna(phase['mid']):
-            continue
-        if phase['duration_days'] < SHORT_PHASE_DAYS:
-            continue
-        ax.text(phase['mid'], y_label_top, phase['left_label'],
-                ha='center', va='center', fontsize=7)
-        ax.text(phase['mid'], y_label_bottom, phase['right_label'],
-                ha='center', va='center', fontsize=7)
+# Phase labels (top = Left feeder seed, bottom = Right feeder seed).
+# Stagger the labels across a few height tiers (within the headroom above
+# and below the data) so adjacent phase labels stop overlapping as more,
+# and shorter, phases accumulate along the date axis.
+labeled_phases = [
+    p for p in phases
+    if pd.notna(p['mid']) and p['duration_days'] >= SHORT_PHASE_DAYS
+]
+labeled_phases.sort(key=lambda p: p['mid'])
+if labeled_phases:
+    mids = np.array([mdates.date2num(pd.to_datetime(p['mid'])) for p in labeled_phases])
+    span = (mids.max() - mids.min()) or 1.0
+    min_gap = np.min(np.diff(mids)) if len(mids) > 1 else span
+    # More tiers when labels are tightly packed relative to the axis span.
+    n_tiers = int(np.clip(np.ceil(span / max(min_gap * 7, 1)), 1, 3))
+    # Tiers step inward from the top/bottom edges but stay inside the ~3-unit
+    # headroom baked into max_y, so labels never sit on top of the data.
+    top_tiers = [max_y - 0.6 - t for t in range(n_tiers)]
+    for ax in axes[:n_birds]:
+        for k, phase in enumerate(labeled_phases):
+            y_top = top_tiers[k % n_tiers]
+            ax.text(phase['mid'], y_top, phase['left_label'],
+                    ha='center', va='center', fontsize=7)
+            ax.text(phase['mid'], -y_top, phase['right_label'],
+                    ha='center', va='center', fontsize=7)
 
 # Format x-ticks as MM-DD and rotate 45 degrees
 date_fmt = mdates.DateFormatter('%m-%d')
