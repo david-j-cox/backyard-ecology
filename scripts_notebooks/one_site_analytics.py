@@ -42,6 +42,9 @@ SEED_LABELS = {
 }
 NO_SEED_LABEL = 'No\nSeed'
 SHORT_PHASE_DAYS = 3  # phases shorter than this skip their text label
+# Non-bird visitors to exclude from the peck-data plots (seed preference and
+# peck distribution).
+EXCLUDE_SPECIES = {'Eastern Gray Squirrel'}
 
 
 def label_for_seed(seed):
@@ -200,9 +203,10 @@ for i in range(len(phases) - 1):
         'linestyle': '-' if involves_no_seed else '--',
     })
 
-# --- Filter birds with at least 5 days of data ---
+# --- Filter birds with at least 5 days of data (excluding non-birds) ---
 days_per_bird = peck_data.groupby('Bird')['Date'].nunique()
-birds = sorted(days_per_bird[days_per_bird >= 5].index)
+birds = sorted(b for b in days_per_bird[days_per_bird >= 5].index
+               if b not in EXCLUDE_SPECIES)
 
 n_birds = len(birds)
 n_cols = 4
@@ -269,12 +273,33 @@ def _code(label):
     return letter_map[' '.join(str(label).split())]
 
 
+# Center each letter within its condition span - midway between the bounding
+# phase-change lines (or the axis edges for the first/last span) - rather than
+# at the data midpoint, so codes sit visually centered in each condition.
+xlim_left = data_min - pd.Timedelta(days=4)
+xlim_right = data_max + pd.Timedelta(days=14)
+n_phases = len(phases)
+
+
+def _span_center(j):
+    left = xlim_left if j == 0 else transitions[j - 1]['mid']
+    right = xlim_right if j == n_phases - 1 else transitions[j]['mid']
+    if pd.isna(left):
+        left = phases[j]['start']
+    if pd.isna(right):
+        right = phases[j]['end']
+    return left + (right - left) / 2
+
+
 y_code = max_y * 0.9
 for ax in axes[:n_birds]:
-    for phase in labeled_phases:
-        ax.text(phase['mid'], y_code, _code(phase['left_label']),
+    for j, phase in enumerate(phases):
+        if pd.isna(phase['mid']) or phase['duration_days'] < SHORT_PHASE_DAYS:
+            continue
+        cx = _span_center(j)
+        ax.text(cx, y_code, _code(phase['left_label']),
                 ha='center', va='center', fontsize=11, fontweight='bold')
-        ax.text(phase['mid'], -y_code, _code(phase['right_label']),
+        ax.text(cx, -y_code, _code(phase['right_label']),
                 ha='center', va='center', fontsize=11, fontweight='bold')
 
 # Use the first unused grid cell as a legend for the letter codes; hide the rest.
@@ -313,10 +338,11 @@ plt.close(fig)
 # ---------------------------------
 print("Generating peck distribution plot...")
 
-# Get all unique birds
+# Get all unique birds (excluding non-birds)
 bird_counts = raw_data['Bird'].value_counts().reset_index()
 bird_counts = bird_counts[bird_counts['count'] >= 10]
-unique_birds = sorted(bird_counts['Bird'].unique())
+unique_birds = sorted(b for b in bird_counts['Bird'].unique()
+                      if b not in EXCLUDE_SPECIES)
 n_birds = len(unique_birds)
 
 # Calculate grid dimensions (aim for roughly square layout)
