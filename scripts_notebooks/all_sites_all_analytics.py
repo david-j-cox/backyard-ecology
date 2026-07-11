@@ -249,7 +249,9 @@ def plot_heatmap_counts_subplots(location_data: dict,
     locations = sorted(list(location_data.keys())) 
     n_locations = len(locations)
     
-    fig, axes = plt.subplots(1, n_locations, figsize=(18*n_locations, 10))
+    # Stack locations vertically (n rows x 1 col) so each heatmap gets the
+    # full width; each row keeps the same height, so the figure is n x taller.
+    fig, axes = plt.subplots(n_locations, 1, figsize=(18*n_locations, 10*n_locations))
     
     # Ensure axes is always a list for consistent indexing
     if n_locations == 1:
@@ -277,16 +279,13 @@ def plot_heatmap_counts_subplots(location_data: dict,
         
         ax.set_title(location, fontsize=30, fontweight='bold')
         ax.set_xlabel('Date', fontsize=24, labelpad=12)
-        if i==0:
-            ax.set_ylabel('Time of Day', fontsize=24, labelpad=12)
-        else:
-            ax.set_ylabel('')
+        ax.set_ylabel('Time of Day', fontsize=24, labelpad=12)
         ax.tick_params(axis='x', rotation=45, labelsize=10)
         ax.tick_params(axis='y', rotation=0, labelsize=10)
         ax.invert_yaxis()
     
     plt.tight_layout()
-    plt.subplots_adjust(wspace=0.1)
+    plt.subplots_adjust(hspace=0.3)
     return fig
 
 
@@ -295,7 +294,9 @@ def plot_heatmap_proportions_subplots(location_data: dict,
     locations = sorted(list(location_data.keys())) 
     n_locations = len(locations)
     
-    fig, axes = plt.subplots(1, n_locations, figsize=(18*n_locations, 10))
+    # Stack locations vertically (n rows x 1 col) so each heatmap gets the
+    # full width; each row keeps the same height, so the figure is n x taller.
+    fig, axes = plt.subplots(n_locations, 1, figsize=(18*n_locations, 10*n_locations))
     
     # Ensure axes is always a list for consistent indexing
     if n_locations == 1:
@@ -326,16 +327,13 @@ def plot_heatmap_proportions_subplots(location_data: dict,
         
         ax.set_title(location, fontsize=30, fontweight='bold')
         ax.set_xlabel('Date', fontsize=24, labelpad=12)
-        if i==0:
-            ax.set_ylabel('Time of Day', fontsize=24, labelpad=12)
-        else:
-            ax.set_ylabel('')
+        ax.set_ylabel('Time of Day', fontsize=24, labelpad=12)
         ax.tick_params(axis='x', rotation=45, labelsize=10)
         ax.tick_params(axis='y', rotation=0, labelsize=10)
         ax.invert_yaxis()
     
     plt.tight_layout()
-    plt.subplots_adjust(wspace=0.1)
+    plt.subplots_adjust(hspace=0.3)
     return fig
 
 
@@ -542,7 +540,9 @@ def plot_heatmap_relative_time_proportions(location_data: dict,
     locations = sorted(list(location_data.keys()))
     n_locations = len(locations)
     
-    fig, axes = plt.subplots(1, n_locations, figsize=(18*n_locations, 10))
+    # Stack locations vertically (n rows x 1 col) so each heatmap gets the
+    # full width; each row keeps the same height, so the figure is n x taller.
+    fig, axes = plt.subplots(n_locations, 1, figsize=(18*n_locations, 10*n_locations))
     
     # Ensure axes is always a list for consistent indexing
     if n_locations == 1:
@@ -587,16 +587,13 @@ def plot_heatmap_relative_time_proportions(location_data: dict,
         
         ax.set_title(location, fontsize=30, fontweight='bold')
         ax.set_xlabel('Date', fontsize=24, labelpad=12)
-        if i == 0:
-            ax.set_ylabel('Relative Time (0=Sunrise, 1=Sunset)', fontsize=24, labelpad=12)
-        else:
-            ax.set_ylabel('')
+        ax.set_ylabel('Relative Time (0=Sunrise, 1=Sunset)', fontsize=24, labelpad=12)
         ax.tick_params(axis='x', rotation=45, labelsize=10)
         ax.tick_params(axis='y', rotation=0, labelsize=10)
         ax.invert_yaxis()
     
     plt.tight_layout()
-    plt.subplots_adjust(wspace=0.1)
+    plt.subplots_adjust(hspace=0.3)
     return fig
 
 # --- Cell 2 ---
@@ -3119,9 +3116,9 @@ ax_table.text(
 )
 
 fig.suptitle('Multiple Baseline of Feeder Visits', fontsize=16, fontweight='bold', y=1.005)
-plt.tight_layout(rect=[0, 0.035, 1, 0.99])
-# Condition key for the single-letter phase codes, along the figure bottom.
-draw_condition_key(fig, mbd_condition_legend, x=0.5, y=0.028, fontsize=13)
+plt.tight_layout(rect=[0, 0, 1, 0.94])
+# Condition key for the single-letter phase codes, above the top panel.
+draw_condition_key(fig, mbd_condition_legend, x=0.5, y=0.965, fontsize=13)
 
 
 # --- Cell 37 ---
@@ -3797,8 +3794,8 @@ for config in plot_configs:
         ax.tick_params(axis='y', labelsize=9)
 
 plt.tight_layout()
-plt.subplots_adjust(hspace=0.2, bottom=0.07)
-draw_condition_key(fig, diversity_condition_legend, x=0.5, y=0.025, fontsize=16)
+plt.subplots_adjust(hspace=0.2, top=0.92)
+draw_condition_key(fig, diversity_condition_legend, x=0.5, y=0.98, fontsize=16)
 
 # --- Cell 41 ---
 # Save diversity metrics plot for dashboard
@@ -4312,12 +4309,13 @@ def plot_puc_data(station_name=None, puc_name=None, prob_threshold=prob_threshol
         
         sns.despine(top=True, right=True, ax=ax)
 
-    plt.subplots_adjust(wspace=0.2, hspace=0.1, bottom=0.20, top=0.90)
-    # Data-series legend across the top, clear of the panels and span letters.
+    plt.subplots_adjust(wspace=0.2, hspace=0.1, bottom=0.10, top=0.86)
+    # Data-series legend at the very top, condition key just below it - both
+    # above the panels and clear of the span letters.
     if _puc_handles:
         fig.legend(_puc_handles, _puc_labels, fontsize=20, frameon=False,
                    loc='upper center', bbox_to_anchor=(0.5, 1.0), ncol=2)
-    draw_condition_key(fig, puc_legend, x=0.5, y=0.03, fontsize=16)
+    draw_condition_key(fig, puc_legend, x=0.5, y=0.94, fontsize=16)
     return fig
 
 # --- Cell 50 ---
