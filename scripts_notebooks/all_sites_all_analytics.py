@@ -4234,9 +4234,10 @@ def plot_puc_data(station_name=None, puc_name=None, prob_threshold=prob_threshol
     ]
 
     # Plot each metric
+    _puc_handles, _puc_labels = [], []
     for row, col, col_name, ylabel in plot_configs:
         ax = axes[row, col]
-        
+
         # Check if column exists in dataframe
         if col_name in count_by_date_all.columns:
             sns.lineplot(
@@ -4294,10 +4295,11 @@ def plot_puc_data(station_name=None, puc_name=None, prob_threshold=prob_threshol
                 ax.set_xlabel('')
                 ax.tick_params(axis='x', labelbottom=False)
             
-            # Only show legend on first subplot, placed above the plot
+            # Capture the data-series legend once; it is drawn at the figure
+            # top (below) so it never collides with the span letters.
             if row == 0 and col == 0:
-                ax.legend(fontsize=20, frameon=False, bbox_to_anchor=(0.0, 1.18), loc='upper left')
-            else:
+                _puc_handles, _puc_labels = ax.get_legend_handles_labels()
+            if ax.get_legend() is not None:
                 ax.legend().remove()
         else:
             # If column doesn't exist, show a message
@@ -4310,7 +4312,11 @@ def plot_puc_data(station_name=None, puc_name=None, prob_threshold=prob_threshol
         
         sns.despine(top=True, right=True, ax=ax)
 
-    plt.subplots_adjust(wspace=0.2, hspace=0.1, bottom=0.20)
+    plt.subplots_adjust(wspace=0.2, hspace=0.1, bottom=0.20, top=0.90)
+    # Data-series legend across the top, clear of the panels and span letters.
+    if _puc_handles:
+        fig.legend(_puc_handles, _puc_labels, fontsize=20, frameon=False,
+                   loc='upper center', bbox_to_anchor=(0.5, 1.0), ncol=2)
     draw_condition_key(fig, puc_legend, x=0.5, y=0.03, fontsize=16)
     return fig
 
