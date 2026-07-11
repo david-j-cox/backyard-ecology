@@ -57,6 +57,24 @@ def dominant_seed(series):
         return known.mode().iloc[0]
     return None
 
+
+def assign_condition_letters(ordered_labels):
+    """Map condition labels to single-letter codes (A, B, C, ...) in
+    first-appearance order. Whitespace/newlines in labels are normalized so
+    'Finch\\nFood' and 'Finch Food' collapse to one entry. Returns
+    (normalized_label -> letter, [(letter, normalized_label), ...] for a legend).
+    Single letters stay readable however many/short the phases get, where full
+    text used to overlap neighboring labels and the phase-change lines."""
+    import string
+    letters, legend = {}, []
+    for lab in ordered_labels:
+        key = ' '.join(str(lab).split())
+        if key and key not in letters:
+            code = string.ascii_uppercase[len(letters)] if len(letters) < 26 else f'#{len(letters)}'
+            letters[key] = code
+            legend.append((code, key))
+    return letters, legend
+
 # Create dashboard output directory
 DASHBOARD_DIR = '../docs/dashboard_plots'
 os.makedirs(DASHBOARD_DIR, exist_ok=True)
@@ -230,35 +248,44 @@ for i, (ax, bird) in enumerate(zip(axes, birds)):
 
     ax.set_title(bird, fontsize=14)
 
-# Turn off any unused axes
-for j in range(len(birds), len(axes)):
-    axes[j].axis('off')
-
-# Phase labels (top = Left feeder seed, bottom = Right feeder seed).
-# Stagger the labels across a few height tiers (within the headroom above
-# and below the data) so adjacent phase labels stop overlapping as more,
-# and shorter, phases accumulate along the date axis.
+# Phase labels: mark each phase span with a single-letter code (top = Left
+# feeder seed, bottom = Right feeder seed) placed at the span midpoint - away
+# from the phase-change lines at the boundaries - with a legend mapping the
+# letters to conditions. Single letters stay legible however many/short the
+# phases get, where the full text used to overlap the lines and each other.
 labeled_phases = [
     p for p in phases
     if pd.notna(p['mid']) and p['duration_days'] >= SHORT_PHASE_DAYS
 ]
 labeled_phases.sort(key=lambda p: p['mid'])
-if labeled_phases:
-    mids = np.array([mdates.date2num(pd.to_datetime(p['mid'])) for p in labeled_phases])
-    span = (mids.max() - mids.min()) or 1.0
-    min_gap = np.min(np.diff(mids)) if len(mids) > 1 else span
-    # More tiers when labels are tightly packed relative to the axis span.
-    n_tiers = int(np.clip(np.ceil(span / max(min_gap * 7, 1)), 1, 3))
-    # Tiers step inward from the top/bottom edges but stay inside the ~3-unit
-    # headroom baked into max_y, so labels never sit on top of the data.
-    top_tiers = [max_y - 0.6 - t for t in range(n_tiers)]
-    for ax in axes[:n_birds]:
-        for k, phase in enumerate(labeled_phases):
-            y_top = top_tiers[k % n_tiers]
-            ax.text(phase['mid'], y_top, phase['left_label'],
-                    ha='center', va='center', fontsize=7)
-            ax.text(phase['mid'], -y_top, phase['right_label'],
-                    ha='center', va='center', fontsize=7)
+# Assign letters over left-side then right-side seeds in chronological order.
+letter_map, legend_entries = assign_condition_letters(
+    [p['left_label'] for p in labeled_phases]
+    + [p['right_label'] for p in labeled_phases]
+)
+
+
+def _code(label):
+    return letter_map[' '.join(str(label).split())]
+
+
+y_code = max_y * 0.9
+for ax in axes[:n_birds]:
+    for phase in labeled_phases:
+        ax.text(phase['mid'], y_code, _code(phase['left_label']),
+                ha='center', va='center', fontsize=11, fontweight='bold')
+        ax.text(phase['mid'], -y_code, _code(phase['right_label']),
+                ha='center', va='center', fontsize=11, fontweight='bold')
+
+# Use the first unused grid cell as a legend for the letter codes; hide the rest.
+legend_text = 'Seed condition key\n' + '\n'.join(
+    f'{code} = {name}' for code, name in legend_entries
+)
+for j in range(n_birds, len(axes)):
+    axes[j].axis('off')
+if n_birds < len(axes):
+    axes[n_birds].text(0.02, 0.98, legend_text, transform=axes[n_birds].transAxes,
+                       ha='left', va='top', fontsize=12, family='monospace')
 
 # Format x-ticks as MM-DD and rotate 45 degrees
 date_fmt = mdates.DateFormatter('%m-%d')

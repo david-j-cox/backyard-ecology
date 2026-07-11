@@ -118,9 +118,72 @@ def save_plot_for_dashboard(fig, filename, title, description=""):
     
     with open(f'{DASHBOARD_DIR}/{filename}.json', 'w') as f:
         json.dump(metadata, f, indent=2)
-    
+
     print(f"Saved: {title} -> {filename}")
     return filename
+
+
+def assign_condition_letters(ordered_labels):
+    """Map phase-condition labels to single-letter codes (A, B, C, ...) in
+    first-appearance order, normalizing whitespace/newlines so 'No\\nSeed' and
+    'No Seed' collapse to one entry. Returns (normalized_label -> letter,
+    [(letter, normalized_label), ...] for a legend). A single centered letter
+    per condition span stays legible where full text overlapped the phase
+    lines and neighboring labels as the study accrued more phases."""
+    import string
+    letters, legend = {}, []
+    for lab in ordered_labels:
+        key = ' '.join(str(lab).split())
+        if key and key not in letters:
+            code = string.ascii_uppercase[len(letters)] if len(letters) < 26 else f'#{len(letters)}'
+            letters[key] = code
+            legend.append((code, key))
+    return letters, legend
+
+
+def draw_condition_key(fig, legend, x=0.5, y=0.965, fontsize=13):
+    """Render a one-line horizontal 'Condition key' legend across the figure
+    for the letter codes produced by assign_condition_letters()."""
+    if not legend:
+        return
+    parts = '    '.join(f'{code} = {name}' for code, name in legend)
+    fig.text(x, y, f'Condition key:   {parts}', ha='center', va='top',
+             fontsize=fontsize)
+
+
+def condition_spans(location_phase_changes, observed_dates, baseline='Seed'):
+    """Return [(center_date, condition_str), ...] - one entry per phase span,
+    centered between phase-change lines. Spans are: the baseline period before
+    the first change, then each change to the next change (or to the last
+    observed date). Used to place single-letter codes clear of the lines."""
+    obs = pd.Series(list(observed_dates)).dropna()
+    if obs.empty:
+        return []
+    obs = np.sort(pd.to_datetime(obs.unique()))
+    data_start, data_end = obs[0], obs[-1]
+    boundaries = []  # (line_date, condition_description)
+    for _, row in location_phase_changes.iterrows():
+        change_date = pd.to_datetime(row['DateChangeStarted'])
+        prior = obs[obs < change_date]
+        if len(prior) == 0:
+            continue
+        line_date = prior[-1] + (change_date - prior[-1]) / 2
+        boundaries.append((line_date, row['DescriptionOfChange']))
+    boundaries.sort(key=lambda b: b[0])
+    edges = [data_start] + [b[0] for b in boundaries] + [data_end]
+    conditions = [baseline] + [b[1] for b in boundaries]
+    return [(edges[i] + (edges[i + 1] - edges[i]) / 2, conditions[i])
+            for i in range(len(conditions))]
+
+
+def condition_span_placements(location_phase_changes, observed_dates, baseline='Seed'):
+    """Single-location convenience: return (placements, legend) with letters
+    assigned from this location's own conditions. placements =
+    [(center_date, letter), ...]; legend = [(letter, condition), ...]."""
+    spans = condition_spans(location_phase_changes, observed_dates, baseline)
+    letters, legend = assign_condition_letters([c for _, c in spans])
+    placements = [(center, letters[' '.join(str(c).split())]) for center, c in spans]
+    return placements, legend
 
 # --- Cell 1 ---
 # ---------------------------------
@@ -2708,6 +2771,7 @@ ax_table.axis('off')
 # IMPORTANT: store the exact midpoints that were actually plotted (after filtering/filling)
 plotted_mids_by_region = {}
 dashed_indices_by_region = {}
+mbd_condition_legend = []  # (letter, condition) for the figure-level key
 
 for ax, region in zip(axes, regions_order):
 
@@ -2835,16 +2899,19 @@ for ax, region in zip(axes, regions_order):
             else:
                 ax.axvline(mid, color='black', linewidth=1.5, alpha=0.9)
 
-    # Phase labels for the first row only
+    # Phase labels for the first row only: a single-letter code centered in
+    # each condition span (with a figure-level legend drawn after the loop).
+    # Single letters replace the multi-line text that overlapped once phases
+    # packed close together.
     if region == regions_order[0]:
         y_pos_log = 1200
 
         def _to_label(desc):
             d = str(desc).lower()
             if 'removed' in d:
-                return 'Feeder\nRemoved'
+                return 'Feeder Removed'
             if 'extinct' in d or 'no seed' in d:
-                return 'No\nSeed'
+                return 'No Seed'
             if 'seed' in d or 'mix' in d:
                 return 'Seed'
             return ''
@@ -2853,6 +2920,7 @@ for ax, region in zip(axes, regions_order):
             change_dates = sorted(all_changes['DateChangeStarted'].tolist())
             phase_boundaries = [date_min] + change_dates + [date_max]
 
+            span_conditions = []  # (x_center, condition) in chronological order
             for i in range(len(phase_boundaries) - 1):
                 phase_start = phase_boundaries[i]
                 phase_end = phase_boundaries[i + 1]
@@ -2868,8 +2936,15 @@ for ax, region in zip(axes, regions_order):
 
                 if condition:
                     x_center = phase_start + (phase_end - phase_start) / 2
-                    ax.text(x_center, y_pos_log, condition,
-                            ha='center', va='center', fontsize=14)
+                    span_conditions.append((x_center, condition))
+
+            _letter_map, mbd_condition_legend = assign_condition_letters(
+                [c for _, c in span_conditions]
+            )
+            for x_center, condition in span_conditions:
+                ax.text(x_center, y_pos_log,
+                        _letter_map[' '.join(str(condition).split())],
+                        ha='center', va='center', fontsize=16, fontweight='bold')
 
     # No condition labels for rows below the first — the connectors
     # from the top row indicate which phase changes correspond.
@@ -3044,7 +3119,9 @@ ax_table.text(
 )
 
 fig.suptitle('Multiple Baseline of Feeder Visits', fontsize=16, fontweight='bold', y=1.005)
-plt.tight_layout(rect=[0, 0, 1, 0.99])
+plt.tight_layout(rect=[0, 0.035, 1, 0.99])
+# Condition key for the single-letter phase codes, along the figure bottom.
+draw_condition_key(fig, mbd_condition_legend, x=0.5, y=0.028, fontsize=13)
 
 
 # --- Cell 37 ---
@@ -3553,6 +3630,16 @@ plot_configs = [
     }
 ]
 
+# Global condition -> letter map for the whole diversity figure, so the same
+# condition gets the same letter across every site panel and one shared legend
+# explains them. Single letters centered in each span replace the rotated full
+# text that used to sit on the phase-change lines.
+_div_conditions = ['Seed']
+for _loc in locations:
+    for _, _r in phase_changes[phase_changes['LocationOfChange'] == _loc].iterrows():
+        _div_conditions.append(_r['DescriptionOfChange'])
+diversity_letter_map, diversity_condition_legend = assign_condition_letters(_div_conditions)
+
 # Plot all subplots: iterate over metrics (rows) and locations (columns)
 for config in plot_configs:
     row_idx = config['row_idx']
@@ -3633,31 +3720,28 @@ for config in plot_configs:
             # Add phase change vertical lines for this location
             for _, phase_row in location_phase_changes.iterrows():
                 change_date = pd.to_datetime(phase_row['DateChangeStarted'])
-                description = phase_row['DescriptionOfChange']
-                
+
                 # Find the date before the change date
                 location_dates = location_data['Date'].unique()
                 location_dates = pd.to_datetime(location_dates)
                 location_dates = np.sort(location_dates)
-                
-                # Find the date before the change date
+
                 before_change_idx = np.where(location_dates < change_date)[0]
                 if len(before_change_idx) > 0:
                     date_before = location_dates[before_change_idx[-1]]
-                    # Calculate halfway point
                     halfway_date = date_before + (change_date - date_before) / 2
-                    
-                    # Add vertical line
                     ax.axvline(x=halfway_date, color='black', linestyle='-', linewidth=3, alpha=0.8)
-                    
-                    # Add description text
-                    ymax = location_data[config['y_col']].max()
-                    if 'ylim' in config and config['ylim'] is not None:
-                        ylim_max = config['ylim'][1]
-                    else:
-                        ylim_max = ax.get_ylim()[1]
-                    ax.text(halfway_date + pd.Timedelta(days=3), ylim_max, description, 
-                        rotation=90, ha='center', va='top', fontsize=12)
+
+            # Single-letter condition codes centered in each span (shared legend
+            # is drawn once for the whole figure).
+            if 'ylim' in config and config['ylim'] is not None:
+                ylim_max = config['ylim'][1]
+            else:
+                ylim_max = ax.get_ylim()[1]
+            for _center, _cond in condition_spans(location_phase_changes, location_data['Date']):
+                ax.text(_center, ylim_max,
+                        diversity_letter_map[' '.join(str(_cond).split())],
+                        ha='center', va='top', fontsize=13, fontweight='bold')
             
             # Set labels
             if col_idx == 0:
@@ -3713,7 +3797,8 @@ for config in plot_configs:
         ax.tick_params(axis='y', labelsize=9)
 
 plt.tight_layout()
-plt.subplots_adjust(hspace=0.2)
+plt.subplots_adjust(hspace=0.2, bottom=0.07)
+draw_condition_key(fig, diversity_condition_legend, x=0.5, y=0.025, fontsize=16)
 
 # --- Cell 41 ---
 # Save diversity metrics plot for dashboard
@@ -4130,6 +4215,10 @@ def plot_puc_data(station_name=None, puc_name=None, prob_threshold=prob_threshol
     plot_high_pc = count_by_date_high_pc.loc[count_by_date_high_pc['station_name'] == station_name]
     # Phase changes for this station (match LocationOfChange to station_name)
     location_phase_changes = phase_changes[phase_changes['LocationOfChange'].astype(str).str.strip().str.startswith(station_name)]
+    # Single-letter condition codes (centered in each phase span) + legend
+    puc_placements, puc_legend = condition_span_placements(
+        location_phase_changes, plot_all['date']
+    )
     # Plot trends - 2x3 subplot
     fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(28, 12), sharex=True)
     fig.tight_layout(pad=4.0)
@@ -4176,21 +4265,22 @@ def plot_puc_data(station_name=None, puc_name=None, prob_threshold=prob_threshol
                 alpha=0.7,
                 label=f'High PC Data (p={prob_threshold}, c={conf_threshold})'
             )
-            # Phase change vertical lines (same logic as diversity metrics plot)
+            # Phase change vertical lines + single-letter condition codes
+            # centered in each span (legend drawn once for the figure below).
             if not location_phase_changes.empty and not plot_all.empty:
                 location_dates = pd.to_datetime(plot_all['date'].unique())
                 location_dates = np.sort(location_dates)
                 for _, phase_row in location_phase_changes.iterrows():
                     change_date = pd.to_datetime(phase_row['DateChangeStarted'])
-                    description = phase_row['DescriptionOfChange']
                     before_change_idx = np.where(location_dates < change_date)[0]
                     if len(before_change_idx) > 0:
                         date_before = location_dates[before_change_idx[-1]]
                         halfway_date = date_before + (change_date - date_before) / 2
                         ax.axvline(x=halfway_date, color='black', linestyle='-', linewidth=3, alpha=0.8)
-                        ylim_max = ax.get_ylim()[1]
-                        ax.text(halfway_date + pd.Timedelta(days=3), ylim_max, description, 
-                            rotation=90, ha='center', va='top', fontsize=12)
+                ylim_max = ax.get_ylim()[1]
+                for center, letter in puc_placements:
+                    ax.text(center, ylim_max, letter, ha='center', va='top',
+                            fontsize=15, fontweight='bold')
             ax.set_ylabel(ylabel, fontsize=30, labelpad=8)
             ax.tick_params(labelsize=18)
             
@@ -4220,7 +4310,8 @@ def plot_puc_data(station_name=None, puc_name=None, prob_threshold=prob_threshol
         
         sns.despine(top=True, right=True, ax=ax)
 
-    plt.subplots_adjust(wspace=0.2, hspace=0.1)
+    plt.subplots_adjust(wspace=0.2, hspace=0.1, bottom=0.20)
+    draw_condition_key(fig, puc_legend, x=0.5, y=0.03, fontsize=16)
     return fig
 
 # --- Cell 50 ---
