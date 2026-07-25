@@ -14,10 +14,11 @@ import logging
 import os
 import subprocess
 import sys
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 # Per-script wall-clock budget. The scripts normally finish in ~15 minutes; a
 # much longer run means the BirdWeather API is degraded and retry backoffs are
@@ -26,6 +27,15 @@ SCRIPT_TIMEOUT_SECS = int(os.environ.get('PUC_SCRIPT_TIMEOUT', '3600'))
 
 # How much of a timed-out script's captured output to surface in the log.
 OUTPUT_TAIL_CHARS = 4000
+
+# Substrings that mark a child's output line as a problem worth reporting even
+# when the script exits 0. The child scripts catch and log their own failures
+# rather than propagating them, so exit status alone hides real breakage.
+CONCERN_MARKERS = ('WARNING', 'ERROR', 'Traceback', 'FAILED')
+
+# Cap on distinct warnings echoed per script, so one repeating message cannot
+# bury the run summary.
+MAX_DISTINCT_CONCERNS = 20
 
 
 def setup_logging(script_dir: Path) -> Path:
@@ -60,6 +70,47 @@ def tail(stream: Optional[object]) -> str:
     return stream[-OUTPUT_TAIL_CHARS:]
 
 
+def concerning_lines(*streams: Optional[object]) -> List[str]:
+    """
+    Lines of captured child output that report a problem.
+
+    A script can exit 0 while still having swallowed something worth knowing
+    about -- a DuckDB write that failed, a schema that has drifted. Those
+    warnings go to the child's stdout/stderr, which on success used to be
+    logged at DEBUG and therefore never appeared in CI at all.
+    """
+    found: List[str] = []
+    for stream in streams:
+        if not stream:
+            continue
+        if isinstance(stream, bytes):
+            stream = stream.decode('utf-8', errors='replace')
+        for line in stream.splitlines():
+            if any(marker in line for marker in CONCERN_MARKERS):
+                found.append(line.strip())
+    return found
+
+
+def log_concerns(script_name: str, logger: logging.Logger, *streams: Optional[object]) -> None:
+    """Surface each distinct warning once, with a count, instead of per occurrence."""
+    counts = Counter(concerning_lines(*streams))
+    if not counts:
+        return
+
+    logger.warning(
+        f"{script_name} exited cleanly but reported "
+        f"{sum(counts.values())} warning(s) ({len(counts)} distinct):"
+    )
+    for line, n in counts.most_common(MAX_DISTINCT_CONCERNS):
+        suffix = f"  [x{n}]" if n > 1 else ""
+        logger.warning(f"  {script_name}: {line}{suffix}")
+    if len(counts) > MAX_DISTINCT_CONCERNS:
+        logger.warning(
+            f"  ...and {len(counts) - MAX_DISTINCT_CONCERNS} more distinct "
+            f"warning(s); see the uploaded logs/ artifact for the full output"
+        )
+
+
 def run_script(
     script_path: Path, script_name: str, script_dir: Path,
     logger: logging.Logger, python_executable: str
@@ -83,6 +134,7 @@ def run_script(
             logger.info(f"{script_name} completed successfully in {elapsed:.1f}s")
             if result.stdout:
                 logger.debug(f"{script_name} stdout:\n{result.stdout}")
+            log_concerns(script_name, logger, result.stdout, result.stderr)
             return (script_name, True, result.stdout)
         else:
             logger.error(f"{script_name} failed (rc={result.returncode})")
