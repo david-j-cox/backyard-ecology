@@ -398,16 +398,56 @@ def get_api_total_count_for_station(station_id: str, api_key: Optional[str], day
         return None
 
 
-def remove_station_day(csv_path: Path, station_id: str, day: date):
-    """Remove all rows for a given station+date from the CSV file."""
+def write_csv_atomic(rows: List[dict], fieldnames: List[str], csv_path: Path):
+    """
+    Write a CSV via a sibling temp file plus an atomic rename.
+
+    Opening the real path with mode 'w' truncates it before a single row is
+    written, so a process killed mid-write leaves a partial file -- and CI
+    uploads whatever is on disk to the release even when the job fails.
+    """
+    # Trailing .tmp so the repo's existing *.tmp ignore rule keeps an orphan
+    # (left by a hard kill, when the finally below cannot run) out of commits.
+    tmp = csv_path.with_name(f".{csv_path.name}.{os.getpid()}.tmp")
+    for stale in csv_path.parent.glob(f".{csv_path.name}.*.tmp"):
+        try:
+            stale.unlink()
+            logger.info(f"  Cleaned up orphaned temp file: {stale.name}")
+        except OSError:
+            pass
+    try:
+        with open(tmp, 'w', newline='', encoding='utf-8') as f:
+            w = csv.DictWriter(f, fieldnames=fieldnames)
+            w.writeheader()
+            w.writerows(rows)
+        os.replace(tmp, csv_path)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
+
+
+def replace_station_day(csv_path: Path, station_id: str, day: date, new_nodes: List[dict]):
+    """
+    Swap a station+date's rows for freshly fetched ones in a single rewrite.
+
+    The old rows are only dropped once new_nodes is in hand, so a failed or
+    interrupted fetch leaves existing data untouched rather than deleting it
+    and then dying before the replacement arrives.
+    """
+    new_rows = [flatten(node) for node in new_nodes]
+
     if not csv_path.exists():
+        fields = sorted({k for r in new_rows for k in r.keys()}) if new_rows else list(flatten({}).keys())
+        write_csv_atomic(new_rows, fields, csv_path)
+        logger.info(f"Wrote {len(new_rows)} records to {csv_path}")
         return
+
     try:
         with open(csv_path, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             rows = list(reader)
-            fieldnames = reader.fieldnames
-    except Exception:
+    except Exception as e:
+        logger.warning(f"Error reading existing file: {e}. Skipping write to avoid data loss.")
         return
 
     kept = []
@@ -426,11 +466,18 @@ def remove_station_day(csv_path: Path, station_id: str, day: date):
         kept.append(row)
 
     if removed > 0:
-        with open(csv_path, 'w', newline='', encoding='utf-8') as f:
-            w = csv.DictWriter(f, fieldnames=fieldnames)
-            w.writeheader()
-            w.writerows(kept)
-        logger.info(f"  Removed {removed:,} incomplete rows for station {station_id} on {day}")
+        logger.info(f"  Replacing {removed:,} incomplete rows for station {station_id} on {day}")
+
+    # Drop any new row whose id already survives elsewhere in the file
+    kept_ids = {row.get('id') for row in kept if row.get('id')}
+    fresh = [r for r in new_rows if r.get('id') not in kept_ids]
+
+    all_rows = kept + fresh
+    fields = sorted({k for r in all_rows for k in r.keys()}) if all_rows else list(flatten({}).keys())
+    all_rows.sort(key=lambda x: x.get('timestamp', ''))
+
+    write_csv_atomic(all_rows, fields, csv_path)
+    logger.info(f"Wrote {len(all_rows)} total records to {csv_path} (+{len(fresh)} new)")
 
 
 def find_days_to_fetch_for_station(
@@ -899,64 +946,6 @@ def flatten(node):
     return result
 
 
-def append_to_csv(new_items: List[dict], csv_path: Path):
-    """
-    Append new items to CSV file, or create it if it doesn't exist.
-    Removes duplicates based on detection ID.
-    
-    Args:
-        new_items: List of detection nodes to add
-        csv_path: Path to the CSV file
-    """
-    if not new_items:
-        logger.info("No new items to write.")
-        return
-    
-    # Flatten the new items
-    new_rows = [flatten(node) for node in new_items]
-    
-    # Get existing data if file exists
-    existing_ids = set()
-    existing_rows = []
-    
-    if csv_path.exists():
-        try:
-            with open(csv_path, 'r', encoding='utf-8') as f:
-                reader = csv.DictReader(f)
-                existing_rows = list(reader)
-                existing_ids = {row.get('id') for row in existing_rows if row.get('id')}
-            logger.info(f"Found {len(existing_rows)} existing records")
-        except Exception as e:
-            logger.warning(f"Error reading existing file: {e}. Will create new file.")
-            existing_rows = []
-    
-    # Filter out duplicates
-    new_rows_filtered = [row for row in new_rows if row.get('id') not in existing_ids]
-    
-    if not new_rows_filtered:
-        logger.info("All new records already exist in file. No updates needed.")
-        return
-    
-    logger.info(f"Adding {len(new_rows_filtered)} new records (skipped {len(new_rows) - len(new_rows_filtered)} duplicates)")
-    
-    # Combine existing and new rows
-    all_rows = existing_rows + new_rows_filtered
-    
-    # Build header from all keys
-    fields = sorted({k for r in all_rows for k in r.keys()}) if all_rows else list(flatten({}).keys())
-    
-    # Sort by timestamp to keep chronological order
-    all_rows.sort(key=lambda x: x.get('timestamp', ''))
-    
-    # Write to file
-    with open(csv_path, 'w', newline='', encoding='utf-8') as f:
-        w = csv.DictWriter(f, fieldnames=fields)
-        w.writeheader()
-        w.writerows(all_rows)
-    
-    logger.info(f"Wrote {len(all_rows)} total records to {csv_path}")
-
-
 def parse_args():
     ap = argparse.ArgumentParser(
         description="Download BirdWeather detections for specific PUC stations."
@@ -1112,19 +1101,20 @@ def main():
             status = f"(replacing: {existing} rows)" if existing > 0 else "(missing)"
             logger.info(f"\n  Station {station_id} {day} {status}")
 
-            # Remove old data before repulling
-            if existing > 0:
-                remove_station_day(output_path, station_id, day)
-
             nodes = fetch_one_day_for_station(
                 station_id, api_key, day, page_size=args.page_size
             )
 
             if nodes is None:
+                # Fetch failed. Existing rows stay put -- the next run re-checks
+                # this day against the API and repulls if still short.
                 failed_days.append((station_id, day))
                 continue
 
             if not nodes:
+                # find_days_to_fetch_for_station already skips days the API
+                # reports as empty, so an empty result here means the API
+                # disagreed with itself. Keep what we have.
                 logger.info(f"  No detections for station {station_id} on {day}")
                 continue
 
@@ -1136,7 +1126,7 @@ def main():
                 nodes = merge_sensor_data_with_detections(nodes, sensor_readings)
 
             logger.info(f"  Fetched {len(nodes):,} detections for station {station_id} on {day}")
-            append_to_csv(nodes, output_path)
+            replace_station_day(output_path, station_id, day, nodes)
             write_to_duckdb(nodes)
             total_fetched += len(nodes)
 

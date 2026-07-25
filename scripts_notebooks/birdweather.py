@@ -9,6 +9,7 @@ Usage:
   python birdweather_counties.py --from 2018-01-01 --to 2025-10-22
 """
 
+import os
 import time
 import argparse
 from datetime import date, datetime, timedelta
@@ -222,24 +223,53 @@ def convert_dates(df):
             df[col] = pd.to_datetime(df[col], errors="coerce", utc=True)
     return df
 
-def append_to_parquet(df, filepath):
-    """Append DataFrame to existing parquet file or create new one."""
+def sweep_orphan_temps(filepath):
+    """
+    Delete leftover temp files for this target from an earlier hard kill.
+
+    These are full-size copies of the data file, so letting them pile up in a
+    long-lived checkout wastes real disk.
+    """
     filepath = Path(filepath)
-    
-    if filepath.exists():
-        # Read existing file and append
-        existing_df = pd.read_parquet(filepath)
-        combined_df = pd.concat([existing_df, df], ignore_index=True)
-        # Remove duplicates based on (id, county) so the same detection can
-        # legitimately appear in overlapping county bounding boxes without one
-        # county's fetch "stealing" it from the other.
-        dedup_cols = ["id", "county"] if "county" in combined_df.columns else ["id"]
-        if "id" in combined_df.columns:
-            combined_df = combined_df.drop_duplicates(subset=dedup_cols, keep="last")
-        combined_df.to_parquet(filepath, engine="pyarrow", index=False)
-    else:
-        # Create new file
-        df.to_parquet(filepath, engine="pyarrow", index=False)
+    for stale in filepath.parent.glob(f".{filepath.name}.*.tmp"):
+        try:
+            stale.unlink()
+            print(f"  Cleaned up orphaned temp file: {stale.name}")
+        except OSError:
+            pass
+
+
+def write_parquet_atomic(df, filepath):
+    """
+    Write a parquet file via a sibling temp file plus an atomic rename.
+
+    Writing in place would leave a truncated file if the process is killed
+    mid-write -- and CI uploads whatever is on disk to the release even when
+    the job fails, so a partial write becomes the canonical copy.
+    """
+    filepath = Path(filepath)
+    # Trailing .tmp so the repo's existing *.tmp ignore rule keeps an orphan
+    # (left by a hard kill, when the finally below cannot run) out of commits.
+    tmp = filepath.with_name(f".{filepath.name}.{os.getpid()}.tmp")
+    sweep_orphan_temps(filepath)
+    try:
+        df.to_parquet(tmp, engine="pyarrow", index=False)
+        os.replace(tmp, filepath)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
+
+
+def dedupe(df):
+    """
+    Drop duplicate detections on (id, county) so the same detection can
+    legitimately appear in overlapping county bounding boxes without one
+    county's fetch "stealing" it from the other.
+    """
+    if "id" not in df.columns:
+        return df
+    dedup_cols = ["id", "county"] if "county" in df.columns else ["id"]
+    return df.drop_duplicates(subset=dedup_cols, keep="last")
 
 
 # If we have at least this fraction of the API's totalCount, the day is considered complete.
@@ -270,21 +300,35 @@ def get_existing_daily_counts(filepath):
     return df.groupby(["county", "_date"]).size().to_dict()
 
 
-def remove_county_day(filepath, county, day):
-    """Remove all rows for a given county+date from the parquet file."""
+def replace_county_day(filepath, county, day, new_df):
+    """
+    Swap a county+date's rows for freshly fetched ones in a single rewrite.
+
+    The old data is only dropped once new_df is in hand, so a failed or
+    interrupted fetch leaves the existing rows untouched rather than deleting
+    them and then dying before the replacement arrives.
+    """
+    filepath = Path(filepath)
+    # Normalize here rather than trusting the caller: concatenating a datetime
+    # timestamp column onto a string one yields object dtype, which pyarrow
+    # refuses to write, and the whole day's fetch would be lost.
+    new_df = convert_dates(new_df.copy())
+
     if not filepath.exists():
+        write_parquet_atomic(new_df, filepath)
         return
+
     df = pd.read_parquet(filepath)
     df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce", utc=True)
     df["_date"] = df["timestamp"].dt.date
     mask = (df["county"] == county) & (df["_date"] == day)
-    removed = mask.sum()
+    removed = int(mask.sum())
     if removed > 0:
-        df = df[~mask].drop(columns=["_date"])
-        df.to_parquet(filepath, engine="pyarrow", index=False)
-        print(f"  Removed {removed:,} incomplete rows for {county} on {day}")
-    else:
-        df.drop(columns=["_date"]).to_parquet(filepath, engine="pyarrow", index=False)
+        print(f"  Replacing {removed:,} incomplete rows for {county} on {day}")
+
+    kept = df[~mask].drop(columns=["_date"])
+    combined = dedupe(pd.concat([kept, new_df], ignore_index=True))
+    write_parquet_atomic(combined, filepath)
 
 
 def fetch_one_day(county_key, bbox, day, page_size=500, max_retries=3):
@@ -466,22 +510,23 @@ def main():
                 status = "(missing)"
             print(f"\n  {county_key} {day} {status}")
 
-            # Remove old data before repulling
-            if existing > 0:
-                remove_county_day(output_file, county_key, day)
-
             df = fetch_one_day(county_key, bbox, day, page_size=args.page_size)
 
             if df is None:
+                # Fetch failed. Existing rows are left in place -- the next run
+                # re-checks this day against the API and repulls if still short.
                 failed_days.append((county_key, day))
                 continue
 
             if df.empty:
+                # find_days_to_fetch already skips days the API reports as
+                # empty, so an empty result here means the API disagreed with
+                # itself. Keep what we have rather than dropping the day.
                 print(f"  No detections for {county_key} on {day}")
                 continue
 
             print(f"  Fetched {len(df):,} detections for {county_key} on {day}")
-            append_to_parquet(df, output_file)
+            replace_county_day(output_file, county_key, day, df)
             write_to_duckdb(df)
             total_fetched += len(df)
 
