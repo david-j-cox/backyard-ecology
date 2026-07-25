@@ -11,12 +11,21 @@ completeness-check work is separated from the dashboard update pipeline.
 """
 
 import logging
+import os
 import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Optional, Tuple
+
+# Per-script wall-clock budget. The scripts normally finish in ~15 minutes; a
+# much longer run means the BirdWeather API is degraded and retry backoffs are
+# grinding, so fail fast rather than burning a full CI job.
+SCRIPT_TIMEOUT_SECS = int(os.environ.get('PUC_SCRIPT_TIMEOUT', '3600'))
+
+# How much of a timed-out script's captured output to surface in the log.
+OUTPUT_TAIL_CHARS = 4000
 
 
 def setup_logging(script_dir: Path) -> Path:
@@ -42,6 +51,15 @@ def setup_logging(script_dir: Path) -> Path:
     return log_file
 
 
+def tail(stream: Optional[object]) -> str:
+    """Last OUTPUT_TAIL_CHARS of a captured stream, decoded if needed."""
+    if not stream:
+        return ''
+    if isinstance(stream, bytes):
+        stream = stream.decode('utf-8', errors='replace')
+    return stream[-OUTPUT_TAIL_CHARS:]
+
+
 def run_script(
     script_path: Path, script_name: str, script_dir: Path,
     logger: logging.Logger, python_executable: str
@@ -56,7 +74,7 @@ def run_script(
             cwd=script_dir.parent,
             capture_output=True,
             text=True,
-            timeout=7200  # 2 hour timeout
+            timeout=SCRIPT_TIMEOUT_SECS
         )
 
         elapsed = (datetime.now() - start_time).total_seconds()
@@ -70,12 +88,27 @@ def run_script(
             logger.error(f"{script_name} failed (rc={result.returncode})")
             if result.stderr:
                 logger.error(f"{script_name} stderr:\n{result.stderr}")
+            if result.stdout:
+                logger.error(f"{script_name} stdout (tail):\n{tail(result.stdout)}")
             return (script_name, False, result.stderr or result.stdout)
 
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as e:
         elapsed = (datetime.now() - start_time).total_seconds()
         msg = f"{script_name} timed out after {elapsed:.1f}s"
         logger.error(msg)
+
+        # subprocess.run kills the child and collects whatever it had written
+        # before re-raising. Surface it -- without this the log shows nothing
+        # but silence and there is no way to tell how far the script got.
+        partial_out = tail(e.stdout)
+        partial_err = tail(e.stderr)
+        if partial_out:
+            logger.error(f"{script_name} stdout before timeout (tail):\n{partial_out}")
+        if partial_err:
+            logger.error(f"{script_name} stderr before timeout (tail):\n{partial_err}")
+        if not partial_out and not partial_err:
+            logger.error(f"{script_name} produced no output before timing out")
+
         return (script_name, False, msg)
 
     except Exception as e:

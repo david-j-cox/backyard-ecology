@@ -19,6 +19,9 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    # Backstop above the per-script budget in puc_data_refresh.py, so a hang
+    # outside the fetch scripts cannot hold the concurrency group all day.
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,6 +66,15 @@ jobs:
       - name: Run PUC data refresh
         working-directory: scripts_notebooks
         run: python puc_data_refresh.py
+
+      - name: Upload run logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: puc-refresh-logs
+          path: logs/
+          retention-days: 14
+          if-no-files-found: warn
 
       - name: Commit and push changes
         run: |
