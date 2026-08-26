@@ -3,6 +3,6 @@
   "description": "Interactive choropleth map of bird migration across US flyway corridors with date slider",
   "filename": "all_flyways_total_birds",
   "type": "plotly",
-  "created": "2026-08-25T12:09:00.614195",
+  "created": "2026-08-26T12:08:46.424600",
   "html_path": "interactive/all_flyways_total_birds.html"
 }
