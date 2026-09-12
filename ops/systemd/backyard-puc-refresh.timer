@@ -1,0 +1,11 @@
+[Unit]
+Description=Run Backyard Ecology PUC data refresh nightly
+
+[Timer]
+OnCalendar=*-*-* 01:00:00 America/New_York
+Persistent=true
+RandomizedDelaySec=15m
+Unit=backyard-puc-refresh.service
+
+[Install]
+WantedBy=timers.target

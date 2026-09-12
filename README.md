@@ -1,6 +1,6 @@
 # Backyard Ecology: Bird Visit Analysis
 
-A data analysis project for tracking and visualizing bird feeder visits in backyard ecosystems. This project combines automated data collection with advanced analytics to understand bird behavior patterns, migration timing, and ecological diversity. A daily GitHub Actions pipeline fetches fresh data, runs analytics, and publishes an updated dashboard — no manual steps required beyond entering observations in Google Sheets.
+A data analysis project for tracking and visualizing bird feeder visits in backyard ecosystems. This project combines automated data collection with advanced analytics to understand bird behavior patterns, migration timing, and ecological diversity. A daily GitHub Actions pipeline runs the dashboard update, while the heavier BirdWeather PUC refresh runs on a persistent Linux VM.
 
 ## Project Overview
 
@@ -9,7 +9,8 @@ This project analyzes bird feeder visit data collected from multiple sites, focu
 - **Species diversity** metrics including Shannon H, species richness, and beta diversity
 - **Migration correlation** with BirdCast migration data
 - **Weather correlation** with OpenWeatherMap environmental data
-- **Automated daily pipeline** via GitHub Actions — fetches data, runs analytics, generates dashboard, and deploys to GitHub Pages
+- **Automated daily dashboard pipeline** via GitHub Actions — fetches lightweight data, runs analytics, generates dashboard, and deploys to GitHub Pages
+- **Nightly PUC refresh** on a persistent Linux VM — updates large BirdWeather PUC data files outside GitHub Actions
 - **Static dashboard** published automatically to GitHub Pages
 
 ## Data Sources
@@ -132,7 +133,7 @@ The dashboard is updated automatically every day — no manual steps needed beyo
 1. **Enter data** in the Google Sheets spreadsheet
 2. **GitHub Action runs daily at 6:30 AM ET** (cron: `30 11 * * *` UTC)
 3. The Action executes a 3-phase pipeline:
-   - **Phase 1 — Fetch data**: Downloads Google Sheets data, fetches weather data, and pulls BirdWeather PUC audio detections (in parallel)
+   - **Phase 1 — Fetch data**: Downloads Google Sheets data and migration/flyway data. Large BirdWeather PUC refreshes run separately on the Linux VM described in `docs/operations/puc-digitalocean.md`.
    - **Phase 2 — Run analytics**: Executes `all_sites_all_analytics.py` and `one_site_analytics.py`
    - **Phase 3 — Generate dashboard**: Runs `dashboard_update.py` to produce the static HTML dashboard
 4. The Action **commits** updated data and dashboard files to `main` and **deploys** to GitHub Pages
@@ -157,7 +158,7 @@ For code changes (new analytics, bug fixes, refactoring):
 1. **Google Sheets Download** → Raw Excel in `data/raw_data_from_gsheet/`
 2. **Site Merging** (`merge_sites_data.py`) → Unified `multi_site_data.xlsx` and CSVs
 3. **Weather Fetch** (`weather.py`) → `hourly_weather.csv`, `sunrise_sunset.csv`
-4. **BirdWeather Fetch** (`birdweather_specific_pucs.py`) → `study_site_puc_data.csv`
+4. **BirdWeather PUC Fetch** (`birdweather_specific_pucs.py`, `birdweather.py`) → `study_site_puc_data.csv`, `county_level_birdweather.parquet` via the nightly Linux VM job
 5. **Analytics** (`all_sites_all_analytics.py`, `one_site_analytics.py`) → Plot JSON/images in `docs/dashboard_plots/`
 6. **Dashboard Generation** (`dashboard_update.py`) → `docs/index.html`
 7. **Deployment** → GitHub Pages via `actions/deploy-pages`

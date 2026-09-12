@@ -1,0 +1,16 @@
+[Unit]
+Description=Backyard Ecology PUC data refresh
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=backyard
+Group=backyard
+EnvironmentFile=/etc/backyard-ecology/puc-refresh.env
+WorkingDirectory=/opt/backyard-ecology
+ExecStart=/opt/backyard-ecology/ops/run_puc_refresh.sh
+TimeoutStartSec=8h
+Nice=5
+IOSchedulingClass=best-effort
+IOSchedulingPriority=6
