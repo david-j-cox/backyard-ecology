@@ -1,12 +1,8 @@
 name: PUC Data Refresh
 
 on:
-  schedule:
-    # 1:00 AM ET every day (ET = UTC-5, so 06:00 UTC)
-    # During daylight saving time (EDT = UTC-4), this runs at 2:00 AM ET
-    - cron: '0 6 * * *'
-
-  # Manual trigger from the Actions tab
+  # Manual trigger from the Actions tab. Nightly PUC refresh now runs on a
+  # persistent Linux VM; see docs/operations/puc-digitalocean.md.
   workflow_dispatch:
 
 permissions:
