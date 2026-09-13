@@ -1144,12 +1144,52 @@ def main():
     else:
         logger.info(f"  No failures.")
 
+    dedupe_csv_by_id(output_path)
     sync_csv_to_duckdb(output_path)
 
 
 def quote_identifier(name: str) -> str:
     """Return a DuckDB-safe quoted identifier."""
     return '"' + name.replace('"', '""') + '"'
+
+
+def dedupe_csv_by_id(csv_path: Path):
+    """Remove duplicate detection IDs from the station CSV."""
+    if not csv_path.exists():
+        return
+
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+            original_fields = reader.fieldnames or []
+    except Exception as e:
+        logger.warning(f"Error reading existing file for de-duplication: {e}")
+        return
+
+    seen = set()
+    deduped = []
+    duplicate_count = 0
+    for row in rows:
+        detection_id = row.get("id")
+        if detection_id:
+            if detection_id in seen:
+                duplicate_count += 1
+                continue
+            seen.add(detection_id)
+        deduped.append(row)
+
+    if duplicate_count == 0:
+        return
+
+    fields = list(original_fields)
+    for row in deduped:
+        for key in row:
+            if key not in fields:
+                fields.append(key)
+
+    write_csv_atomic(deduped, fields, csv_path)
+    logger.info(f"Removed {duplicate_count:,} duplicate detection rows from {csv_path}")
 
 
 def sync_csv_to_duckdb(csv_path: Path):
