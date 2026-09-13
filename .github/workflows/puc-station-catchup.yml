@@ -61,6 +61,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Download station PUC CSV from release
+        run: |
+          gh release download study-site-puc-data \
+            --pattern "study_site_puc_data.csv" \
+            --dir data/ --clobber \
+            || echo "WARNING: No station PUC release data found, using git copy"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run station catch-up
         working-directory: scripts_notebooks
         run: |
@@ -79,18 +88,19 @@ jobs:
           retention-days: 14
           if-no-files-found: warn
 
-      - name: Commit and push station CSV
+      - name: Upload station PUC CSV to release
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/study_site_puc_data.csv
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Backfill PUC station data"
-            git pull --rebase origin main
-            git push
+          if [ ! -f data/study_site_puc_data.csv ]; then
+            echo "No station PUC CSV to upload"
+            exit 0
           fi
+          gh release view study-site-puc-data >/dev/null 2>&1 \
+            || gh release create study-site-puc-data \
+              --title "Study-site PUC data" \
+              --notes "Incremental BirdWeather station detections (managed outside git after exceeding GitHub's 100 MB file limit)"
+          gh release upload study-site-puc-data data/study_site_puc_data.csv --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload DuckDB to release
         if: always()
