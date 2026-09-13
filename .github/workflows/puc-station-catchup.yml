@@ -1,23 +1,34 @@
-name: PUC Data Refresh
+name: PUC Station Catch-up
 
 on:
-  # Manual trigger from the Actions tab. Nightly PUC refresh now runs on a
-  # persistent Linux VM; see docs/operations/puc-digitalocean.md.
   workflow_dispatch:
+    inputs:
+      stations:
+        description: "Space-separated BirdWeather station IDs to catch up"
+        required: true
+        default: "18618"
+      from_date:
+        description: "Start date, inclusive (YYYY-MM-DD)"
+        required: true
+      to_date:
+        description: "End date, inclusive (YYYY-MM-DD)"
+        required: true
+      lookback_days:
+        description: "Completeness-check lookback days"
+        required: true
+        default: "45"
 
 permissions:
   contents: write
 
 concurrency:
-  group: "puc-data-refresh"
+  group: "puc-station-catchup"
   cancel-in-progress: false
 
 jobs:
-  refresh:
+  catchup:
     runs-on: ubuntu-latest
-    # Backstop above the per-script budget in puc_data_refresh.py, so a hang
-    # outside the fetch scripts cannot hold the concurrency group all day.
-    timeout-minutes: 90
+    timeout-minutes: 180
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,15 +52,6 @@ jobs:
           ESSEX_BIRDWX_API_KEY=${{ secrets.ESSEX_BIRDWX_API_KEY }}
           EOF
 
-      - name: Download county BirdWeather data from release
-        run: |
-          gh release download county-birdweather \
-            --pattern "county_level_birdweather.parquet" \
-            --dir data/ --clobber \
-            || echo "WARNING: No existing county BirdWeather data found, starting fresh"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Download DuckDB from release
         run: |
           gh release download data \
@@ -59,46 +61,36 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run PUC data refresh
+      - name: Run station catch-up
         working-directory: scripts_notebooks
-        run: python puc_data_refresh.py
+        run: |
+          python birdweather_specific_pucs.py \
+            --stations ${{ inputs.stations }} \
+            --from "${{ inputs.from_date }}" \
+            --to "${{ inputs.to_date }}" \
+            --lookback "${{ inputs.lookback_days }}"
 
       - name: Upload run logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: puc-refresh-logs
+          name: puc-station-catchup-logs
           path: logs/
           retention-days: 14
           if-no-files-found: warn
 
-      - name: Commit and push changes
+      - name: Commit and push station CSV
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ logs/
+          git add data/study_site_puc_data.csv
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "PUC data refresh"
+            git commit -m "Backfill PUC station data"
             git pull --rebase origin main
             git push
           fi
-
-      - name: Upload county BirdWeather data to release
-        if: always()
-        run: |
-          if [ ! -f data/county_level_birdweather.parquet ]; then
-            echo "No county BirdWeather parquet to upload"
-            exit 0
-          fi
-          gh release view county-birdweather >/dev/null 2>&1 \
-            || gh release create county-birdweather \
-              --title "County BirdWeather data" \
-              --notes "Incremental county-level BirdWeather detection data (managed by CI pipeline)"
-          gh release upload county-birdweather data/county_level_birdweather.parquet --clobber
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload DuckDB to release
         if: always()
