@@ -1,0 +1,106 @@
+name: PUC Station Catch-up
+
+on:
+  workflow_dispatch:
+    inputs:
+      stations:
+        description: "Space-separated BirdWeather station IDs to catch up"
+        required: true
+        default: "18618"
+      from_date:
+        description: "Start date, inclusive (YYYY-MM-DD)"
+        required: true
+      to_date:
+        description: "End date, inclusive (YYYY-MM-DD)"
+        required: true
+      lookback_days:
+        description: "Completeness-check lookback days"
+        required: true
+        default: "45"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "puc-station-catchup"
+  cancel-in-progress: false
+
+jobs:
+  catchup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create .env file
+        run: |
+          cat > .env << 'EOF'
+          WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}
+          JAX_BIRDWX_API_KEY=${{ secrets.JAX_BIRDWX_API_KEY }}
+          ESSEX_BIRDWX_API_KEY=${{ secrets.ESSEX_BIRDWX_API_KEY }}
+          EOF
+
+      - name: Download DuckDB from release
+        run: |
+          gh release download data \
+            --pattern "backyard_ecology.duckdb" \
+            --dir data/ --clobber \
+            || echo "WARNING: No existing DB found, starting fresh"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run station catch-up
+        working-directory: scripts_notebooks
+        run: |
+          python birdweather_specific_pucs.py \
+            --stations ${{ inputs.stations }} \
+            --from "${{ inputs.from_date }}" \
+            --to "${{ inputs.to_date }}" \
+            --lookback "${{ inputs.lookback_days }}"
+
+      - name: Upload run logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: puc-station-catchup-logs
+          path: logs/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Commit and push station CSV
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/study_site_puc_data.csv
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Backfill PUC station data"
+            git pull --rebase origin main
+            git push
+          fi
+
+      - name: Upload DuckDB to release
+        if: always()
+        run: |
+          if [ ! -f data/backyard_ecology.duckdb ]; then
+            echo "No DuckDB file to upload"
+            exit 0
+          fi
+          gh release view data >/dev/null 2>&1 \
+            || gh release create data --title "DuckDB data store" --notes "Pipeline database"
+          gh release upload data data/backyard_ecology.duckdb --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
