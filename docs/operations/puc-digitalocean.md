@@ -102,3 +102,8 @@ so the backfill is safe to rerun. Existing data is preserved when a fetch fails.
 `.github/workflows/puc-data-refresh.yml` is intentionally manual-only. Do not
 re-add a schedule unless the large data files move back into an Actions-friendly
 storage and runtime model.
+
+For one-time station-only repairs that need existing GitHub Actions secrets,
+use the manual `PUC Station Catch-up` workflow. It avoids the county-level
+BirdWeather job and only runs `birdweather_specific_pucs.py` for the station and
+date range supplied at dispatch time.
