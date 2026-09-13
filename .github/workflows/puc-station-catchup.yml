@@ -1,18 +1,20 @@
 name: PUC Station Catch-up
 
 on:
+  schedule:
+    - cron: "23 8 * * *"
   workflow_dispatch:
     inputs:
       stations:
         description: "Space-separated BirdWeather station IDs to catch up"
         required: true
-        default: "18618"
+        default: "18618 21974"
       from_date:
         description: "Start date, inclusive (YYYY-MM-DD)"
-        required: true
+        required: false
       to_date:
         description: "End date, inclusive (YYYY-MM-DD)"
-        required: true
+        required: false
       lookback_days:
         description: "Completeness-check lookback days"
         required: true
@@ -72,12 +74,26 @@ jobs:
 
       - name: Run station catch-up
         working-directory: scripts_notebooks
+        env:
+          STATIONS: ${{ github.event.inputs.stations || '18618 21974' }}
+          FROM_DATE: ${{ github.event.inputs.from_date || '' }}
+          TO_DATE: ${{ github.event.inputs.to_date || '' }}
+          LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '45' }}
         run: |
+          if [ -z "$FROM_DATE" ]; then
+            FROM_DATE="$(date -u -d "${LOOKBACK_DAYS} days ago" +%F)"
+          fi
+          if [ -z "$TO_DATE" ]; then
+            TO_DATE="$(date -u +%F)"
+          fi
+          echo "Stations: $STATIONS"
+          echo "Date range: $FROM_DATE to $TO_DATE"
+          echo "Lookback days: $LOOKBACK_DAYS"
           python birdweather_specific_pucs.py \
-            --stations ${{ inputs.stations }} \
-            --from "${{ inputs.from_date }}" \
-            --to "${{ inputs.to_date }}" \
-            --lookback "${{ inputs.lookback_days }}"
+            --stations $STATIONS \
+            --from "$FROM_DATE" \
+            --to "$TO_DATE" \
+            --lookback "$LOOKBACK_DAYS"
 
       - name: Upload run logs
         if: always()
