@@ -48,50 +48,6 @@ def get_connection(read_only=False):
             con.close()
 
 
-def check_county_birdweather_pk(con):
-    """
-    Warn when county_birdweather still carries the legacy single-column PK.
-
-    This used to be an in-place migration from PK (id) to PK (id, county),
-    attempted with ALTER TABLE ... DROP CONSTRAINT. DuckDB does not implement
-    that option -- it raises NotImplementedException on every call -- and the
-    whole block sat inside a bare `except Exception: pass`. The result was a
-    migration that could never succeed and never said so, which is
-    indistinguishable from one that works. It ran unnoticed from 2026-03 until
-    a row-count audit turned it up.
-
-    The key is left alone here on purpose. Changing it requires rebuilding the
-    table (CREATE with the composite PK, INSERT INTO ... SELECT, DROP, RENAME)
-    *plus* a backfill from county_level_birdweather.parquet, because rows that
-    were already overwritten are gone from this table and a constraint swap
-    will not bring them back. That is a deliberate one-off, not something a
-    per-write schema check should attempt on a 1.4 GB database.
-
-    Until that happens, say so loudly on every run.
-    """
-    try:
-        pk = con.execute(
-            "SELECT constraint_column_names FROM duckdb_constraints() "
-            "WHERE table_name = 'county_birdweather' "
-            "AND constraint_type = 'PRIMARY KEY'"
-        ).fetchone()
-    except Exception as e:
-        # Introspection itself failing is unexpected and worth hearing about,
-        # but it must not take down a write path that is otherwise fine.
-        logger.warning(f"Could not read county_birdweather primary key: {e}")
-        return
-
-    if pk and sorted(pk[0]) == ["id"]:
-        logger.warning(
-            "county_birdweather still has the legacy PRIMARY KEY (id) instead of "
-            "(id, county). Detections inside the duval_fl / st_johns_fl bounding-box "
-            "overlap collapse to one row, so this table undercounts those counties. "
-            "county_level_birdweather.parquet is unaffected and remains the source "
-            "of truth. Fixing it needs a table rebuild plus a backfill from the "
-            "parquet -- see check_county_birdweather_pk in db.py."
-        )
-
-
 def init_schema(con):
     """
     Create all tables if they don't already exist. Idempotent.
@@ -211,30 +167,10 @@ def init_schema(con):
         )
     """)
 
-    con.execute("""
-        CREATE TABLE IF NOT EXISTS county_birdweather (
-            id                  VARCHAR,
-            "timestamp"         VARCHAR,
-            certainty           VARCHAR,
-            confidence          VARCHAR,
-            probability         VARCHAR,
-            score               VARCHAR,
-            lat                 VARCHAR,
-            lon                 VARCHAR,
-            species_common      VARCHAR,
-            species_scientific  VARCHAR,
-            species_ebird       VARCHAR,
-            station_id          VARCHAR,
-            station_name        VARCHAR,
-            sound_url           VARCHAR,
-            sound_start         VARCHAR,
-            sound_end           VARCHAR,
-            county              VARCHAR,
-            PRIMARY KEY (id, county)
-        )
-    """)
-
-    check_county_birdweather_pk(con)
+    # County-level BirdWeather data is not mirrored here. With 15M+ rows it
+    # alone pushed the release DB past GitHub's 2 GiB asset limit, nothing read
+    # it back from DuckDB, and county_level_birdweather.parquet (its own
+    # release asset) is the source of truth.
 
     # BirdCast tables share the same schema.
     # All columns are VARCHAR to handle dirty scraped data; analytics casts as needed.
