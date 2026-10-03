@@ -1127,7 +1127,7 @@ def main():
 
             logger.info(f"  Fetched {len(nodes):,} detections for station {station_id} on {day}")
             replace_station_day(output_path, station_id, day, nodes)
-            write_to_duckdb(nodes)
+            write_to_duckdb(nodes, station_id, day)
             total_fetched += len(nodes)
 
             time.sleep(1)
@@ -1145,12 +1145,6 @@ def main():
         logger.info(f"  No failures.")
 
     dedupe_csv_by_id(output_path)
-    sync_csv_to_duckdb(output_path)
-
-
-def quote_identifier(name: str) -> str:
-    """Return a DuckDB-safe quoted identifier."""
-    return '"' + name.replace('"', '""') + '"'
 
 
 def dedupe_csv_by_id(csv_path: Path):
@@ -1192,62 +1186,13 @@ def dedupe_csv_by_id(csv_path: Path):
     logger.info(f"Removed {duplicate_count:,} duplicate detection rows from {csv_path}")
 
 
-def sync_csv_to_duckdb(csv_path: Path):
+def write_to_duckdb(nodes, station_id, day):
     """
-    Rebuild study_site_puc_data from the CSV source of truth.
+    Replace one station-day in study_site_puc_data, mirroring replace_station_day.
 
-    The daily fetch path replaces incomplete station-days in the CSV. A plain
-    INSERT OR IGNORE into DuckDB cannot mirror those replacements, so the final
-    sync reloads the table from the refreshed CSV before the workflow uploads
-    the release database.
-    """
-    if not csv_path.exists():
-        logger.info(f"[DuckDB] No CSV found at {csv_path}; skipping final sync")
-        return
-
-    try:
-        import pandas as pd
-        from db import get_connection, init_schema
-
-        df = pd.read_csv(csv_path, dtype=str, keep_default_na=False)
-        df = df.replace({"": None})
-
-        with get_connection() as con:
-            init_schema(con)
-
-            existing_cols = {
-                row[0]
-                for row in con.execute(
-                    "SELECT column_name FROM information_schema.columns "
-                    "WHERE table_name = 'study_site_puc_data'"
-                ).fetchall()
-            }
-            for col in df.columns:
-                if col not in existing_cols:
-                    con.execute(
-                        f"ALTER TABLE study_site_puc_data ADD COLUMN IF NOT EXISTS {quote_identifier(col)} VARCHAR"
-                    )
-
-            con.execute("DELETE FROM study_site_puc_data")
-            columns = [quote_identifier(col) for col in df.columns]
-            column_list = ", ".join(columns)
-            con.register("study_site_puc_csv", df)
-            con.execute(
-                f"INSERT OR IGNORE INTO study_site_puc_data ({column_list}) "
-                f"SELECT {column_list} FROM study_site_puc_csv"
-            )
-            con.unregister("study_site_puc_csv")
-
-            count = con.execute("SELECT COUNT(*) FROM study_site_puc_data").fetchone()[0]
-            logger.info(f"[DuckDB] Synced study_site_puc_data from CSV: {count:,} total rows")
-
-    except Exception as e:
-        logger.warning(f"[DuckDB WARNING] Failed to sync PUC CSV to DuckDB: {e}")
-
-
-def write_to_duckdb(nodes):
-    """
-    INSERT OR IGNORE new detections into study_site_puc_data.
+    Only that station-day's rows are deleted and reinserted. Reloading the whole
+    table each run left dead blocks behind (DuckDB does not shrink the file on
+    DELETE) and pushed the database past the 2 GiB release asset limit.
     Handles dynamic sensor columns via ALTER TABLE ADD COLUMN IF NOT EXISTS.
     """
     if not nodes:
@@ -1279,6 +1224,11 @@ def write_to_duckdb(nodes):
                         f'ALTER TABLE study_site_puc_data ADD COLUMN IF NOT EXISTS "{col}" VARCHAR'
                     )
 
+            # Same day test as replace_station_day: the date in the timestamp's own offset
+            con.execute(
+                'DELETE FROM study_site_puc_data WHERE station_id = ? AND left("timestamp", 10) = ?',
+                [station_id, day.isoformat()],
+            )
             con.execute("INSERT OR IGNORE INTO study_site_puc_data SELECT * FROM df")
             count = con.execute("SELECT COUNT(*) FROM study_site_puc_data").fetchone()[0]
             logger.info(f"[DuckDB] study_site_puc_data: {count:,} total rows")
