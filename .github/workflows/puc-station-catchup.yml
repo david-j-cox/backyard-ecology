@@ -125,6 +125,9 @@ jobs:
             echo "No DuckDB file to upload"
             exit 0
           fi
+          # Reclaim space left by DELETE-and-reload syncs and refuse to clobber
+          # the release copy if the file is over the 2 GiB asset limit
+          python scripts_notebooks/compact_duckdb.py
           gh release view data >/dev/null 2>&1 \
             || gh release create data --title "DuckDB data store" --notes "Pipeline database"
           gh release upload data data/backyard_ecology.duckdb --clobber
