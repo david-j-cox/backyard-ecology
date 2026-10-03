@@ -183,7 +183,6 @@ def main():
         load_csv(DATA_DIR / "daily_summaries_all_locations.csv", "daily_summaries", con)
         load_csv(DATA_DIR / "phase_change_data.csv", "phase_changes", con)
         load_study_site_puc(DATA_DIR / "study_site_puc_data.csv", con)
-        load_parquet(DATA_DIR / "county_level_birdweather.parquet", "county_birdweather", con)
         load_parquet(DATA_DIR / "birdcast_data.parquet", "birdcast_data", con, add_date_key=True)
         load_parquet(DATA_DIR / "atlantic_flyway_corridor.parquet", "atlantic_flyway", con, add_date_key=True)
         load_parquet(DATA_DIR / "mississippi_flyway_corridor.parquet", "mississippi_flyway", con, add_date_key=True)
@@ -194,7 +193,7 @@ def main():
     with get_connection(read_only=True) as con:
         tables = [
             "hourly_weather", "sunrise_sunset", "raw_data", "daily_summaries",
-            "phase_changes", "study_site_puc_data", "county_birdweather",
+            "phase_changes", "study_site_puc_data",
             "birdcast_data", "atlantic_flyway", "mississippi_flyway", "pacific_flyway",
         ]
         for t in tables:
