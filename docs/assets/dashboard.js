@@ -268,6 +268,22 @@
       ul.append(li);
     }
 
+    // Entries the pipeline could not read, such as a mistyped time
+    for (const issue of (data.dataIssues || []).filter((i) => i.site === state.site)) {
+      const li = document.createElement("li");
+      li.className = "late";
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dot.setAttribute("aria-hidden", "true");
+      const text = document.createElement("span");
+      const strong = document.createElement("strong");
+      strong.textContent = "Check data entry";
+      text.append(strong, document.createTextNode(`: ${issue.bird} on ${fmtDate(parse(issue.date))} has ${issue.field.toLowerCase()} "${issue.value}"`));
+      li.append(dot, text);
+      li.title = "This entry could not be read, so it was left out. Correct it in the feeder sheet.";
+      ul.append(li);
+    }
+
     // A phase dated well outside the site's records is almost always a typo in the sheet
     const siteDates = feederDaily.filter((r) => r.site === state.site).map((r) => r.d);
     const first = d3.min(siteDates);
