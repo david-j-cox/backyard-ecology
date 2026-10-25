@@ -246,3 +246,6 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 }
 .div-matrix button:disabled { cursor: default; }
 .div-matrix button[aria-pressed="true"] { border-color: var(--ink); font-weight: 600; }
+
+.seed-key { grid-column: 1 / -1; margin: 0 0 4px; }
+.seed-key strong { color: var(--ink); }

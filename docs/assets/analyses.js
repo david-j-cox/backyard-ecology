@@ -655,80 +655,123 @@
   // ---- seed and side preference --------------------------------------------
   const JAX = "jacksonville_fl_32259";
 
+  // Matches seed_preference_by_bird and peck_distribution_by_bird in one_site_analytics.py
+  function seedPhases(dates, pecks) {
+    const dmin = d3.min(dates), dmax = d3.max(dates);
+    const bounds = BY.phases.filter((p) => p.site === JAX && p.d > dmin && p.d <= dmax).map((p) => +p.d).sort((a, b) => a - b);
+    const starts = [+dmin, ...bounds];
+    const mode = (vals) => d3.greatest(d3.rollups(vals.filter(Boolean), (v) => v.length, (v) => v), (a) => a[1])?.[0] || "No Seed";
+    return starts.map((a, i) => {
+      const b = i + 1 < starts.length ? starts[i + 1] : +dmax + BY.DAY;
+      const inside = pecks.filter((p) => +p.d >= a && +p.d < b);
+      const days = new Set(inside.map((p) => +p.d));
+      return { start: new Date(a), end: new Date(b), days: days.size,
+        left: mode(inside.map((p) => p.leftSeed)), right: mode(inside.map((p) => p.rightSeed)), empty: !inside.length };
+    }).filter((ph) => !ph.empty);
+  }
+
   function renderSeedPreference() {
     const dom = BY.domain();
     const sub = document.getElementById("seed-sub");
     const el = document.getElementById("seed-chart");
-    const pecks = A.pecks.filter(BY.inRange(dom));
-    const atJax = BY.state.site === JAX;
+    const peckEl = document.getElementById("peck-chart");
+    document.getElementById("peck-species").closest(".card-controls").style.display = "none";
+    const pecks = A.pecks.filter(BY.inRange(dom)).filter((p) => p.right != null);
     if (!pecks.length) {
       sub.textContent = "Pecks are recorded at Jacksonville only.";
       BY.empty(el, "No peck counts in this range.");
-      document.getElementById("peck-chart").replaceChildren();
+      peckEl.replaceChildren();
       return;
     }
-    const mode = (vals) => d3.greatest(d3.rollups(vals.filter(Boolean), (v) => v.length, (v) => v), (a) => a[1])?.[0] || "None";
-    const daily = d3.flatRollup(pecks.filter((p) => p.species !== SQUIRREL), (v) => ({
-      left: d3.sum(v, (p) => p.left || 0), right: d3.sum(v, (p) => p.right || 0),
-      leftSeed: mode(v.map((p) => p.leftSeed)), rightSeed: mode(v.map((p) => p.rightSeed)),
-    }), (p) => p.species, (p) => +p.d).map(([species, t, s]) => ({ species, d: new Date(t), ...s, ratio: Math.log((s.left + 1) / (s.right + 1)) }));
-    const bySpecies = d3.groups(daily, (r) => r.species).filter(([, v]) => v.length >= 5).sort((a, b) => b[1].length - a[1].length);
-    sub.textContent = `${atJax ? "" : "Pecks are recorded at Jacksonville only, so this shows Jacksonville. "}` +
-      "Each point is one day: the natural log of (left pecks + 1) ÷ (right pecks + 1). Above zero, more pecks on the left feeder; below, more on the right. " +
-      "Species with at least 5 days of peck counts in this range; the squirrel is left out, as in the study.";
-    const maxAbs = d3.max(daily, (r) => Math.abs(r.ratio)) || 1;
-    const rects = phaseRects(JAX);
-    const cards = bySpecies.map(([species, rowsRaw]) => {
+    const ink = BY.css("--ink"), muted = BY.css("--muted");
+    const daily = d3.flatRollup(pecks, (v) => ({ left: d3.sum(v, (p) => p.left || 0), right: d3.sum(v, (p) => p.right || 0) }),
+      (p) => p.species, (p) => +p.d).map(([species, t, x]) => ({ species, d: new Date(t), ...x, ratio: Math.log((x.left + 1) / (x.right + 1)) }));
+    const phs = seedPhases(daily.map((r) => r.d), pecks);
+    // Transition lines halfway between the last day of one phase and the first of the next;
+    // solid where either feeder side has no seed, dashed otherwise
+    const dayList = [...new Set(daily.map((r) => +r.d))].sort((a, b) => a - b);
+    const transitions = phs.slice(1).map((ph, i) => {
+      const before = dayList.filter((t) => t < +ph.start).pop() ?? +ph.start;
+      const after = dayList.find((t) => t >= +ph.start) ?? +ph.start;
+      const prev = phs[i];
+      const noSeed = [prev.left, prev.right, ph.left, ph.right].includes("No Seed");
+      return { d: new Date(before + (after - before) / 2), solid: noSeed };
+    });
+    const labels = [...new Set([...phs.map((p) => p.left), ...phs.map((p) => p.right)])];
+    const letter = new Map(labels.map((l, i) => [l, String.fromCharCode(65 + i)]));
+    const birds = d3.groups(daily.filter((r) => r.species !== SQUIRREL), (r) => r.species)
+      .filter(([, v]) => v.length >= 5).sort((a, b) => d3.ascending(a[0], b[0]));
+    const maxY = (d3.max(daily, (r) => Math.abs(r.ratio)) || 0) + 3;
+    const x0 = d3.utcDay.offset(d3.min(daily, (r) => r.d), -4), x1 = d3.utcDay.offset(d3.max(daily, (r) => r.d), 14);
+    sub.textContent = (BY.state.site === JAX ? "" : "Pecks are recorded at Jacksonville only, so this shows Jacksonville. ") +
+      "Each point is one day: ln((left pecks + 1) / (right pecks + 1)). Above zero, more pecks on the left feeder. " +
+      "Letters give the seed on each side for each phase: top for the left feeder, bottom for the right. " +
+      "Solid lines mark changes where a side had no seed; dashed lines mark other seed changes.";
+
+    const key = document.createElement("div");
+    key.className = "legend seed-key";
+    labels.forEach((l) => { const sp = document.createElement("span"); const b = document.createElement("strong"); b.textContent = letter.get(l); sp.append(b, document.createTextNode(` ${l}`)); key.append(sp); });
+    // Letters for phases of 3+ days (as in the study) that are wide enough to read
+    const pxPerMs = 256 / (x1 - x0);
+    const lettersFor = phs.filter((p) => (p.end - p.start) / BY.DAY >= 3 && (p.end - p.start) * pxPerMs >= 14).flatMap((p) => {
+      const mid = new Date((Math.max(+p.start, +x0) + Math.min(+p.end, +x1)) / 2);
+      return [{ d: mid, y: 0.9 * maxY, t: letter.get(p.left) }, { d: mid, y: -0.9 * maxY, t: letter.get(p.right) }];
+    });
+    const cards = birds.map(([bird, rowsRaw]) => {
       const rows = rowsRaw.sort((a, b) => a.d - b.d);
+      // Break the line at each phase change, as in the study figure
+      const seg = (d) => phs.findIndex((p) => d >= p.start && d < p.end);
       const div = document.createElement("div");
       const h = document.createElement("h4");
-      h.textContent = `${species} (${rows.length} days)`;
-      const byDay = new Map(rows.map((r) => [+r.d, r]));
-      const lineRows = d3.utcDays(rows[0].d, new Date(+rows[rows.length - 1].d + BY.DAY)).map((d) => ({ d, ratio: byDay.get(+d)?.ratio ?? null }));
+      h.textContent = bird;
       div.append(h, Plot.plot({
-        width: 300, height: 170, marginLeft: 36, marginRight: 8, marginTop: 10,
+        width: 300, height: 200, marginLeft: 36, marginRight: 8, marginTop: 8,
         style: { background: "transparent", color: BY.css("--ink-2"), fontSize: "11px" },
-        x: { type: "utc", domain: dom, ticks: 4 },
-        y: { domain: [-maxAbs, maxAbs], grid: true, label: null, ticks: 5, nice: true },
+        x: { type: "utc", domain: [x0, x1], ticks: 4, tickFormat: d3.utcFormat("%m-%d"), label: null },
+        y: { domain: [-maxY, maxY], grid: true, label: "Log(L/R)", ticks: 5 },
         marks: [
-          Plot.rect(rects, { x1: "x1", x2: "x2", fill: (s) => BY.phaseShade(s.description), fillOpacity: 0.16 }),
           Plot.ruleY([0], { stroke: BY.css("--axis") }),
-          Plot.text(["Left"], { frameAnchor: "top-left", dx: 3, dy: 2, fill: BY.css("--muted"), fontSize: 10 }),
-          Plot.text(["Right"], { frameAnchor: "bottom-left", dx: 3, dy: -2, fill: BY.css("--muted"), fontSize: 10 }),
-          Plot.lineY(lineRows, { x: "d", y: "ratio", stroke: BY.css("--s1"), strokeWidth: 1.5 }),
-          Plot.dot(rows, { x: "d", y: "ratio", r: 2.5, fill: BY.css("--s1"),
-            tip: true, title: (r) => `${BY.fmtDate(r.d)}\nLeft ${BY.fmt(r.left)} pecks (${r.leftSeed})\nRight ${BY.fmt(r.right)} pecks (${r.rightSeed})` }),
+          Plot.ruleX(transitions.filter((t) => t.solid), { x: "d", stroke: muted, strokeWidth: 1.5 }),
+          Plot.ruleX(transitions.filter((t) => !t.solid), { x: "d", stroke: muted, strokeWidth: 1, strokeDasharray: "4,3" }),
+          Plot.text(lettersFor, { x: "d", y: "y", text: "t", fill: BY.css("--ink-2"), fontWeight: 600, fontSize: 12 }),
+          Plot.line(rows, { x: "d", y: "ratio", z: (r) => seg(r.d), stroke: ink, strokeWidth: 1 }),
+          Plot.dot(rows, { x: "d", y: "ratio", r: 2.5, fill: ink,
+            tip: true, title: (r) => `${BY.fmtDate(r.d)}\nLeft ${BY.fmt(r.left)} pecks, right ${BY.fmt(r.right)} pecks` }),
         ],
       }));
       return div;
     });
-    if (cards.length) el.replaceChildren(...cards);
+    if (cards.length) el.replaceChildren(key, ...cards);
     else BY.empty(el, "No species with 5 or more days of peck counts in this range.");
 
-    // Pecks per visit, by the seed on the side that was pecked
-    const peckSel = bindOnce("peck-species", "change", (e) => BY.update({ peckSpecies: e.target.value }));
-    const counts = d3.rollups(pecks, (v) => v.length, (p) => p.species).sort((a, b) => b[1] - a[1]);
-    const chosen = setOptions(peckSel, [["", "All species"], ...counts.filter(([s, n]) => n >= 10 && s !== SQUIRREL).map(([s, n]) => [s, `${s} (${BY.fmt(n)})`])], BY.state.peckSpecies || "");
-    const sel = pecks.filter((p) => (chosen ? p.species === chosen : p.species !== SQUIRREL));
-    const sides = sel.flatMap((p) => [{ seed: p.leftSeed, pecks: p.left }, { seed: p.rightSeed, pecks: p.right }])
-      .filter((s) => s.seed && s.pecks > 0);
-    const peckEl = document.getElementById("peck-chart");
-    if (!sides.length) { BY.empty(peckEl, "No pecks recorded for this selection."); return; }
-    const seeds = A.seeds.filter((s) => sides.some((x) => x.seed === s));
-    const dist = d3.groups(sides, (s) => s.seed).flatMap(([seed, v]) =>
-      d3.rollups(v, (g) => g.length, (s) => s.pecks).map(([pecksN, n]) => ({ seed, pecks: pecksN, n, share: n / v.length })));
-    const seedColor = (s) => BY.css(`--s${(A.seeds.indexOf(s) % 8) + 1}`);
-    peckEl.replaceChildren(BY.legend(seeds.map((s) => ({ label: s, color: seedColor(s) })), "line"), Plot.plot({
-      width: Math.max(320, peckEl.clientWidth), height: 300, marginLeft: 56, marginRight: 20,
-      style: { background: "transparent", color: BY.css("--ink-2"), fontSize: "12px" },
-      x: { label: "Pecks in the visit", domain: [1, 40], grid: true },
-      y: { type: "log", label: "Share of visits to that seed", grid: true, tickFormat: "%" },
-      color: { domain: seeds, range: seeds.map(seedColor) },
-      marks: [
-        Plot.line(dist.filter((d) => d.pecks <= 40), { x: "pecks", y: "share", stroke: "seed", strokeWidth: 2, sort: "pecks" }),
-        Plot.dot(dist.filter((d) => d.pecks <= 40), { x: "pecks", y: "share", fill: "seed", r: 3,
-          tip: true, title: (d) => `${d.seed}\n${d.pecks} pecks: ${d3.format(".1%")(d.share)} of visits (${BY.fmt(d.n)})` }),
-      ],
-    }), noteEl("Each visit's left and right pecks count toward the seed on that side; visits with zero pecks on a side are left out, as in the study."));
+    // Pecks per visit: per bird, the share of visits with each peck count, by seed (pecks > 0)
+    const SEED_COLORS = { "Special Finch Food": ink, "Golden Safflower": "#d4a017", "Sunflower, Safflower, Mealworm, Peanuts": "#d03b3b" };
+    const seedColor = (s) => SEED_COLORS[s] || BY.css(`--s${(A.seeds.indexOf(s) % 8) + 1}`);
+    const peckBirds = d3.groups(pecks.filter((p) => p.species !== SQUIRREL), (p) => p.species).filter(([, v]) => v.length >= 10).sort((a, b) => d3.ascending(a[0], b[0]));
+    const seedsSeen = new Set();
+    const panels = peckBirds.map(([bird, v]) => {
+      const sides = v.flatMap((p) => [{ seed: p.leftSeed, n: p.left }, { seed: p.rightSeed, n: p.right }]).filter((x) => x.seed && x.n > 0);
+      const dist = d3.groups(sides, (x) => x.seed).flatMap(([seed, g]) => { seedsSeen.add(seed);
+        return d3.rollups(g, (h) => h.length, (x) => x.n).map(([n, c]) => ({ seed, n, share: c / g.length, c })); }).filter((x) => x.n <= 40);
+      const div = document.createElement("div");
+      const h = document.createElement("h4");
+      h.textContent = bird;
+      div.append(h, dist.length ? Plot.plot({
+        width: 300, height: 200, marginLeft: 44, marginRight: 8, marginTop: 8,
+        style: { background: "transparent", color: BY.css("--ink-2"), fontSize: "11px" },
+        x: { domain: [0.5, 40.5], ticks: [1, 5, 10, 15, 20, 25, 30, 35, 40], label: "Number of pecks" },
+        y: { type: "log", domain: [0.001, 1.1], label: "Proportion of visits", tickFormat: "~g" },
+        marks: [
+          Plot.rectY(dist, { x1: (d) => d.n - 0.45, x2: (d) => d.n + 0.45, y1: 0.001, y2: "share", fill: (d) => seedColor(d.seed), fillOpacity: 0.4,
+            tip: true, title: (d) => `${d.seed}\n${d.n} pecks: ${d3.format(".1%")(d.share)} of visits (${BY.fmt(d.c)})` }),
+        ],
+      }) : noteEl("No pecks recorded."));
+      return div;
+    });
+    const seedKey = BY.legend([...seedsSeen].map((sd) => ({ label: sd, color: seedColor(sd) })));
+    const grid = document.createElement("div");
+    grid.className = "seed-grid";
+    grid.append(...panels);
+    peckEl.replaceChildren(seedKey, grid, noteEl("Birds with at least 10 recorded visits; the squirrel is left out, as in the study. Bars sit at the actual peck count."));
   }
 })();
