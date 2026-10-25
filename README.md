@@ -8,17 +8,18 @@ This project analyzes bird feeder visit data collected from multiple sites, focu
 - **Temporal patterns** of bird visits throughout the day and across seasons
 - **Species diversity** metrics including Shannon H, species richness, and beta diversity
 - **Migration correlation** with BirdCast migration data
-- **Weather correlation** with OpenWeatherMap environmental data
+- **Weather correlation** with Open-Meteo weather and the PUC's own temperature/humidity sensors
 - **Automated daily dashboard pipeline** via GitHub Actions — fetches lightweight data, runs analytics, generates dashboard, and deploys to GitHub Pages
 - **Nightly PUC refresh** on a persistent Linux VM — updates large BirdWeather PUC data files outside GitHub Actions
-- **Static dashboard** published automatically to GitHub Pages
+- **Dashboard** published automatically to GitHub Pages: an interactive backyard view and a study page for presenting figures
 
 ## Data Sources
 
 - **Primary Data**: Google Sheets — bird feeder visit records with timestamps (downloaded automatically by the pipeline)
 - **BirdWeather PUC Audio Data**: Species detections from BirdWeather stations at each study site
 - **Migration Data**: BirdCast API integration for migration timing correlation
-- **Weather Data**: OpenWeatherMap API for environmental context (temperature, wind, precipitation)
+- **Weather Data**: Open-Meteo (no API key) for hourly temperature, wind, and precipitation; OpenWeatherMap history through Feb 2026
+- **Backyard Sensors**: The PUC's on-board temperature, humidity, pressure, air quality, and sound level readings, stored as hourly means
 
 ## Setup Instructions
 
@@ -65,11 +66,14 @@ backyard-ecology/
 │   ├── run_prod_scripts.py                # Orchestrates the full pipeline
 │   ├── all_sites_all_analytics.py         # Cross-site analytics
 │   ├── one_site_analytics.py              # Single-site analytics
-│   ├── weather.py                         # Weather data fetching
+│   ├── weather.py                         # OpenWeather fetch (retired; shared CSV schema)
+│   ├── open_meteo_weather.py              # Daily weather fill from Open-Meteo
+│   ├── puc_environment.py                 # PUC sensor history as hourly means
 │   ├── merge_sites_data.py                # Merges multi-site Google Sheets data
 │   ├── birdweather.py                     # BirdWeather API utilities
 │   ├── birdweather_specific_pucs.py       # BirdWeather PUC station data
-│   └── dashboard_update.py                # Generates static HTML dashboard
+│   ├── dashboard_update.py                # Generates docs/study.html from saved plots
+│   └── export_dashboard_data.py           # Writes docs/data/dashboard.json for the backyard view
 ├── data/
 │   ├── raw_data_from_gsheet/              # Raw data downloaded from Google Sheets
 │   ├── multi_site_data.xlsx               # Merged bird visit data
@@ -77,10 +81,14 @@ backyard-ecology/
 │   ├── daily_summaries_all_locations.csv  # Daily summary statistics
 │   ├── hourly_weather.csv                 # Hourly weather observations
 │   ├── sunrise_sunset.csv                 # Sunrise/sunset times
+│   ├── puc_environment_hourly.csv         # PUC sensor readings, hourly means
 │   ├── study_site_puc_data.csv            # BirdWeather PUC detections
 │   └── phase_change_data.csv              # Phase-change analysis data
 ├── docs/                                  # Generated dashboard (GitHub Pages)
-│   ├── index.html                         # Main dashboard page
+│   ├── index.html                         # Interactive backyard view (static page)
+│   ├── study.html                         # Study figures, generated daily
+│   ├── assets/                            # Dashboard CSS and JavaScript
+│   ├── data/dashboard.json                # Daily summaries for the backyard view
 │   └── dashboard_plots/                   # Plot JSON files and images
 └── .github/workflows/
     ├── update-dashboard.yml               # Daily automated pipeline
@@ -133,9 +141,9 @@ The dashboard is updated automatically every day — no manual steps needed beyo
 1. **Enter data** in the Google Sheets spreadsheet
 2. **GitHub Action runs daily at 6:30 AM ET** (cron: `30 11 * * *` UTC)
 3. The Action executes a 3-phase pipeline:
-   - **Phase 1 — Fetch data**: Downloads Google Sheets data and migration/flyway data. Large BirdWeather PUC refreshes run separately on the Linux VM described in `docs/operations/puc-digitalocean.md`.
+   - **Phase 1 — Fetch data**: Downloads Google Sheets data, migration/flyway data, Open-Meteo weather, and PUC sensor history. Large BirdWeather PUC refreshes run separately on the Linux VM described in `docs/operations/puc-digitalocean.md`.
    - **Phase 2 — Run analytics**: Executes `all_sites_all_analytics.py` and `one_site_analytics.py`
-   - **Phase 3 — Generate dashboard**: Runs `dashboard_update.py` to produce the static HTML dashboard
+   - **Phase 3 — Generate dashboard**: Runs `dashboard_update.py` (study page) and `export_dashboard_data.py` (backyard view data)
 4. The Action **commits** updated data and dashboard files to `main` and **deploys** to GitHub Pages
 
 You can also trigger the pipeline manually from the **Actions** tab using the `workflow_dispatch` trigger.
@@ -157,10 +165,10 @@ For code changes (new analytics, bug fixes, refactoring):
 
 1. **Google Sheets Download** → Raw Excel in `data/raw_data_from_gsheet/`
 2. **Site Merging** (`merge_sites_data.py`) → Unified `multi_site_data.xlsx` and CSVs
-3. **Weather Fetch** (`weather.py`) → `hourly_weather.csv`, `sunrise_sunset.csv`
+3. **Weather Fetch** (`open_meteo_weather.py`, `puc_environment.py`) → `hourly_weather.csv`, `sunrise_sunset.csv`, `puc_environment_hourly.csv`
 4. **BirdWeather PUC Fetch** (`birdweather_specific_pucs.py`, `birdweather.py`) → `study_site_puc_data.csv`, `county_level_birdweather.parquet` via the nightly Linux VM job
 5. **Analytics** (`all_sites_all_analytics.py`, `one_site_analytics.py`) → Plot JSON/images in `docs/dashboard_plots/`
-6. **Dashboard Generation** (`dashboard_update.py`) → `docs/index.html`
+6. **Dashboard Generation** (`dashboard_update.py`, `export_dashboard_data.py`) → `docs/study.html`, `docs/data/dashboard.json` (read by `docs/index.html`)
 7. **Deployment** → GitHub Pages via `actions/deploy-pages`
 
 ## Development

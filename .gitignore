@@ -38,6 +38,8 @@ Thumbs.db
 # *.xlsx
 # *.csv
 *.json
+# Daily summaries read by the interactive dashboard (docs/index.html)
+!docs/data/*.json
 *.log
 *.parquet
 *.duckdb
