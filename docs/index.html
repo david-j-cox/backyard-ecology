@@ -1,301 +1,122 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Backyard Ecology Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 98%;
-            margin: 0 auto;
-        }
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-        }
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        .plots-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 100px;
-            margin: 0 auto 50px auto;
-            background: transparent;  /* Add this line */
-        }
-        .plot-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            width: 100%;
-        }
-        .plot-card h1 {
-            margin-top: 0;
-            color: #333;
-            text-align: center;
-        }
-        .plot-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-        .plot-card img {
-            width: 100%;
-            max-height: 1500px;
-            height: auto;
-            border-radius: 5px;
-            object-fit: contain;
-        }
-        .plot-card iframe {
-            width: 100%;
-            height: 800px;
-            border: none;
-            border-radius: 5px;
-        }
-        .metadata {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backyard Ecology</title>
+  <link rel="stylesheet" href="assets/dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6.16/dist/plot.umd.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Backyard Ecology Dashboard</h1>
-            <p>Last updated: 2026-10-25 15:11</p>
-        </div>
-        
-        <div class="plots-grid">
-
-                <div class="plot-card">
-                    <h1>Daily Bird Feeder Visits by Species</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/species_visits_by_date.png" alt="Daily Bird Feeder Visits by Species">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:05:35.666974
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Multiple Baseline of Feeder Visits</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/mbd_plot.png" alt="Multiple Baseline of Feeder Visits">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:07:02.067747
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Ecological Diversity Metrics</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/diversity_metrics.png" alt="Ecological Diversity Metrics">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:07:08.710995
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Correlation Matrix of Diversity Metrics</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/diversity_metrics_corr_matrix.png" alt="Correlation Matrix of Diversity Metrics">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:07:11.048465
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Auditory Data from Essex Fells PUC</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/puc_audio_data_nj_jcv.png" alt="Auditory Data from Essex Fells PUC">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:07:23.243072
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Auditory Data from Jacksonville PUC</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/puc_audio_data_puc_21974_cox.png" alt="Auditory Data from Jacksonville PUC">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:07:24.489125
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Auditory Data from Study Site vs County with Migration</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/puc_audio_data_puc_site_to_county.png" alt="Auditory Data from Study Site vs County with Migration">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:09:04.027439
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Study Site vs County PUC Activity by Station</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/puc_site_county_faceted.png" alt="Study Site vs County PUC Activity by Station">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:09:04.631845
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>US Flyway Migration - Total Birds</h1>
-                    <div class="plot-content">
-                        <iframe src="dashboard_plots/interactive/all_flyways_total_birds.html"></iframe>
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Interactive Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:11:43.643330
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Heatmap: Date vs Time of Day as a Count of Observations</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/heatmap_counts.png" alt="Heatmap: Date vs Time of Day as a Count of Observations">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:06:01.984600
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Heatmap: Date vs Time of Day as a Proportion of Observations</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/heatmap_proportions.png" alt="Heatmap: Date vs Time of Day as a Proportion of Observations">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:06:28.165546
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Proportion of visits by wind speed and temperature</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/prop_visits_wind_temp.png" alt="Proportion of visits by wind speed and temperature">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:06:31.896794
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Species Clustermap Using Visits and Weather</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/species_cluster_visits_by_weather.png" alt="Species Clustermap Using Visits and Weather">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:06:29.757148
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>All Birds: Bout Analysis</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/all_birds_bout_analysis.png" alt="All Birds: Bout Analysis">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:06:44.364022
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>All Birds: Bout Analysis Separating Seed and No Seed Conditions</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/all_birds_bout_seed_no_seed_separate.png" alt="All Birds: Bout Analysis Separating Seed and No Seed Conditions">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:06:48.990501
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>All Birds: Bout Analysis (Within-Date Only)</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/all_birds_bout_analysis_within_date.png" alt="All Birds: Bout Analysis (Within-Date Only)">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:06:46.628991
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Bird Species: Bout Analysis (log space)</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/individual_species_bout_analysis.png" alt="Bird Species: Bout Analysis (log space)">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:07:00.923212
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Seed Preference by Bird and Feeder Side
-(Right Side More Open)</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/seed_preference_by_bird.png" alt="Seed Preference by Bird and Feeder Side
-(Right Side More Open)">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:09:08.837337
-                    </div>
-                </div>
-                
-                <div class="plot-card">
-                    <h1>Number of Pecks per Visit by Seed Type</h1>
-                    <div class="plot-content">
-                        <img src="dashboard_plots/images/peck_distribution_by_bird.png" alt="Number of Pecks per Visit by Seed Type">
-                    </div>
-                    <div class="metadata">
-                        <strong>Type:</strong> Static Plot<br>
-                        <strong>Created:</strong> 2026-10-25T15:09:11.289645
-                    </div>
-                </div>
-                
-        </div>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <h1>Backyard Ecology</h1>
+      <nav class="tabs" aria-label="Sections">
+        <a href="index.html" aria-current="page">Backyard</a>
+        <a href="study.html">Study</a>
+      </nav>
     </div>
+  </header>
+
+  <main class="wrap">
+    <div class="filters" role="group" aria-label="Filters">
+      <label>Site
+        <select id="site"></select>
+      </label>
+      <div class="range" role="radiogroup" aria-label="Date range">
+        <button type="button" data-days="30">30 days</button>
+        <button type="button" data-days="90" aria-pressed="true">90 days</button>
+        <button type="button" data-days="365">1 year</button>
+        <button type="button" data-days="0">All</button>
+      </div>
+      <label class="toggle"><input type="checkbox" id="phases"> Show study phases</label>
+    </div>
+
+    <section aria-labelledby="health-h">
+      <h2 id="health-h" class="visually-hidden">Data health</h2>
+      <ul id="health" class="health"></ul>
+    </section>
+
+    <section id="phase-key" class="phase-key" aria-label="Study phases" hidden></section>
+
+    <section class="tiles" id="tiles" aria-label="Summary"></section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Feeder visits by species</h2>
+        <p class="sub" id="feeder-sub"></p>
+      </div>
+      <div id="feeder-chart" class="chart"></div>
+      <details class="table-view"><summary>Table</summary><div id="feeder-table"></div></details>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Feeder visits by time of day</h2>
+        <p class="sub">Each cell is one hour of one day. Stronger color means more visits.</p>
+      </div>
+      <div id="hour-chart" class="chart"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>What the microphones heard</h2>
+        <p class="sub">BirdWeather detections per day at the study site and across the county, with BirdCast's estimate of birds migrating overhead each night.</p>
+      </div>
+      <h3 class="panel-title">Study site detections per day</h3>
+      <div id="station-chart" class="chart short"></div>
+      <h3 class="panel-title">County detections per day</h3>
+      <div id="county-chart" class="chart short"></div>
+      <h3 class="panel-title">Birds migrating overhead per night</h3>
+      <div id="migration-chart" class="chart short"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Backyard weather</h2>
+        <p class="sub" id="weather-sub"></p>
+      </div>
+      <h3 class="panel-title">Daily high temperature (°C)</h3>
+      <div id="temp-chart" class="chart short"></div>
+      <h3 class="panel-title">Rain per day (mm)</h3>
+      <div id="rain-chart" class="chart short"></div>
+      <h3 class="panel-title">Wind, daily mean (m/s)</h3>
+      <div id="wind-chart" class="chart short"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Bird activity and weather</h2>
+        <p class="sub">One dot per day in the selected range. The correlation (r) measures how closely the two move together; it does not show cause.</p>
+      </div>
+      <div class="corr-layout">
+        <div id="corr-chart" class="chart"></div>
+        <div class="corr-side">
+          <div class="range" role="radiogroup" aria-label="Activity" id="corr-activity">
+            <button type="button" data-activity="detections">PUC detections</button>
+            <button type="button" data-activity="visits">Feeder visits</button>
+          </div>
+          <ul class="corr-list" id="corr-list" aria-label="Weather measures"></ul>
+          <p class="corr-stat" id="corr-stat"></p>
+          <p class="sub" id="corr-note"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Species heard at the study site</h2>
+        <p class="sub" id="species-sub"></p>
+      </div>
+      <div id="species-new" class="new-species"></div>
+      <div id="species-chart" class="chart"></div>
+      <details class="table-view"><summary>Table</summary><div id="species-table" class="table-wrap"></div></details>
+    </section>
+
+    <p class="footnote">Data updated <span id="generated"></span>. The migration map across US flyways is at <a href="dashboard_plots/interactive/all_flyways_total_birds.html">flyway heatmap</a>.</p>
+  </main>
+
+  <script src="assets/dashboard.js"></script>
 </body>
 </html>
