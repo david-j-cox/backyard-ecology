@@ -17,6 +17,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import duckdb
+import numpy as np
+import pandas as pd
 
 from db import DB_PATH
 
@@ -56,6 +58,18 @@ BIRDCAST_REGIONS = {
     "US-AL-081": {"name": "Lee County, AL", "site": "auburn_al_36830"},
     "US-CO-013": {"name": "Boulder County, CO", "site": None},
     "US-CA-013": {"name": "Contra Costa County, CA", "site": None},
+}
+
+# BirdCast flyway tables, and which flyway each study site sits in
+FLYWAYS = {
+    "atlantic_flyway": "Atlantic",
+    "mississippi_flyway": "Mississippi",
+    "pacific_flyway": "Pacific",
+}
+SITE_FLYWAYS = {
+    "jacksonville_fl_32259": "atlantic_flyway",
+    "essex_fells_nj_07021": "atlantic_flyway",
+    "auburn_al_36830": "mississippi_flyway",
 }
 
 PHASE_LOCATIONS = {
@@ -238,23 +252,104 @@ def birdcast_night(scrape_timestamp, migration_date):
     return night.isoformat()
 
 
+def _number(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def export_migration(con):
-    """Birds crossing each BirdCast region per night."""
+    """Birds crossing each BirdCast region per night, with how they flew."""
     nights = {}
-    for code, scraped, mdate, total in con.execute(
-        "SELECT region_code, scrape_timestamp, migration_date, total_birds FROM birdcast_data"
+    for code, scraped, mdate, total, peak, direction, speed, altitude in con.execute(
+        """
+        SELECT region_code, scrape_timestamp, migration_date, total_birds, peak_birds_in_flight,
+               flight_direction, flight_speed_mph, flight_altitude_ft
+        FROM birdcast_data
+        """
     ).fetchall():
         if code not in BIRDCAST_REGIONS:
             continue
         night = birdcast_night(scraped, mdate)
-        try:
-            total = int(float(total))
-        except (TypeError, ValueError):
+        total = _number(total)
+        if not night or total is None:
             continue
-        if night:
-            # Later scrapes of the same night win
+        # Later scrapes of the same night win
+        if (code, night) in nights and nights[(code, night)][0] >= scraped:
+            continue
+        nights[(code, night)] = (scraped, [code, night, int(total), _number(peak),
+                                           (direction or "").strip() or None, _number(speed), _number(altitude)])
+    return [row for _key, (_s, row) in sorted(nights.items())]
+
+
+def export_flyways(con):
+    """Birds crossing each whole flyway per night: the sum over its counties."""
+    out = []
+    for table, name in FLYWAYS.items():
+        nights = {}
+        for code, scraped, mdate, total in con.execute(
+            f"SELECT region_code, scrape_timestamp, migration_date, total_birds FROM {table}"
+        ).fetchall():
+            night = birdcast_night(scraped, mdate)
+            total = _number(total)
+            if not night or total is None:
+                continue
+            if (code, night) in nights and nights[(code, night)][0] >= scraped:
+                continue
             nights[(code, night)] = (scraped, total)
-    return [[c, n, t] for (c, n), (_s, t) in sorted(nights.items())]
+        totals = {}
+        for (code, night), (_s, total) in nights.items():
+            birds, regions = totals.get(night, (0, 0))
+            totals[night] = (birds + total, regions + 1)
+        out += [[table, night, int(birds), regions] for night, (birds, regions) in sorted(totals.items())]
+    return out
+
+
+def export_migration_species(migration, station_species_daily, station_daily, species_names):
+    """
+    How closely each species' next-morning detections follow the night's migration.
+
+    BirdCast counts birds flying overnight, so night N is paired with the
+    station's detections on day N+1. Both series are log-scaled and taken as
+    deviations from a centered 7-day median, which removes the shared seasonal
+    trend (migration and resident song both peak in spring and fall) and keeps
+    the night-to-night signal. Exploratory: one correlation per species.
+    """
+    out = []
+    mig = pd.DataFrame(migration, columns=["region", "night", "birds", "peak", "direction", "speed", "altitude"])
+    days = pd.DataFrame(station_daily, columns=["station", "date", "detections", "species"])
+    spd = pd.DataFrame(station_species_daily, columns=["station", "species", "date", "detections"])
+
+    def anomaly(series):
+        logged = np.log10(series + 1)
+        return logged - logged.rolling(7, center=True, min_periods=4).median()
+
+    for station_id, meta in STATIONS.items():
+        region = next((c for c, r in BIRDCAST_REGIONS.items() if r["site"] == meta["site"]), None)
+        if region is None:
+            continue
+        m = mig[mig["region"] == region]
+        if m.empty:
+            continue
+        birds = pd.Series(m["birds"].values, index=pd.to_datetime(m["night"]) + pd.Timedelta(days=1)).asfreq("D")
+        on = days[days["station"] == station_id]
+        station_on = pd.Series(1, index=pd.to_datetime(on["date"])).asfreq("D")
+        mig_anom = anomaly(birds)
+        sp = spd[spd["station"] == station_id]
+        for idx, group in sp.groupby("species"):
+            counts = pd.Series(group["detections"].values, index=pd.to_datetime(group["date"]))
+            # Zero on days the station ran without hearing the species; missing when it was off
+            counts = counts.reindex(station_on.index).fillna(0).where(station_on.notna())
+            if (counts > 0).sum() < 15:
+                continue
+            pair = pd.concat([mig_anom, anomaly(counts)], axis=1).dropna()
+            if len(pair) < 30:
+                continue
+            r = pair.iloc[:, 0].corr(pair.iloc[:, 1])
+            if pd.notna(r):
+                out.append([station_id, int(idx), round(float(r), 3), int(len(pair)), int((counts > 0).sum())])
+    return out
 
 
 def export_phases(con):
@@ -369,6 +464,7 @@ def main():
         species_names, station_species_daily = export_station_species_daily(con)
         county_daily = export_county_puc(con)
         migration = export_migration(con)
+        flyways = export_flyways(con)
         phases = export_phases(con)
         weather = export_weather(con)
         environment = export_puc_environment(con)
@@ -396,7 +492,17 @@ def main():
         "speciesNames": species_names,
         "stationSpeciesDaily": {"cols": ["station", "species", "date", "detections"], "rows": station_species_daily},
         "countyDaily": {"cols": ["county", "date", "detections", "species"], "rows": county_daily},
-        "migration": {"cols": ["region", "night", "birds"], "rows": migration},
+        "migration": {
+            "cols": ["region", "night", "birds", "peak", "direction", "speedMph", "altitudeFt"],
+            "rows": migration,
+        },
+        "flyways": {name: label for name, label in FLYWAYS.items()},
+        "siteFlyways": SITE_FLYWAYS,
+        "flywayNightly": {"cols": ["flyway", "night", "birds", "regions"], "rows": flyways},
+        "migrationSpecies": {
+            "cols": ["station", "species", "r", "days", "daysDetected"],
+            "rows": export_migration_species(migration, station_species_daily, station_daily, species_names),
+        },
         "phases": {"cols": ["site", "start", "description", "ratio"], "rows": phases},
         "weatherDaily": {
             "cols": ["site", "date", "tempMin", "tempMean", "tempMax", "rainMm", "windMean", "gustMax",
