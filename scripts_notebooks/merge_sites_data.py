@@ -348,7 +348,7 @@ def main():
 
 def write_to_duckdb(output_dir: Path, logger: logging.Logger) -> None:
     """
-    Bulk-load the just-written CSVs into DuckDB (INSERT OR REPLACE).
+    Load the just-written CSVs into DuckDB, replacing each table's contents.
     Wrapped in try/except so CSV path still works if DuckDB fails.
     """
     try:
@@ -392,10 +392,26 @@ def write_to_duckdb(output_dir: Path, logger: logging.Logger) -> None:
                     dropped = before - len(df)
                     if dropped:
                         logger.info(f"[DuckDB] {table_name}: dropped {dropped} rows missing PK columns")
+                    # Repeated keys in the sheets: keep the last, as the old upsert did
+                    df = df.drop_duplicates(subset=pk_cols, keep="last")
                 if df.empty:
                     continue
 
-                con.execute(f'INSERT OR REPLACE INTO {table_name} SELECT * FROM df')
+                # The CSVs hold the sheets' full history, so replace the table
+                # rather than upsert: an upsert keeps rows deleted or re-dated
+                # in the sheet (a corrected 9/13/16 phase stayed in 2016).
+                # Skip the replace if the new data is much smaller than what is
+                # stored, which points to a truncated download, not an edit.
+                existing = con.execute(f"SELECT COUNT(*) FROM {table_name}").fetchone()[0]
+                if len(df) >= 0.9 * existing:
+                    con.execute(f"DELETE FROM {table_name}")
+                    con.execute(f"INSERT INTO {table_name} SELECT * FROM df")
+                else:
+                    logger.warning(
+                        f"[DuckDB] {table_name}: new data has {len(df):,} rows vs {existing:,} stored; "
+                        "upserting instead of replacing"
+                    )
+                    con.execute(f'INSERT OR REPLACE INTO {table_name} SELECT * FROM df')
                 count = con.execute(f"SELECT COUNT(*) FROM {table_name}").fetchone()[0]
                 logger.info(f"[DuckDB] {table_name}: {count:,} total rows")
 
