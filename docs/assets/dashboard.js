@@ -125,24 +125,28 @@
       .map((s) => ({ ...s, x1: new Date(Math.max(s.x1, a)), x2: new Date(Math.min(s.x2, b)) }));
   }
 
-  function phaseMarks(el) {
+  // Each food condition keeps one shade everywhere; extinction is the unshaded baseline
+  const PHASE_SHADES = {
+    "Seed": "--s3",
+    "Low Dove Mix": "--s4",
+    "Low Dove Mix (One Side)": "--s7",
+    "Low Dove Mix (Both Sides)": "--s5",
+    "Low Dove Mix (Split Sides)": "--s1",
+    "Feeder Removed": "--muted",
+  };
+  const phaseShade = (description) => {
+    const token = PHASE_SHADES[(description || "").trim()];
+    return token ? css(token) : null;
+  };
+
+  function phaseMarks() {
     if (!state.phases) return [];
-    const spans = phaseSpans();
-    // Skip a number when it would collide with the previous one; the key lists every phase
-    const [a, b] = domain();
-    const pxPerMs = (width(el) - 70) / (b - a);
-    let lastX = -Infinity;
-    const labeled = spans.filter((s) => {
-      const x = (s.x1 - a) * pxPerMs;
-      if (x - lastX < 22) return false;
-      lastX = x;
-      return true;
-    });
+    const shaded = phaseSpans().filter((s) => phaseShade(s.description));
     return [
-      Plot.rect(spans.filter((s) => s.n % 2), { x1: "x1", x2: "x2", fill: css("--muted"), fillOpacity: 0.1 }),
-      Plot.ruleX(spans, { x: "x1", stroke: css("--axis"), strokeWidth: 1 }),
-      Plot.text(labeled, { x: "x1", frameAnchor: "top", text: (s) => String(s.n), dx: 4, dy: 2,
-        textAnchor: "start", fill: css("--ink-2"), fontSize: 11, fontWeight: 600 }),
+      Plot.rect(shaded, {
+        x1: "x1", x2: "x2", fill: (s) => phaseShade(s.description), fillOpacity: 0.16,
+        title: (s) => `${s.description}\n${fmtDate(s.d)}${s.ratio ? `\n${s.ratio}` : ""}`,
+      }),
     ];
   }
 
@@ -152,25 +156,47 @@
     el.hidden = !spans.length;
     el.replaceChildren();
     if (!spans.length) return;
-    const h = document.createElement("h2");
-    h.textContent = "Study phases";
+
+    const legendEl = document.createElement("div");
+    legendEl.className = "legend phase-legend";
+    const label = document.createElement("strong");
+    label.textContent = "Study phases";
+    legendEl.append(label);
+    const conditions = [...new Set(spans.map((s) => (s.description || "").trim()))];
+    const ordered = ["Extinction", ...Object.keys(PHASE_SHADES)].filter((c) => conditions.includes(c))
+      .concat(conditions.filter((c) => c !== "Extinction" && !(c in PHASE_SHADES)));
+    for (const c of ordered) {
+      const item = document.createElement("span");
+      const swatch = document.createElement("i");
+      swatch.className = "phase-swatch";
+      const shade = phaseShade(c);
+      if (shade) { swatch.style.background = `color-mix(in srgb, ${shade} 30%, transparent)`; swatch.style.borderColor = shade; }
+      item.append(swatch, document.createTextNode(c === "Extinction" ? "Extinction (no shading)" : c));
+      legendEl.append(item);
+    }
+
+    const details = document.createElement("details");
+    const summary = document.createElement("summary");
+    summary.textContent = "Phase dates";
     const ol = document.createElement("ol");
     const allPhases = phases.filter((p) => p.site === state.site).sort((x, y) => x.d - y.d);
     for (const s of spans) {
       const next = allPhases[s.n];
       const li = document.createElement("li");
-      const num = document.createElement("span");
-      num.className = "num";
-      num.textContent = s.n;
+      const swatch = document.createElement("i");
+      swatch.className = "phase-swatch";
+      const shade = phaseShade(s.description);
+      if (shade) { swatch.style.background = `color-mix(in srgb, ${shade} 30%, transparent)`; swatch.style.borderColor = shade; }
       const text = document.createElement("span");
       const strong = document.createElement("strong");
       strong.textContent = s.description;
       const until = next ? ` to ${fmtDate(d3.utcDay.offset(next.d, -1))}` : " onward";
       text.append(strong, document.createTextNode(`, ${fmtDate(s.d)}${until}${s.ratio ? `. ${s.ratio}` : ""}`));
-      li.append(num, text);
+      li.append(swatch, text);
       ol.append(li);
     }
-    el.append(h, ol);
+    details.append(summary, ol);
+    el.append(legendEl, details);
   }
 
   // ---- data health ---------------------------------------------------------
@@ -273,13 +299,13 @@
       y: { label: "Visits per day", grid: true },
       color: { domain: groups, range: groups.map(color) },
       marks: [
+        ...phaseMarks(),
         Plot.rectY(daily, Plot.stackY({
           x: "d", interval: "day", y: "visits", fill: "group", order: groups,
           inset: 0.5, tip: { format: { x: (d) => fmtDate(d), fill: true, y: true } },
           title: (d) => `${d.group}\n${fmt(d.visits)} visits\n${fmtDate(d.d)}`,
         })),
         Plot.ruleY([0], { stroke: css("--axis") }),
-        ...phaseMarks(el),
       ],
     }));
     el.replaceChildren(legend(groups.map((g) => ({ label: g, color: color(g) }))), chart);
@@ -326,11 +352,11 @@
       y: { domain: [24, 0], label: "Hour of day", ticks: [0, 6, 12, 18, 24], tickFormat: (h) => `${String(h).padStart(2, "0")}:00` },
       color: { type: "linear", range: [css("--seq-lo"), css("--seq-hi")], legend: true, label: "Visits in the hour" },
       marks: [
+        ...phaseMarks(),
         Plot.rect(visible, {
           x: "d", interval: "day", y1: "hour", y2: (r) => r.hour + 1, fill: "visits", inset: 0.25,
           tip: true, title: (r) => `${fmt(r.visits)} visits\n${fmtDate(r.d)}, ${String(r.hour).padStart(2, "0")}:00`,
         }),
-        ...phaseMarks(el),
       ],
     })));
   }
@@ -346,6 +372,7 @@
       y: { label: yLabel, grid: true, nice: true, tickFormat: "~s" },
       color: { domain: series.map((s) => s.label), range: series.map((s) => s.color) },
       marks: [
+        ...phaseMarks(),
         ...(zero ? [Plot.ruleY([0], { stroke: css("--axis") })] : []),
         ...under,
         // Gaps in the data stay gaps rather than being bridged by a line
@@ -354,7 +381,6 @@
         Plot.ruleX(all, Plot.pointerX({ x: "d", stroke: css("--muted"), strokeWidth: 1 })),
         Plot.tip(all, Plot.pointerX({ x: "d", y: "value",
           title: (r) => `${fmt(r.value)} ${yLabel.toLowerCase()}\n${r.label}\n${fmtDate(r.d)}` })),
-        ...phaseMarks(el),
       ],
     }));
     el.replaceChildren(...(multi ? [legend(series.map((s) => ({ label: s.label, color: s.color })), "line")] : []), chart);
@@ -398,10 +424,10 @@
         height: 170,
         y: { label: "Birds", grid: true, tickFormat: "~s" },
         marks: [
+          ...phaseMarks(),
           Plot.rectY(nights, { x: "d", interval: "day", y: "birds", fill: css("--s1"), inset: 0.5, rx2: 2,
             tip: true, title: (r) => `${fmt(r.birds)} birds\n${data.birdcastRegions[r.region].name}\nNight of ${fmtDate(r.d)}` }),
           Plot.ruleY([0], { stroke: css("--axis") }),
-          ...phaseMarks(migEl),
         ],
       })));
     }
@@ -435,10 +461,10 @@
       height: 140,
       y: { label: "mm", grid: true },
       marks: [
+        ...phaseMarks(),
         Plot.rectY(rain, { x: "d", interval: "day", y: "rainMm", fill: css("--s1"), inset: 0.5,
           tip: true, title: (r) => `${d3.format(".1f")(r.rainMm)} mm\n${fmtDate(r.d)}` }),
         Plot.ruleY([0], { stroke: css("--axis") }),
-        ...phaseMarks(rainEl),
       ],
     })));
 
@@ -498,7 +524,7 @@
 
     const unit = { tempMean: "°C", tempMax: "°C", rainMm: "mm", windMean: "m/s", humidity: "%", clouds: "%" }[field];
     // Square, so neither variable is visually stretched
-    const size = Math.min(el.clientWidth || 520, 520);
+    const size = Math.min(el.clientWidth || 520, 760);
     el.replaceChildren(Plot.plot({
       width: size,
       height: size,
@@ -568,12 +594,12 @@
       color: { type: "log", range: [css("--seq-lo"), css("--seq-hi")], legend: true,
         label: weekly ? "Detections per week" : "Detections per day" },
       marks: [
+        ...phaseMarks(),
         // barX: a time span per cell on a categorical (species) axis
         Plot.barX(cells, {
           x1: "d", x2: (c) => bin.offset(c.d, 1), y: "name", fill: "n", inset: 0.5,
           tip: true, title: (c) => `${c.name}\n${fmt(c.n)} detections\n${weekly ? "Week of " : ""}${fmtDate(c.d)}`,
         }),
-        ...phaseMarks(el),
       ],
     })));
 
