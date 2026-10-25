@@ -167,6 +167,23 @@ def init_schema(con):
         )
     """)
 
+    # Hourly means of the PUC's on-board environment sensors (puc_environment.py)
+    con.execute("""
+        CREATE TABLE IF NOT EXISTS puc_environment_hourly (
+            station_id          VARCHAR,
+            hour_local          VARCHAR,
+            readings            INTEGER,
+            temperature_c       DOUBLE,
+            humidity_pct        DOUBLE,
+            pressure_hpa        DOUBLE,
+            aqi                 DOUBLE,
+            eco2_ppm            DOUBLE,
+            voc                 DOUBLE,
+            sound_pressure_db   DOUBLE,
+            PRIMARY KEY (station_id, hour_local)
+        )
+    """)
+
     # County-level BirdWeather data is not mirrored here. With 15M+ rows it
     # alone pushed the release DB past GitHub's 2 GiB asset limit, nothing read
     # it back from DuckDB, and county_level_birdweather.parquet (its own
