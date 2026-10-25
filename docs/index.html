@@ -38,11 +38,20 @@
       <ul id="health" class="health"></ul>
     </section>
 
+    <nav class="jump" aria-label="Jump to section">
+      <a href="#sec-feeder">Feeder</a>
+      <a href="#sec-sound">Sound</a>
+      <a href="#sec-migration">Migration</a>
+      <a href="#sec-weather">Weather</a>
+      <a href="#sec-species">Species</a>
+      <a href="#sec-analyses">Study analyses</a>
+    </nav>
+
     <section id="phase-key" class="phase-key" aria-label="Study phases" hidden></section>
 
     <section class="tiles" id="tiles" aria-label="Summary"></section>
 
-    <section class="card">
+    <section class="card" id="sec-feeder">
       <div class="card-head">
         <h2>Feeder visits by species</h2>
         <p class="sub" id="feeder-sub"></p>
@@ -54,12 +63,16 @@
     <section class="card">
       <div class="card-head">
         <h2>Feeder visits by time of day</h2>
-        <p class="sub">Each cell is one hour of one day. Stronger color means more visits.</p>
+        <p class="sub" id="hour-sub">Each cell is one hour of one day. Stronger color means more visits.</p>
+      </div>
+      <div class="range card-toggle" role="radiogroup" aria-label="Heatmap values" id="hour-mode">
+        <button type="button" data-mode="count">Visits</button>
+        <button type="button" data-mode="share">Share of the day</button>
       </div>
       <div id="hour-chart" class="chart"></div>
     </section>
 
-    <section class="card">
+    <section class="card" id="sec-sound">
       <div class="card-head">
         <h2>What the microphones heard</h2>
         <p class="sub">BirdWeather detections per day at the study site and across the county, with BirdCast's estimate of birds migrating overhead each night.</p>
@@ -72,7 +85,7 @@
       <div id="migration-chart" class="chart short"></div>
     </section>
 
-    <section class="card">
+    <section class="card" id="sec-migration">
       <div class="card-head">
         <h2>Migration overhead</h2>
         <p class="sub">BirdCast's radar estimates of birds flying over each study site's county at night. All sites share one scale.</p>
@@ -87,7 +100,7 @@
       </div>
     </section>
 
-    <section class="card">
+    <section class="card" id="sec-weather">
       <div class="card-head">
         <h2>Backyard weather</h2>
         <p class="sub" id="weather-sub"></p>
@@ -119,7 +132,7 @@
       </div>
     </section>
 
-    <section class="card">
+    <section class="card" id="sec-species">
       <div class="card-head">
         <h2>Species heard at the study site</h2>
         <p class="sub" id="species-sub"></p>
@@ -148,9 +161,92 @@
       </div>
     </section>
 
+    <h2 class="group-title" id="sec-analyses">Study analyses</h2>
+    <p class="sub group-sub">The analyses from the multi-site feeder study, recomputed for the site and date range above. Phase conditions match the shading used throughout. The Study tab keeps the original figures for presenting.</p>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>All sites across study phases</h2>
+        <p class="sub">Daily feeder visits from each site's daily summaries, one row per site, shaded by that site's own phases. Momentum fits are drawn on each extinction phase.</p>
+      </div>
+      <div class="card-controls">
+        <label class="toggle"><input type="checkbox" id="mb-log" checked> Log scale</label>
+        <label class="toggle"><input type="checkbox" id="mb-fits" checked> Show momentum fits</label>
+      </div>
+      <div id="mb-chart" class="chart"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Behavioral momentum</h2>
+        <p class="sub">How fast visits fall off after food is removed, fitted for every extinction phase: B(t) = B&#8320;e<sup>&minus;bt</sup> and B(t) = B&#8320;e<sup>&minus;bt</sup> + c, where t is days since the extinction began. Higher b means faster extinction. Same method as the study: zero-visit days are left out of the fit.</p>
+      </div>
+      <h3 class="panel-title">Extinction rate b, by extinction phase (two-parameter fit)</h3>
+      <div id="bm-trend" class="chart"></div>
+      <details class="table-view" open><summary>All fits</summary><div id="bm-table" class="table-wrap"></div></details>
+      <h3 class="panel-title">Extinction rate b by species</h3>
+      <div id="bm-species" class="chart"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Ecological diversity</h2>
+        <p class="sub" id="div-sub"></p>
+      </div>
+      <div id="div-chart" class="chart"></div>
+      <h3 class="panel-title">How the metrics move together</h3>
+      <div class="corr-layout">
+        <div id="div-scatter" class="chart"></div>
+        <div class="corr-side"><div id="div-matrix" class="chart"></div><p class="sub" id="div-note"></p></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Feeder visits and weather</h2>
+        <p class="sub" id="vw-sub"></p>
+      </div>
+      <div class="card-controls"><label>Species <select id="vw-species"></select></label></div>
+      <div class="corr-layout">
+        <div id="vw-grid" class="chart"></div>
+        <div class="corr-side"><p class="sub">Share of visits in each temperature and wind combination. This counts visits, not how often each weather occurred, so common weather looks busier.</p></div>
+      </div>
+      <h3 class="panel-title">When each species visits, by temperature</h3>
+      <div id="vw-species-chart" class="chart"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Bout analysis</h2>
+        <p class="sub">The time between consecutive feeder visits. On a log scale, a two-process pattern (quick revisits within a bout, longer gaps between bouts) shows up as two straight segments. Curves are fitted in log space.</p>
+      </div>
+      <div class="card-controls">
+        <label>Species <select id="bout-species"></select></label>
+        <label>Model <select id="bout-model"><option value="dexp">Double exponential</option><option value="dgamma">Double gamma</option></select></label>
+        <label class="toggle"><input type="checkbox" id="bout-sameday"> Same-day intervals only</label>
+        <label class="toggle"><input type="checkbox" id="bout-split"> Split by food condition</label>
+      </div>
+      <div class="corr-layout">
+        <div id="bout-chart" class="chart"></div>
+        <div class="corr-side"><div id="bout-params" class="table-wrap"></div><p class="sub" id="bout-note"></p></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Seed and side preference</h2>
+        <p class="sub" id="seed-sub"></p>
+      </div>
+      <div id="seed-chart" class="seed-grid"></div>
+      <h3 class="panel-title">Pecks per visit by seed</h3>
+      <div class="card-controls"><label>Species <select id="peck-species"></select></label></div>
+      <div id="peck-chart" class="chart"></div>
+    </section>
+
     <p class="footnote">Data updated <span id="generated"></span>. The migration map across US flyways is at <a href="dashboard_plots/interactive/all_flyways_total_birds.html">flyway heatmap</a>.</p>
   </main>
 
   <script src="assets/dashboard.js"></script>
+  <script src="assets/analyses.js"></script>
 </body>
 </html>
