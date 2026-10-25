@@ -90,27 +90,14 @@
         <h2>Bird activity and weather</h2>
         <p class="sub">One dot per day in the selected range. The correlation (r) measures how closely the two move together; it does not show cause.</p>
       </div>
-      <div class="filters inline" role="group" aria-label="Correlation options">
-        <label>Activity
-          <select id="corr-activity">
-            <option value="detections">PUC detections</option>
-            <option value="visits">Feeder visits</option>
-          </select>
-        </label>
-        <label>Weather
-          <select id="corr-weather">
-            <option value="tempMean">Mean temperature</option>
-            <option value="tempMax">High temperature</option>
-            <option value="rainMm">Rain</option>
-            <option value="windMean">Wind</option>
-            <option value="humidity">Humidity</option>
-            <option value="clouds">Cloud cover</option>
-          </select>
-        </label>
-      </div>
       <div class="corr-layout">
         <div id="corr-chart" class="chart"></div>
         <div class="corr-side">
+          <div class="range" role="radiogroup" aria-label="Activity" id="corr-activity">
+            <button type="button" data-activity="detections">PUC detections</button>
+            <button type="button" data-activity="visits">Feeder visits</button>
+          </div>
+          <ul class="corr-list" id="corr-list" aria-label="Weather measures"></ul>
           <p class="corr-stat" id="corr-stat"></p>
           <p class="sub" id="corr-note"></p>
         </div>
