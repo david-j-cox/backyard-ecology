@@ -30,6 +30,8 @@ OUTPUT_PATH = REPO_ROOT / "docs" / "data" / "dashboard.json"
 # rather than DuckDB's raw_data: its (Date, Bird, Time) primary key drops real
 # repeat visits (two birds of a species in the same minute).
 RAW_VISITS_CSV = REPO_ROOT / "data" / "raw_data_all_locations.csv"
+# Entries merge_sites_data.py could not read (e.g. a mistyped time), for the page to flag
+DATA_ENTRY_ISSUES_CSV = REPO_ROOT / "data" / "data_entry_issues.csv"
 
 # Feeder sites: raw_data source_sheet -> display metadata
 SITES = {
@@ -475,6 +477,12 @@ def main():
         environment = export_puc_environment(con)
     freshness = build_freshness(feeder_daily, station_daily, county_daily, migration, weather, environment)
 
+    issues = []
+    if DATA_ENTRY_ISSUES_CSV.exists():
+        df = pd.read_csv(DATA_ENTRY_ISSUES_CSV, dtype=str).fillna("")
+        issues = [{"site": r.source_sheet, "date": r.Date[:10], "bird": r.Bird, "field": r.Field, "value": r.Value}
+                  for r in df.itertuples()]
+
     sites = {k: {"name": v["name"]} for k, v in SITES.items()}
     sites.update({key: {"name": name} for key, name in SUMMARY_ONLY_SITES.values()})
 
@@ -485,6 +493,7 @@ def main():
         "counties": {k: {"name": v["name"], "site": v["site"]} for k, v in COUNTIES.items()},
         "birdcastRegions": BIRDCAST_REGIONS,
         "freshness": freshness,
+        "dataIssues": issues,
         # Row arrays keep the file small; column order documented per key
         "feederDaily": {"cols": ["site", "date", "species", "visits"], "rows": feeder_daily},
         "feederHourly": {"cols": ["site", "date", "hour", "visits"], "rows": feeder_hourly},
