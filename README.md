@@ -73,7 +73,8 @@ backyard-ecology/
 │   ├── birdweather.py                     # BirdWeather API utilities
 │   ├── birdweather_specific_pucs.py       # BirdWeather PUC station data
 │   ├── dashboard_update.py                # Generates docs/study.html from saved plots
-│   └── export_dashboard_data.py           # Writes docs/data/dashboard.json for the backyard view
+│   ├── export_dashboard_data.py           # Writes docs/data/dashboard.json for the backyard view
+│   └── export_analyses.py                 # Writes docs/data/analyses.json for the study analyses
 ├── data/
 │   ├── raw_data_from_gsheet/              # Raw data downloaded from Google Sheets
 │   ├── multi_site_data.xlsx               # Merged bird visit data
@@ -89,6 +90,7 @@ backyard-ecology/
 │   ├── study.html                         # Study figures, generated daily
 │   ├── assets/                            # Dashboard CSS and JavaScript
 │   ├── data/dashboard.json                # Daily summaries for the backyard view
+│   ├── data/analyses.json                 # Visit-level data and momentum fits for the study analyses
 │   └── dashboard_plots/                   # Plot JSON files and images
 └── .github/workflows/
     ├── update-dashboard.yml               # Daily automated pipeline
@@ -143,7 +145,7 @@ The dashboard is updated automatically every day — no manual steps needed beyo
 3. The Action executes a 3-phase pipeline:
    - **Phase 1 — Fetch data**: Downloads Google Sheets data, migration/flyway data, Open-Meteo weather, and PUC sensor history. Large BirdWeather PUC refreshes run separately on the Linux VM described in `docs/operations/puc-digitalocean.md`.
    - **Phase 2 — Run analytics**: Executes `all_sites_all_analytics.py` and `one_site_analytics.py`
-   - **Phase 3 — Generate dashboard**: Runs `dashboard_update.py` (study page) and `export_dashboard_data.py` (backyard view data)
+   - **Phase 3 — Generate dashboard**: Runs `dashboard_update.py` (study page), `export_dashboard_data.py` (backyard view data), and `export_analyses.py` (study analyses data)
 4. The Action **commits** updated data and dashboard files to `main` and **deploys** to GitHub Pages
 
 You can also trigger the pipeline manually from the **Actions** tab using the `workflow_dispatch` trigger.

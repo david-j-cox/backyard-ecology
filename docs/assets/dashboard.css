@@ -221,3 +221,28 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .flight-tiles .value { font-size: 22px; }
 .track-detail { flex: 1 1 480px; min-width: 0; }
 .track-detail .panel-title:first-child { margin-top: 0; }
+
+/* Section links and grouped analyses */
+.jump { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+.jump a { text-decoration: none; color: var(--ink-2); font-size: 13px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); }
+.jump a:hover { color: var(--ink); }
+.card { scroll-margin-top: 12px; }
+.group-title { font-size: 20px; margin: 32px 0 2px; scroll-margin-top: 12px; }
+.group-sub { margin: 0 0 14px; }
+.card-controls { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; margin: 0 0 8px; font-size: 13px; color: var(--ink-2); }
+.card-controls label { display: inline-flex; align-items: center; gap: 6px; }
+.card-toggle { margin: 0 0 8px; }
+.seed-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 8px 16px; }
+.seed-grid h4 { font-size: 13px; font-weight: 600; margin: 4px 0 0; color: var(--ink-2); }
+.bm-table td, .bm-table th { white-space: nowrap; }
+
+/* Diversity correlation matrix: click a cell to plot the pair */
+.div-matrix { display: grid; gap: 3px; font-size: 12px; margin-bottom: 8px; }
+.div-matrix .div-head { color: var(--ink-2); font-weight: 600; align-self: end; text-align: center; line-height: 1.2; padding-bottom: 2px; }
+.div-matrix .div-head.row { text-align: right; align-self: center; padding: 0 6px 0 0; }
+.div-matrix button {
+  font: inherit; font-variant-numeric: tabular-nums; color: var(--ink); border: 1px solid transparent; border-radius: 4px;
+  min-height: 34px; cursor: pointer; padding: 0;
+}
+.div-matrix button:disabled { cursor: default; }
+.div-matrix button[aria-pressed="true"] { border-color: var(--ink); font-weight: 600; }
