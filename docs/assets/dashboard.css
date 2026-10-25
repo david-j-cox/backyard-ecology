@@ -213,3 +213,11 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .corr-bar i { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
 .corr-r { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
 .corr-side .corr-stat strong { font-size: 22px; }
+
+/* Migration card */
+.flight-layout { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: flex-start; margin-top: 4px; }
+.flight-layout .chart { flex: 1 1 420px; max-width: 560px; }
+.flight-tiles { flex: 1 1 320px; grid-template-columns: repeat(2, minmax(140px, 1fr)); margin: 8px 0 0; }
+.flight-tiles .value { font-size: 22px; }
+.track-detail { flex: 1 1 480px; min-width: 0; }
+.track-detail .panel-title:first-child { margin-top: 0; }
