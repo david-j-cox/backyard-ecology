@@ -141,6 +141,7 @@
     "Low Dove Mix (One Side)": "--s7",
     "Low Dove Mix (Both Sides)": "--s5",
     "Low Dove Mix (Split Sides)": "--s1",
+    "Mealworm/Safflower (Both Sides)": "--s2",
     "Feeder Removed": "--muted",
   };
   const phaseShade = (description) => {
