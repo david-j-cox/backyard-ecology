@@ -171,6 +171,32 @@ def export_station_puc(con):
     return daily, species
 
 
+def export_station_species_daily(con):
+    """Detections per station, species, and local day, for the species heatmap."""
+    names, out = [], []
+    index = {}
+    for station_id, meta in STATIONS.items():
+        local = f"timezone('{meta['tz']}', CAST(\"timestamp\" AS TIMESTAMPTZ))"
+        rows = con.execute(
+            f"""
+            SELECT species_common, strftime({local}, '%Y-%m-%d') AS day, count(*)
+            FROM study_site_puc_data
+            WHERE station_id = ? AND species_common IS NOT NULL
+            GROUP BY 1, 2 ORDER BY 2, 1
+            """,
+            [station_id],
+        ).fetchall()
+        last_day = max((d for _, d, _ in rows), default=None)
+        for sp, day, n in rows:
+            if day == last_day:
+                continue  # the last day is still being fetched
+            if sp not in index:
+                index[sp] = len(names)
+                names.append(sp)
+            out.append([station_id, index[sp], day, n])
+    return names, out
+
+
 def export_county_puc(con):
     """Detections per county per local day (empty if the parquet is missing)."""
     if not COUNTY_PARQUET.exists():
@@ -340,6 +366,7 @@ def main():
     with duckdb.connect(str(DB_PATH), read_only=True) as con:
         feeder_daily, feeder_hourly = export_feeder(con)
         station_daily, station_species = export_station_puc(con)
+        species_names, station_species_daily = export_station_species_daily(con)
         county_daily = export_county_puc(con)
         migration = export_migration(con)
         phases = export_phases(con)
@@ -365,6 +392,9 @@ def main():
             "cols": ["station", "species", "scientific", "first", "last", "total", "last7", "last30"],
             "rows": station_species,
         },
+        # Species are indexes into speciesNames to keep the file small
+        "speciesNames": species_names,
+        "stationSpeciesDaily": {"cols": ["station", "species", "date", "detections"], "rows": station_species_daily},
         "countyDaily": {"cols": ["county", "date", "detections", "species"], "rows": county_daily},
         "migration": {"cols": ["region", "night", "birds"], "rows": migration},
         "phases": {"cols": ["site", "start", "description", "ratio"], "rows": phases},
