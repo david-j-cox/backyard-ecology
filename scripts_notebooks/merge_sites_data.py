@@ -12,8 +12,10 @@ Outputs:
 """
 
 import logging
+import re
 import sys
 from datetime import datetime
+from datetime import time as dtime
 from pathlib import Path
 
 import numpy as np
@@ -172,6 +174,38 @@ def merge_jacksonville_data(gsheet_df: pd.DataFrame, multi_site_df: pd.DataFrame
     return merged_df
 
 
+def clean_visit_times(raw_data: pd.DataFrame, output_dir: Path, logger: logging.Logger) -> pd.DataFrame:
+    """
+    Normalize visit times to HH:MM:SS and blank out ones that cannot be read.
+
+    A single mistyped time (":28" for 11:28) used to crash the analytics and
+    stop the whole dashboard update. Unreadable times are blanked so the run
+    continues, and listed in data/data_entry_issues.csv for the dashboard to
+    flag so they can be corrected in the sheet.
+    """
+    def parse(value):
+        if pd.isna(value):
+            return None, False
+        if isinstance(value, (dtime, datetime)):
+            return value.strftime('%H:%M:%S'), False
+        text = str(value).strip()
+        match = re.fullmatch(r'(\d{1,2}):(\d{2})(?::(\d{2}))?(?:\.\d+)?', text)
+        if match and int(match.group(1)) < 24 and int(match.group(2)) < 60:
+            return f"{int(match.group(1)):02d}:{match.group(2)}:{match.group(3) or '00'}", False
+        return None, True
+
+    parsed = raw_data['Time'].map(parse)
+    bad = parsed.map(lambda p: p[1])
+    issues = raw_data.loc[bad, ['source_sheet', 'Date', 'Bird', 'Time']].rename(columns={'Time': 'Value'})
+    issues.insert(3, 'Field', 'Time')
+    issues.to_csv(output_dir / 'data_entry_issues.csv', index=False)
+    for _, row in issues.iterrows():
+        logger.warning(f"Unreadable time {row['Value']!r} for {row['Bird']} on {row['Date']} ({row['source_sheet']}); left blank")
+    raw_data = raw_data.copy()
+    raw_data['Time'] = parsed.map(lambda p: p[0])
+    return raw_data
+
+
 def process_raw_data(excel_file: pd.ExcelFile, raw_data_sheets: list, multi_site_excel: pd.ExcelFile, output_dir: Path, logger: logging.Logger) -> None:
     """Process and merge raw data from multiple sheets."""
     logger.info(f"Processing {len(raw_data_sheets)} raw data sheets...")
@@ -206,6 +240,7 @@ def process_raw_data(excel_file: pd.ExcelFile, raw_data_sheets: list, multi_site
     
     raw_data = pd.concat(raw_data_frames, ignore_index=True)
     raw_data = raw_data[['Date', 'Bird', 'Time', 'LeftPecks', 'RightPecks', 'LeftSeed', 'RightSeed', 'source_sheet', 'Notes', 'CoolDown']]
+    raw_data = clean_visit_times(raw_data, output_dir, logger)
     
     output_path = output_dir / 'raw_data_all_locations.csv'
     raw_data.to_csv(output_path, index=False)
