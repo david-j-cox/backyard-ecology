@@ -15,7 +15,28 @@
     auburn_al_36830: "--s4",
   };
 
-  fetch("data/analyses.json").then((r) => r.json()).then((d) => { A = prepare(d); render(); });
+  // Chart containers in the study analyses cards, for loading and error messages
+  const CHART_IDS = ["mb-chart", "bm-trend", "bm-species", "div-chart", "vw-grid", "vw-species-chart", "bout-chart", "seed-chart", "peck-chart"];
+
+  function showStatus(text) {
+    for (const id of CHART_IDS) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      const p = document.createElement("p");
+      p.className = "empty";
+      p.textContent = text;
+      el.replaceChildren(p);
+    }
+  }
+
+  showStatus("Loading the study analyses\u2026");
+  fetch("data/analyses.json")
+    .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+    .then((d) => { A = prepare(d); render(); })
+    .catch((err) => {
+      console.error("Study analyses data unavailable:", err);
+      showStatus("The study analyses data isn't available yet. It's created by the daily dashboard update; check back after the next run.");
+    });
   window.BYAnalyses = { render };
 
   function prepare(d) {

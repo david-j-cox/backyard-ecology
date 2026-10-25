@@ -154,18 +154,19 @@ def merge_jacksonville_data(gsheet_df: pd.DataFrame, multi_site_df: pd.DataFrame
     logger.debug(f"  Google Sheet rows: {len(gsheet_df)}")
     logger.debug(f"  Multi-site data rows: {len(multi_site_df)}")
     
-    # Concatenate the dataframes
+    # Remove rows that appear in both sources, but keep repeat visits within a
+    # source: two birds of a species in the same minute are two visits. Number
+    # each repeat within its source, so the 3rd 08:41 cardinal in one source
+    # only matches the 3rd 08:41 cardinal in the other.
+    key_columns = ['Date', 'Bird', 'Time'] if 'Time' in gsheet_df.columns else ['Date', 'Bird']
+    gsheet_df = gsheet_df.assign(_repeat=gsheet_df.groupby(key_columns, dropna=False).cumcount())
+    multi_site_df = multi_site_df.assign(_repeat=multi_site_df.groupby(key_columns, dropna=False).cumcount())
     merged_df = pd.concat([gsheet_df, multi_site_df], ignore_index=True)
-    
-    # Remove duplicates if any (based on key columns)
-    # This assumes Date, Bird, Time are unique identifiers
-    key_columns = ['Date', 'Bird', 'Time'] if 'Time' in merged_df.columns else ['Date', 'Bird']
-    if key_columns:
-        before_dedup = len(merged_df)
-        merged_df = merged_df.drop_duplicates(subset=key_columns, keep='first')
-        after_dedup = len(merged_df)
-        if before_dedup != after_dedup:
-            logger.info(f"  Removed {before_dedup - after_dedup} duplicate rows")
+    before_dedup = len(merged_df)
+    merged_df = merged_df.drop_duplicates(subset=key_columns + ['_repeat'], keep='first').drop(columns='_repeat')
+    after_dedup = len(merged_df)
+    if before_dedup != after_dedup:
+        logger.info(f"  Removed {before_dedup - after_dedup} rows present in both sources")
     
     logger.info(f"  Merged total rows: {len(merged_df)}")
     return merged_df
@@ -392,7 +393,9 @@ def write_to_duckdb(output_dir: Path, logger: logging.Logger) -> None:
                     dropped = before - len(df)
                     if dropped:
                         logger.info(f"[DuckDB] {table_name}: dropped {dropped} rows missing PK columns")
-                    # Repeated keys in the sheets: keep the last, as the old upsert did
+                    # Keyed tables (daily summaries, phase changes) hold one row
+                    # per key; if the sheet repeats a key, keep the last.
+                    # raw_data has no key, so every visit is loaded.
                     df = df.drop_duplicates(subset=pk_cols, keep="last")
                 if df.empty:
                     continue
