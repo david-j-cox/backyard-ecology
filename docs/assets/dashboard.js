@@ -260,6 +260,27 @@
       li.title = s.last ? `Last data ${fmtDate(parse(s.last))}` : "No data";
       ul.append(li);
     }
+
+    // A phase dated well outside the site's records is almost always a typo in the sheet
+    const siteDates = feederDaily.filter((r) => r.site === state.site).map((r) => r.d);
+    const first = d3.min(siteDates);
+    if (!first) return;
+    const suspect = phases.filter((p) => p.site === state.site &&
+      (p.d < d3.utcDay.offset(first, -60) || p.d > d3.utcDay.offset(today, 1)));
+    for (const p of suspect) {
+      const li = document.createElement("li");
+      li.className = "late";
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dot.setAttribute("aria-hidden", "true");
+      const text = document.createElement("span");
+      const strong = document.createElement("strong");
+      strong.textContent = "Check phase date";
+      text.append(strong, document.createTextNode(`: ${p.description} dated ${fmtDate(p.d)}`));
+      li.append(dot, text);
+      li.title = "This phase is dated outside the site's records. Check the date in the phase sheet.";
+      ul.append(li);
+    }
   }
 
   // ---- summary tiles -------------------------------------------------------
