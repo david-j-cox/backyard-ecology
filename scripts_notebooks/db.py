@@ -104,6 +104,8 @@ def init_schema(con):
         )
     """)
 
+    # One row per feeder visit. No primary key: two birds of a species can
+    # arrive in the same minute, and each is a real visit.
     con.execute("""
         CREATE TABLE IF NOT EXISTS raw_data (
             "Date"          VARCHAR,
@@ -115,10 +117,20 @@ def init_schema(con):
             "RightSeed"     VARCHAR,
             source_sheet    VARCHAR,
             "Notes"         VARCHAR,
-            "CoolDown"      VARCHAR,
-            PRIMARY KEY (source_sheet, "Date", "Bird", "Time")
+            "CoolDown"      VARCHAR
         )
     """)
+    # Databases created before this change have a (source_sheet, Date, Bird,
+    # Time) key that kept one visit per species per minute. Rebuild the table
+    # without it; merge_sites_data.py reloads the full visit history each run.
+    has_key = con.execute(
+        "SELECT count(*) FROM duckdb_constraints() WHERE table_name = 'raw_data' AND constraint_type = 'PRIMARY KEY'"
+    ).fetchone()[0]
+    if has_key:
+        con.execute("CREATE TABLE raw_data_unkeyed AS SELECT * FROM raw_data")
+        con.execute("DROP TABLE raw_data")
+        con.execute("ALTER TABLE raw_data_unkeyed RENAME TO raw_data")
+        logger.info("Removed the primary key from raw_data so repeat visits are kept")
 
     con.execute("""
         CREATE TABLE IF NOT EXISTS daily_summaries (
