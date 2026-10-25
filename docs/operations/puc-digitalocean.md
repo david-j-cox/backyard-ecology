@@ -1,5 +1,9 @@
 # PUC Data Refresh on DigitalOcean
 
+> **Not in use.** The VM was never set up. County data is refreshed nightly by
+> `.github/workflows/county-puc-refresh.yml` and station data by
+> `puc-station-catchup.yml`. This document is kept for reference only.
+
 The PUC data refresh is a persistent data job. It should run on a Linux VM with
 local disk, not on GitHub Actions. GitHub remains the code host; the VM owns the
 large working data files in `data/`.

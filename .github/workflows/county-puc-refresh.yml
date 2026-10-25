@@ -1,0 +1,72 @@
+name: County PUC Refresh
+
+# Refreshes county-level BirdWeather detections (Duval FL, St. Johns FL,
+# Essex NJ) in the county-birdweather release asset. The full PUC refresh
+# (puc-data-refresh.yml) is manual-only and the planned VM was never set up,
+# so this job keeps the county data current on its own. Runs before the
+# dashboard update so the morning dashboard picks up last night's data.
+
+on:
+  schedule:
+    - cron: "40 9 * * *"
+  workflow_dispatch:
+    inputs:
+      lookback_days:
+        description: "Days back to check for missing or incomplete data"
+        required: true
+        default: "45"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "county-puc-refresh"
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    # About 35 s per county-day of fetching plus a full parquet rewrite per
+    # day; a 45-day catch-up takes a few hours, a normal night a few minutes
+    timeout-minutes: 330
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Download county BirdWeather data from release
+        run: |
+          gh release download county-birdweather \
+            --pattern "county_level_birdweather.parquet" \
+            --dir data/ --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Refresh county detections
+        working-directory: scripts_notebooks
+        env:
+          LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '45' }}
+        run: |
+          FROM_DATE="$(date -u -d "${LOOKBACK_DAYS} days ago" +%F)"
+          python -u birdweather.py --from "$FROM_DATE" --to "$(date -u +%F)" --lookback "$LOOKBACK_DAYS"
+
+      - name: Upload county BirdWeather data to release
+        if: always()
+        run: |
+          if [ ! -f data/county_level_birdweather.parquet ]; then
+            echo "No county parquet to upload"
+            exit 0
+          fi
+          gh release upload county-birdweather data/county_level_birdweather.parquet --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
