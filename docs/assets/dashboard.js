@@ -8,7 +8,7 @@
   const STALE_LATE = 3; // days behind before a source is flagged
   const STALE_BAD = 8;
 
-  const state = { site: "jacksonville_fl_32259", days: 90, phases: false, corrActivity: "detections", corrField: "tempMean" };
+  const state = { site: "jacksonville_fl_32259", days: 90, phases: false, corrActivity: "detections", corrField: "tempMean", trackSpecies: null };
   try {
     const saved = JSON.parse(localStorage.getItem("by-filters") || "{}");
     Object.assign(state, saved);
@@ -29,6 +29,9 @@
   const parse = d3.utcParse("%Y-%m-%d");
   for (const set of [feederDaily, feederHourly, stationDaily, countyDaily]) for (const r of set) r.d = parse(r.date);
   for (const r of migration) r.d = parse(r.night);
+  const flywayNightly = rows(data.flywayNightly);
+  for (const r of flywayNightly) r.d = parse(r.night);
+  const migrationSpecies = rows(data.migrationSpecies);
   for (const r of phases) r.d = parse(r.start);
   for (const set of [weatherDaily, sensorDaily]) for (const r of set) r.d = parse(r.date);
   for (const r of speciesDaily) { r.d = parse(r.date); r.name = data.speciesNames[r.species]; }
@@ -36,6 +39,7 @@
   const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const fmt = d3.format(",");
   const fmtDate = d3.utcFormat("%b %-d, %Y");
+  const fmtBirds = (d) => d3.format("~s")(d).replace("G", "B");
   const today = d3.utcDay.floor(new Date());
 
   // ---- filters ------------------------------------------------------------
@@ -481,7 +485,7 @@
     } else {
       migEl.replaceChildren(withPhases(Plot.plot(baseOptions(migEl, {
         height: 170,
-        y: { label: "Birds", grid: true, tickFormat: "~s" },
+        y: { label: "Birds", grid: true, tickFormat: fmtBirds },
         marks: [
           ...phaseMarks(),
           Plot.rectY(nights, { x: "d", interval: "day", y: "birds", fill: css("--s1"), inset: 0.5, rx2: 2,
@@ -550,7 +554,15 @@
     { field: "windMean", label: "Wind", unit: "m/s" },
     { field: "humidity", label: "Humidity", unit: "%" },
     { field: "clouds", label: "Cloud cover", unit: "%" },
+    { field: "migration", label: "Migration, night before", unit: "log\u2081\u2080 birds" },
   ];
+
+  // BirdCast counts birds flying overnight; pair night N with the morning of day N + 1
+  function migrationByMorning() {
+    const regions = regionsFor(state.site);
+    return new Map(migration.filter((r) => regions.includes(r.region))
+      .map((r) => [+d3.utcDay.offset(r.d, 1), Math.log10(r.birds + 1)]));
+  }
 
   function corrPairs(field) {
     const dom = domain();
@@ -562,7 +574,8 @@
       daily = d3.rollups(feederDaily.filter((r) => r.site === state.site), (v) => d3.sum(v, (r) => r.visits), (r) => +r.d)
         .map(([t, y]) => ({ d: new Date(t), y }));
     }
-    const weather = new Map(weatherDaily.filter((r) => r.site === state.site).map((r) => [+r.d, r[field]]));
+    const weather = field === "migration" ? migrationByMorning()
+      : new Map(weatherDaily.filter((r) => r.site === state.site).map((r) => [+r.d, r[field]]));
     return daily.filter(inRange(dom)).filter((r) => weather.get(+r.d) != null)
       .map((r) => ({ d: r.d, x: weather.get(+r.d), y: r.y }));
   }
@@ -626,7 +639,11 @@
     strong.textContent = `r = ${d3.format(".2f")(sel.r).replace("-", "\u2212")}`;
     const desc = describe(sel.r);
     stat.append(strong, document.createTextNode(`${desc[0].toUpperCase()}${desc.slice(1)} between ${activityText} and ${sel.label.toLowerCase()}, across ${fmt(sel.pairs.length)} days.`));
-    note.textContent = `Each dot is one day. The line is a least-squares fit with its 95% confidence band. Weather is Open-Meteo for ${data.sites[state.site].name}. Bars: blue is positive, red is negative; longer is stronger.`;
+    note.textContent = `Each dot is one day. The line is a least-squares fit with its 95% confidence band. ` +
+      (sel.field === "migration"
+        ? "Migration is BirdCast's count for the night before, on a log scale, and only covers migration seasons. "
+        : `Weather is Open-Meteo for ${data.sites[state.site].name}. `) +
+      "Bars: blue is positive, red is negative; longer is stronger.";
 
     // Square, so neither variable is visually stretched
     const size = Math.min(el.clientWidth || 520, 680);
@@ -646,6 +663,185 @@
           tip: true, title: (p) => `${fmtDate(p.d)}\n${fmt(p.y)} ${activityText}\n${d3.format(".1f")(p.x)} ${sel.unit}` }),
       ],
     }));
+  }
+
+  // ---- migration -----------------------------------------------------------
+  const COMPASS = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+
+  function weightedMedian(items, value, weight) {
+    const sorted = items.filter((x) => value(x) != null).sort((a, b) => value(a) - value(b));
+    const total = d3.sum(sorted, weight);
+    let acc = 0;
+    for (const x of sorted) { acc += weight(x); if (acc >= total / 2) return value(x); }
+    return null;
+  }
+
+  function renderMigration() {
+    const dom = domain();
+    const studyRegions = Object.keys(data.birdcastRegions).filter((k) => data.birdcastRegions[k].site);
+    const label = (code) => {
+      const r = data.birdcastRegions[code];
+      return `${r.name} (${data.sites[r.site] ? data.sites[r.site].name.split(",")[0] : ""} site)`;
+    };
+    const selected = regionsFor(state.site);
+
+    const sitesEl = document.getElementById("migration-sites");
+    const nights = migration.filter((r) => studyRegions.includes(r.region)).filter(inRange(dom))
+      .map((r) => ({ ...r, facet: label(r.region) }));
+    if (!nights.length) {
+      empty(sitesEl, "No migration estimates in this range. BirdCast publishes during spring and fall migration.");
+    } else {
+      const facets = studyRegions.map(label);
+      sitesEl.replaceChildren(Plot.plot(baseOptions(sitesEl, {
+        width: Math.max(320, sitesEl.clientWidth),
+        height: facets.length * 120 + 30,
+        y: { label: "Birds", grid: true, tickFormat: fmtBirds, ticks: 3 },
+        // One row per site; names sit inside each row rather than off the right edge
+        fy: { domain: facets, axis: null, padding: 0.18 },
+        marks: [
+          Plot.text(facets, { fy: (d) => d, text: (d) => d, frameAnchor: "top-left", dx: 4, dy: -12,
+            fill: css("--ink-2"), fontWeight: 600, fontSize: 12 }),
+          Plot.rectY(nights, { x: "d", interval: "day", y: "birds", fy: "facet", inset: 0.5,
+            fill: (r) => (selected.includes(r.region) ? css("--s1") : css("--other")),
+            tip: true, title: (r) => `${fmt(r.birds)} birds\n${data.birdcastRegions[r.region].name}\nNight of ${fmtDate(r.d)}` }),
+          Plot.ruleY([0], { stroke: css("--axis") }),
+        ],
+      })));
+    }
+
+    const flywayKey = data.siteFlyways[state.site];
+    const flywayEl = document.getElementById("flyway-chart");
+    const flyTitle = document.getElementById("flyway-title");
+    const fly = flywayKey ? flywayNightly.filter((r) => r.flyway === flywayKey).filter(inRange(dom)) : [];
+    flyTitle.textContent = flywayKey
+      ? `Whole ${data.flyways[flywayKey]} flyway, birds per night (${fmt(d3.max(fly, (r) => r.regions) || 0)} counties)`
+      : "Whole flyway, birds per night";
+    if (!fly.length) empty(flywayEl, flywayKey ? "No flyway estimates in this range." : "No flyway data for this site.");
+    else flywayEl.replaceChildren(Plot.plot(baseOptions(flywayEl, {
+      width: Math.max(320, flywayEl.clientWidth),
+      height: 150,
+      y: { label: "Birds", grid: true, tickFormat: fmtBirds },
+      marks: [
+        Plot.rectY(fly, { x: "d", interval: "day", y: "birds", fill: css("--s1"), inset: 0.5,
+          tip: true, title: (r) => `${fmt(r.birds)} birds across ${fmt(r.regions)} counties\nNight of ${fmtDate(r.d)}` }),
+        Plot.ruleY([0], { stroke: css("--axis") }),
+      ],
+    })));
+
+    const dirEl = document.getElementById("flight-direction");
+    const tilesEl = document.getElementById("flight-tiles");
+    const regionNights = migration.filter((r) => selected.includes(r.region)).filter(inRange(dom));
+    document.getElementById("flight-title").textContent = selected.length
+      ? `How they flew over ${data.birdcastRegions[selected[0]].name}`
+      : "How they flew";
+    tilesEl.replaceChildren();
+    if (!regionNights.length) { empty(dirEl, "No migration estimates for this site in this range."); return; }
+    const withDir = regionNights.filter((r) => COMPASS.includes(r.direction));
+    const totalDir = d3.sum(withDir, (r) => r.birds);
+    const share = COMPASS.map((dir) => ({ dir, share: totalDir ? d3.sum(withDir.filter((r) => r.direction === dir), (r) => r.birds) / totalDir : 0 }));
+    dirEl.replaceChildren(Plot.plot({
+      width: Math.min(dirEl.clientWidth || 480, 560), height: 200, marginLeft: 44,
+      style: { background: "transparent", color: css("--ink-2"), fontSize: "12px" },
+      x: { domain: COMPASS, label: "Heading", tickSize: 0 },
+      y: { label: "Share of birds", tickFormat: "%", grid: true },
+      marks: [
+        Plot.barY(share, { x: "dir", y: "share", fill: css("--s1"), inset: 2, rx: 2,
+          tip: true, title: (d) => `Heading ${d.dir}\n${d3.format(".0%")(d.share)} of birds` }),
+        Plot.ruleY([0], { stroke: css("--axis") }),
+      ],
+    }));
+    const biggest = regionNights.reduce((a, b) => (a.birds > b.birds ? a : b));
+    const alt = weightedMedian(regionNights, (r) => r.altitudeFt, (r) => r.birds);
+    const speed = weightedMedian(regionNights, (r) => r.speedMph, (r) => r.birds);
+    tilesEl.append(
+      tile("Birds over the county in this range", d3.format(".3~s")(d3.sum(regionNights, (r) => r.birds)).replace("G", "B"), `${fmt(regionNights.length)} nights with estimates`),
+      tile("Biggest night", d3.format(".3~s")(biggest.birds).replace("G", "B"), `Night of ${fmtDate(biggest.d)}`),
+      tile("Typical altitude", alt != null ? `${fmt(Math.round(alt))} ft` : "n/a", "Bird-weighted median"),
+      tile("Typical speed", speed != null ? `${Math.round(speed)} mph` : "n/a", "Bird-weighted median"),
+    );
+  }
+
+  // ---- species that track migration ---------------------------------------
+  const MAX_TRACK = 12;
+
+  function renderTrack() {
+    const list = document.getElementById("track-list");
+    const sub = document.getElementById("track-sub");
+    const note = document.getElementById("track-note");
+    const spEl = document.getElementById("track-species-chart");
+    const migEl = document.getElementById("track-migration-chart");
+    const titleEl = document.getElementById("track-species-title");
+    list.replaceChildren();
+    const sid = stationsFor(state.site)[0];
+    const scores = sid ? migrationSpecies.filter((r) => r.station === sid).sort((a, b) => b.r - a.r).slice(0, MAX_TRACK) : [];
+    if (!scores.length) {
+      sub.textContent = "";
+      note.textContent = "";
+      titleEl.textContent = "";
+      empty(spEl, "Needs a PUC station and BirdCast estimates for this site.");
+      migEl.replaceChildren();
+      return;
+    }
+    sub.textContent = `Species whose next-morning detections at the ${data.stations[sid].name} PUC rise and fall with ` +
+      "the night's migration overhead, after removing the shared seasonal trend. Click a species to compare.";
+    note.textContent = `r compares each day with its surrounding week for both series, over the ${fmt(scores[0].days)} mornings ` +
+      "that have a BirdCast estimate. It is exploratory: with dozens of species, a few will score high by chance.";
+    if (!scores.some((x) => data.speciesNames[x.species] === state.trackSpecies)) state.trackSpecies = data.speciesNames[scores[0].species];
+
+    for (const res of scores) {
+      const name = data.speciesNames[res.species];
+      const li = document.createElement("li");
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("aria-pressed", String(name === state.trackSpecies));
+      const label = document.createElement("span");
+      label.className = "corr-name";
+      label.textContent = name;
+      const bar = document.createElement("span");
+      bar.className = "corr-bar";
+      const fill = document.createElement("i");
+      fill.style.width = `${Math.abs(res.r) * 50}%`;
+      fill.style[res.r >= 0 ? "left" : "right"] = "50%";
+      fill.style.background = css(res.r >= 0 ? "--s1" : "--s8");
+      bar.append(fill);
+      const value = document.createElement("span");
+      value.className = "corr-r";
+      value.textContent = d3.format("+.2f")(res.r).replace("-", "\u2212");
+      btn.append(label, bar, value);
+      btn.addEventListener("click", () => update({ trackSpecies: name }));
+      li.append(btn);
+      list.append(li);
+    }
+
+    // Two aligned panels: the species by day, and the night before's migration on the same morning
+    const dom = domain();
+    titleEl.textContent = `${state.trackSpecies} detections per day`;
+    const sp = speciesDaily.filter((r) => r.station === sid && r.name === state.trackSpecies).filter(inRange(dom));
+    if (!sp.length) empty(spEl, "Not detected in this range.");
+    else spEl.replaceChildren(Plot.plot(baseOptions(spEl, {
+      width: Math.max(320, spEl.clientWidth),
+      height: 150,
+      y: { label: "Detections", grid: true, tickFormat: "~s" },
+      marks: [
+        Plot.rectY(sp, { x: "d", interval: "day", y: "detections", fill: css("--s3"), inset: 0.5,
+          tip: true, title: (r) => `${fmt(r.detections)} detections\n${fmtDate(r.d)}` }),
+        Plot.ruleY([0], { stroke: css("--axis") }),
+      ],
+    })));
+    const regions = regionsFor(state.site);
+    const mornings = migration.filter((r) => regions.includes(r.region))
+      .map((r) => ({ ...r, morning: d3.utcDay.offset(r.d, 1) })).filter((r) => r.morning >= dom[0] && r.morning < dom[1]);
+    if (!mornings.length) empty(migEl, "No migration estimates in this range.");
+    else migEl.replaceChildren(Plot.plot(baseOptions(migEl, {
+      width: Math.max(320, migEl.clientWidth),
+      height: 150,
+      y: { label: "Birds", grid: true, tickFormat: fmtBirds },
+      marks: [
+        Plot.rectY(mornings, { x: "morning", interval: "day", y: "birds", fill: css("--s1"), inset: 0.5,
+          tip: true, title: (r) => `${fmt(r.birds)} birds overhead\nNight of ${fmtDate(r.d)}` }),
+        Plot.ruleY([0], { stroke: css("--axis") }),
+      ],
+    })));
   }
 
   // ---- species heard -------------------------------------------------------
@@ -726,8 +922,10 @@
     renderHours();
     renderAcoustic();
     renderWeather();
+    renderMigration();
     renderCorrelation();
     renderSpecies();
+    renderTrack();
   }
 
   document.getElementById("generated").textContent = new Date(data.generated).toLocaleString();
