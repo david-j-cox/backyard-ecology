@@ -8,7 +8,7 @@
   const STALE_LATE = 3; // days behind before a source is flagged
   const STALE_BAD = 8;
 
-  const state = { site: "jacksonville_fl_32259", days: 90, phases: false, corrActivity: "detections", corrField: "tempMean", trackSpecies: null };
+  const state = { site: "jacksonville_fl_32259", days: 90, phases: false, corrActivity: "detections", corrField: "tempMean", trackSpecies: null, hourMode: "count" };
   try {
     const saved = JSON.parse(localStorage.getItem("by-filters") || "{}");
     Object.assign(state, saved);
@@ -61,6 +61,8 @@
   phaseToggle.addEventListener("change", () => update({ phases: phaseToggle.checked }));
   document.querySelectorAll("#corr-activity button").forEach((b) =>
     b.addEventListener("click", () => update({ corrActivity: b.dataset.activity })));
+  document.querySelectorAll("#hour-mode button").forEach((b) =>
+    b.addEventListener("click", () => update({ hourMode: b.dataset.mode })));
 
   function update(patch) {
     Object.assign(state, patch);
@@ -123,10 +125,10 @@
     };
   }
 
-  function phaseSpans() {
+  function phaseSpans(site = state.site) {
     // Number phases over the site's whole record so numbers stay stable as the range changes
     const [a, b] = domain();
-    const ph = phases.filter((p) => p.site === state.site).sort((x, y) => x.d - y.d);
+    const ph = phases.filter((p) => p.site === site).sort((x, y) => x.d - y.d);
     return ph.map((p, i) => ({ ...p, n: i + 1, x1: p.d, x2: i + 1 < ph.length ? ph[i + 1].d : b }))
       .filter((s) => s.x2 > a && s.x1 < b)
       .map((s) => ({ ...s, x1: new Date(Math.max(s.x1, a)), x2: new Date(Math.min(s.x2, b)) }));
@@ -408,16 +410,28 @@
   // ---- time of day heatmap -------------------------------------------------
   function renderHours() {
     const el = document.getElementById("hour-chart");
-    const visible = feederHourly.filter((r) => r.site === state.site).filter(inRange(domain()));
+    const share = state.hourMode === "share";
+    document.querySelectorAll("#hour-mode button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === state.hourMode)));
+    document.getElementById("hour-sub").textContent = share
+      ? "Each cell is one hour of one day, as a share of that day's visits, so busy and quiet days compare evenly."
+      : "Each cell is one hour of one day. Stronger color means more visits.";
+    let visible = feederHourly.filter((r) => r.site === state.site).filter(inRange(domain()));
     if (!visible.length) { empty(el, "No feeder data in this range."); return; }
+    if (share) {
+      const dayTotals = d3.rollup(visible, (v) => d3.sum(v, (r) => r.visits), (r) => +r.d);
+      visible = visible.map((r) => ({ ...r, value: r.visits / dayTotals.get(+r.d) }));
+    } else {
+      visible = visible.map((r) => ({ ...r, value: r.visits }));
+    }
     const chart = Plot.plot(baseOptions(el, {
       height: 280,
       y: { domain: [24, 0], label: "Hour of day", ticks: [0, 6, 12, 18, 24], tickFormat: (h) => `${String(h).padStart(2, "0")}:00` },
-      color: { type: "linear", range: [css("--seq-lo"), css("--seq-hi")], label: "Visits in the hour" },
+      color: { type: "linear", range: [css("--seq-lo"), css("--seq-hi")], label: share ? "Share of the day's visits" : "Visits in the hour",
+        tickFormat: share ? "%" : undefined },
       marks: [
         Plot.rect(visible, {
-          x: "d", interval: "day", y1: "hour", y2: (r) => r.hour + 1, fill: "visits", inset: 0.25,
-          tip: true, title: (r) => `${fmt(r.visits)} visits\n${fmtDate(r.d)}, ${String(r.hour).padStart(2, "0")}:00`,
+          x: "d", interval: "day", y1: "hour", y2: (r) => r.hour + 1, fill: "value", inset: 0.25,
+          tip: true, title: (r) => `${share ? `${d3.format(".0%")(r.value)} of the day (${fmt(r.visits)} visits)` : `${fmt(r.visits)} visits`}\n${fmtDate(r.d)}, ${String(r.hour).padStart(2, "0")}:00`,
         }),
       ],
     }));
@@ -926,7 +940,15 @@
     renderCorrelation();
     renderSpecies();
     renderTrack();
+    if (window.BYAnalyses) window.BYAnalyses.render();
   }
+
+  // Shared with assets/analyses.js, which draws the study analyses below
+  window.BY = {
+    state, data, phases, today, DAY, parse, css, fmt, fmtDate, fmtBirds, domain, inRange, width, asideOn,
+    baseOptions, empty, legend, table, tile, pearson, update, stationsFor,
+    phaseSpans, phaseShade, phaseSwatch, phaseLegendItems, phaseMarks, phaseStrip, withPhases, PHASE_SHADES,
+  };
 
   document.getElementById("generated").textContent = new Date(data.generated).toLocaleString();
   render();

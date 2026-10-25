@@ -26,6 +26,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 COUNTY_PARQUET = REPO_ROOT / "data" / "county_level_birdweather.parquet"
 PUC_ENVIRONMENT_CSV = REPO_ROOT / "data" / "puc_environment_hourly.csv"
 OUTPUT_PATH = REPO_ROOT / "docs" / "data" / "dashboard.json"
+# One row per feeder visit, written each run by merge_sites_data.py. Read this
+# rather than DuckDB's raw_data: its (Date, Bird, Time) primary key drops real
+# repeat visits (two birds of a species in the same minute).
+RAW_VISITS_CSV = REPO_ROOT / "data" / "raw_data_all_locations.csv"
 
 # Feeder sites: raw_data source_sheet -> display metadata
 SITES = {
@@ -97,22 +101,23 @@ def clean_species(name):
     return SPECIES_ALIASES.get(name.lower(), name)
 
 
+def load_raw_visits():
+    """All feeder visit rows for the study sites, repeat visits included."""
+    df = pd.read_csv(RAW_VISITS_CSV, dtype=str, usecols=lambda c: c in {
+        "Date", "Bird", "Time", "LeftPecks", "RightPecks", "LeftSeed", "RightSeed", "source_sheet"})
+    return df[df["source_sheet"].isin(list(SITES))]
+
+
 def export_feeder(con):
     """Visits per site, day, and species; visits per site, day, and hour."""
-    rows = con.execute(
-        """
-        SELECT source_sheet, Date, Bird, Time
-        FROM raw_data
-        WHERE source_sheet IN (SELECT unnest(?))
-        """,
-        [list(SITES)],
-    ).fetchall()
+    raw = load_raw_visits()
+    rows = zip(raw["source_sheet"], raw["Date"], raw["Bird"], raw["Time"])
 
     daily = {}
     hourly = {}
     for site, day, bird, time in rows:
-        bird = clean_species(bird)
-        if bird is None or not day:
+        bird = clean_species(None if pd.isna(bird) else bird)
+        if bird is None or pd.isna(day) or not day:
             continue
         key = (site, day[:10], bird)
         daily[key] = daily.get(key, 0) + 1

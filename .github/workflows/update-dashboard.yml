@@ -147,6 +147,7 @@ jobs:
         run: |
           python dashboard_update.py
           python export_dashboard_data.py
+          python export_analyses.py
 
       - name: Commit and push changes
         run: |
