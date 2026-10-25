@@ -1,6 +1,6 @@
 # Backyard Ecology: Bird Visit Analysis
 
-A data analysis project for tracking and visualizing bird feeder visits in backyard ecosystems. This project combines automated data collection with advanced analytics to understand bird behavior patterns, migration timing, and ecological diversity. A daily GitHub Actions pipeline runs the dashboard update, while the heavier BirdWeather PUC refresh runs on a persistent Linux VM.
+A data analysis project for tracking and visualizing bird feeder visits in backyard ecosystems. This project combines automated data collection with advanced analytics to understand bird behavior patterns, migration timing, and ecological diversity. Daily GitHub Actions pipelines refresh the BirdWeather PUC data (station and county) and run the dashboard update.
 
 ## Project Overview
 
@@ -10,7 +10,7 @@ This project analyzes bird feeder visit data collected from multiple sites, focu
 - **Migration correlation** with BirdCast migration data
 - **Weather correlation** with Open-Meteo weather and the PUC's own temperature/humidity sensors
 - **Automated daily dashboard pipeline** via GitHub Actions — fetches lightweight data, runs analytics, generates dashboard, and deploys to GitHub Pages
-- **Nightly PUC refresh** on a persistent Linux VM — updates large BirdWeather PUC data files outside GitHub Actions
+- **Nightly PUC refresh** on GitHub Actions: `puc-station-catchup.yml` (study-site stations) and `county-puc-refresh.yml` (county data), both stored as release assets
 - **Dashboard** published automatically to GitHub Pages: an interactive backyard view and a study page for presenting figures
 
 ## Data Sources
