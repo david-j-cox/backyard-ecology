@@ -38,6 +38,8 @@
       <ul id="health" class="health"></ul>
     </section>
 
+    <section id="phase-key" class="phase-key" aria-label="Study phases" hidden></section>
+
     <section class="tiles" id="tiles" aria-label="Summary"></section>
 
     <section class="card">
@@ -52,7 +54,7 @@
     <section class="card">
       <div class="card-head">
         <h2>Feeder visits by time of day</h2>
-        <p class="sub">Each cell is one hour of one day. Darker means more visits.</p>
+        <p class="sub">Each cell is one hour of one day. Stronger color means more visits.</p>
       </div>
       <div id="hour-chart" class="chart"></div>
     </section>
@@ -106,16 +108,23 @@
           </select>
         </label>
       </div>
-      <p class="corr-stat" id="corr-stat"></p>
-      <div id="corr-chart" class="chart"></div>
+      <div class="corr-layout">
+        <div id="corr-chart" class="chart"></div>
+        <div class="corr-side">
+          <p class="corr-stat" id="corr-stat"></p>
+          <p class="sub" id="corr-note"></p>
+        </div>
+      </div>
     </section>
 
     <section class="card">
       <div class="card-head">
-        <h2>Heard recently at the study site</h2>
+        <h2>Species heard at the study site</h2>
         <p class="sub" id="species-sub"></p>
       </div>
-      <div id="species-table" class="table-wrap"></div>
+      <div id="species-new" class="new-species"></div>
+      <div id="species-chart" class="chart"></div>
+      <details class="table-view"><summary>Table</summary><div id="species-table" class="table-wrap"></div></details>
     </section>
 
     <p class="footnote">Data updated <span id="generated"></span>. The migration map across US flyways is at <a href="dashboard_plots/interactive/all_flyways_total_birds.html">flyway heatmap</a>.</p>

@@ -163,3 +163,22 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .filters.inline { margin: 4px 0 8px; }
 .corr-stat { margin: 0 0 4px; font-size: 14px; color: var(--ink-2); }
 .corr-stat strong { color: var(--ink); font-size: 18px; font-weight: 600; margin-right: 4px; }
+
+/* Study phase key: numbers match the labels on the charts */
+.phase-key { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; }
+.phase-key h2 { font-size: 13px; font-weight: 600; color: var(--ink-2); margin: 0 0 6px; }
+.phase-key ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 4px 16px; font-size: 13px; }
+.phase-key li { display: flex; gap: 8px; align-items: baseline; color: var(--ink-2); }
+.phase-key .num {
+  flex: none; min-width: 20px; height: 20px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;
+  background: var(--page); border: 1px solid var(--border); color: var(--ink); font-weight: 600; font-size: 12px; font-variant-numeric: tabular-nums;
+}
+.phase-key strong { color: var(--ink); font-weight: 600; }
+
+.corr-layout { display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: flex-start; }
+.corr-layout .chart { flex: 0 1 520px; }
+.corr-side { flex: 1 1 220px; padding-top: 24px; }
+.corr-side .corr-stat strong { display: block; font-size: 28px; margin-bottom: 2px; }
+
+.new-species { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 8px; font-size: 13px; color: var(--ink-2); }
+.new-species .badge { margin-left: 0; color: var(--ink); }

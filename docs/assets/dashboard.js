@@ -25,11 +25,13 @@
   const phases = rows(data.phases);
   const weatherDaily = rows(data.weatherDaily);
   const sensorDaily = rows(data.sensorDaily);
+  const speciesDaily = rows(data.stationSpeciesDaily);
   const parse = d3.utcParse("%Y-%m-%d");
   for (const set of [feederDaily, feederHourly, stationDaily, countyDaily]) for (const r of set) r.d = parse(r.date);
   for (const r of migration) r.d = parse(r.night);
   for (const r of phases) r.d = parse(r.start);
   for (const set of [weatherDaily, sensorDaily]) for (const r of set) r.d = parse(r.date);
+  for (const r of speciesDaily) { r.d = parse(r.date); r.name = data.speciesNames[r.species]; }
 
   const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const fmt = d3.format(",");
@@ -114,14 +116,61 @@
     };
   }
 
-  function phaseMarks() {
+  function phaseSpans() {
+    // Number phases over the site's whole record so numbers stay stable as the range changes
+    const [a, b] = domain();
+    const ph = phases.filter((p) => p.site === state.site).sort((x, y) => x.d - y.d);
+    return ph.map((p, i) => ({ ...p, n: i + 1, x1: p.d, x2: i + 1 < ph.length ? ph[i + 1].d : b }))
+      .filter((s) => s.x2 > a && s.x1 < b)
+      .map((s) => ({ ...s, x1: new Date(Math.max(s.x1, a)), x2: new Date(Math.min(s.x2, b)) }));
+  }
+
+  function phaseMarks(el) {
     if (!state.phases) return [];
-    const ph = phases.filter((p) => p.site === state.site).filter(inRange(domain()));
+    const spans = phaseSpans();
+    // Skip a number when it would collide with the previous one; the key lists every phase
+    const [a, b] = domain();
+    const pxPerMs = (width(el) - 70) / (b - a);
+    let lastX = -Infinity;
+    const labeled = spans.filter((s) => {
+      const x = (s.x1 - a) * pxPerMs;
+      if (x - lastX < 22) return false;
+      lastX = x;
+      return true;
+    });
     return [
-      Plot.ruleX(ph, { x: "d", stroke: css("--muted"), strokeDasharray: "3,3", strokeWidth: 1 }),
-      Plot.text(ph, { x: "d", frameAnchor: "top", text: "description", dx: 4, textAnchor: "start",
-        fill: css("--ink-2"), fontSize: 11, lineWidth: 10 }),
+      Plot.rect(spans.filter((s) => s.n % 2), { x1: "x1", x2: "x2", fill: css("--muted"), fillOpacity: 0.1 }),
+      Plot.ruleX(spans, { x: "x1", stroke: css("--axis"), strokeWidth: 1 }),
+      Plot.text(labeled, { x: "x1", frameAnchor: "top", text: (s) => String(s.n), dx: 4, dy: 2,
+        textAnchor: "start", fill: css("--ink-2"), fontSize: 11, fontWeight: 600 }),
     ];
+  }
+
+  function renderPhaseKey() {
+    const el = document.getElementById("phase-key");
+    const spans = state.phases ? phaseSpans() : [];
+    el.hidden = !spans.length;
+    el.replaceChildren();
+    if (!spans.length) return;
+    const h = document.createElement("h2");
+    h.textContent = "Study phases";
+    const ol = document.createElement("ol");
+    const allPhases = phases.filter((p) => p.site === state.site).sort((x, y) => x.d - y.d);
+    for (const s of spans) {
+      const next = allPhases[s.n];
+      const li = document.createElement("li");
+      const num = document.createElement("span");
+      num.className = "num";
+      num.textContent = s.n;
+      const text = document.createElement("span");
+      const strong = document.createElement("strong");
+      strong.textContent = s.description;
+      const until = next ? ` to ${fmtDate(d3.utcDay.offset(next.d, -1))}` : " onward";
+      text.append(strong, document.createTextNode(`, ${fmtDate(s.d)}${until}${s.ratio ? `. ${s.ratio}` : ""}`));
+      li.append(num, text);
+      ol.append(li);
+    }
+    el.append(h, ol);
   }
 
   // ---- data health ---------------------------------------------------------
@@ -230,7 +279,7 @@
           title: (d) => `${d.group}\n${fmt(d.visits)} visits\n${fmtDate(d.d)}`,
         })),
         Plot.ruleY([0], { stroke: css("--axis") }),
-        ...phaseMarks(),
+        ...phaseMarks(el),
       ],
     }));
     el.replaceChildren(legend(groups.map((g) => ({ label: g, color: color(g) }))), chart);
@@ -281,7 +330,7 @@
           x: "d", interval: "day", y1: "hour", y2: (r) => r.hour + 1, fill: "visits", inset: 0.25,
           tip: true, title: (r) => `${fmt(r.visits)} visits\n${fmtDate(r.d)}, ${String(r.hour).padStart(2, "0")}:00`,
         }),
-        ...phaseMarks(),
+        ...phaseMarks(el),
       ],
     })));
   }
@@ -305,7 +354,7 @@
         Plot.ruleX(all, Plot.pointerX({ x: "d", stroke: css("--muted"), strokeWidth: 1 })),
         Plot.tip(all, Plot.pointerX({ x: "d", y: "value",
           title: (r) => `${fmt(r.value)} ${yLabel.toLowerCase()}\n${r.label}\n${fmtDate(r.d)}` })),
-        ...phaseMarks(),
+        ...phaseMarks(el),
       ],
     }));
     el.replaceChildren(...(multi ? [legend(series.map((s) => ({ label: s.label, color: s.color })), "line")] : []), chart);
@@ -352,7 +401,7 @@
           Plot.rectY(nights, { x: "d", interval: "day", y: "birds", fill: css("--s1"), inset: 0.5, rx2: 2,
             tip: true, title: (r) => `${fmt(r.birds)} birds\n${data.birdcastRegions[r.region].name}\nNight of ${fmtDate(r.d)}` }),
           Plot.ruleY([0], { stroke: css("--axis") }),
-          ...phaseMarks(),
+          ...phaseMarks(migEl),
         ],
       })));
     }
@@ -389,7 +438,7 @@
         Plot.rectY(rain, { x: "d", interval: "day", y: "rainMm", fill: css("--s1"), inset: 0.5,
           tip: true, title: (r) => `${d3.format(".1f")(r.rainMm)} mm\n${fmtDate(r.d)}` }),
         Plot.ruleY([0], { stroke: css("--axis") }),
-        ...phaseMarks(),
+        ...phaseMarks(rainEl),
       ],
     })));
 
@@ -434,6 +483,7 @@
     stat.replaceChildren();
     if (r == null) {
       stat.textContent = "";
+      document.getElementById("corr-note").textContent = "";
       empty(el, `Not enough days with both ${activityLabel.toLowerCase()} and weather in this range.`);
       return;
     }
@@ -441,12 +491,17 @@
     const direction = Math.abs(r) < 0.1 ? "" : r > 0 ? " positive relationship" : " negative relationship";
     const strong = document.createElement("strong");
     strong.textContent = `r = ${d3.format(".2f")(r)}`;
-    stat.append(strong, document.createTextNode(`${strength}${direction}, across ${fmt(pairs.length)} days`));
+    const desc = `${strength}${direction}`;
+    stat.append(strong, document.createTextNode(`${desc[0].toUpperCase()}${desc.slice(1)}, across ${fmt(pairs.length)} days.`));
+    document.getElementById("corr-note").textContent =
+      `Each dot is one day. The line is a least-squares fit with its 95% confidence band. Weather is Open-Meteo for ${data.sites[state.site].name}.`;
 
     const unit = { tempMean: "°C", tempMax: "°C", rainMm: "mm", windMean: "m/s", humidity: "%", clouds: "%" }[field];
+    // Square, so neither variable is visually stretched
+    const size = Math.min(el.clientWidth || 520, 520);
     el.replaceChildren(Plot.plot({
-      width: width(el),
-      height: 300,
+      width: size,
+      height: size,
       marginLeft: 52,
       style: { background: "transparent", color: css("--ink-2"), fontSize: "12px" },
       x: { label: `${fieldLabel} (${unit})`, grid: true },
@@ -460,35 +515,78 @@
   }
 
   // ---- heard recently ------------------------------------------------------
+  const MAX_HEATMAP_SPECIES = 25;
+
   function renderSpecies() {
-    const el = document.getElementById("species-table");
+    const el = document.getElementById("species-chart");
     const sub = document.getElementById("species-sub");
-    const stations = stationsFor(state.site);
-    if (!stations.length) { sub.textContent = ""; empty(el, "No PUC station at this site."); return; }
-    const sid = stations[0];
-    const lastDay = d3.max(stationDaily.filter((r) => r.station === sid), (r) => r.d);
-    const recent = stationSpecies.filter((r) => r.station === sid && r.last30 > 0)
-      .sort((a, b) => d3.descending(a.last7, b.last7) || d3.descending(a.last30, b.last30));
-    sub.textContent = `${data.stations[sid].name} PUC detections in the 7 and 30 days through ${fmtDate(lastDay)}. "New" marks species first detected in the last 14 days.`;
-    const newSince = d3.utcDay.offset(lastDay, -13);
-    const body = recent.map((r) => {
-      const name = document.createElement("span");
-      name.textContent = r.species;
-      if (parse(r.first) >= newSince) {
-        const b = document.createElement("span");
-        b.className = "badge";
-        b.textContent = "New";
-        name.append(b);
+    const newEl = document.getElementById("species-new");
+    const tableEl = document.getElementById("species-table");
+    newEl.replaceChildren();
+    tableEl.replaceChildren();
+    const sid = stationsFor(state.site)[0];
+    if (!sid) { sub.textContent = ""; empty(el, "No PUC station at this site."); return; }
+
+    const dom = domain();
+    const all = speciesDaily.filter((r) => r.station === sid);
+    const visible = all.filter(inRange(dom));
+    if (!visible.length) { sub.textContent = ""; empty(el, "No detections in this range."); return; }
+
+    const totals = d3.rollups(visible, (v) => ({ detections: d3.sum(v, (r) => r.detections), days: v.length,
+      first: d3.min(v, (r) => r.d), last: d3.max(v, (r) => r.d) }), (r) => r.name)
+      .sort((x, y) => d3.descending(x[1].detections, y[1].detections));
+    const top = totals.slice(0, MAX_HEATMAP_SPECIES).map((t) => t[0]);
+    const [a, b] = dom;
+    const weekly = (b - a) / DAY > 120;
+    const bin = weekly ? d3.utcWeek : d3.utcDay;
+    const cells = d3.flatRollup(visible.filter((r) => top.includes(r.name)), (v) => d3.sum(v, (r) => r.detections),
+      (r) => r.name, (r) => +bin.floor(r.d)).map(([name, t, n]) => ({ name, d: new Date(t), n }));
+
+    const lastDay = d3.max(all, (r) => r.d);
+    sub.textContent = `The ${top.length} most-detected species at the ${data.stations[sid].name} PUC in this range, ` +
+      `${weekly ? "by week" : "by day"}. Stronger color means more detections. ${totals.length} species detected in all.`;
+
+    // New arrivals: first ever detection in the last 14 days, once the station has a season of history
+    const firstSeen = d3.rollup(all, (v) => d3.min(v, (r) => r.d), (r) => r.name);
+    const history = (lastDay - d3.min(all, (r) => r.d)) / DAY;
+    const arrivals = [...firstSeen].filter(([, d]) => history > 90 && d >= d3.utcDay.offset(lastDay, -13))
+      .sort((x, y) => y[1] - x[1]);
+    if (arrivals.length) {
+      newEl.append(document.createTextNode("First detected in the last 14 days:"));
+      for (const [name, d] of arrivals) {
+        const chip = document.createElement("span");
+        chip.className = "badge";
+        chip.textContent = `${name}, ${d3.utcFormat("%b %-d")(d)}`;
+        newEl.append(chip);
       }
-      return [name, fmt(r.last7), fmt(r.last30), fmtDate(parse(r.first))];
-    });
-    el.replaceChildren(table(["Species", "Last 7 days", "Last 30 days", "First detected"], body, [false, true, true, false]));
+    }
+
+    el.replaceChildren(Plot.plot(baseOptions(el, {
+      height: top.length * 20 + 50,
+      marginLeft: 170,
+      y: { domain: top, label: null, tickSize: 0 },
+      color: { type: "log", range: [css("--seq-lo"), css("--seq-hi")], legend: true,
+        label: weekly ? "Detections per week" : "Detections per day" },
+      marks: [
+        // barX: a time span per cell on a categorical (species) axis
+        Plot.barX(cells, {
+          x1: "d", x2: (c) => bin.offset(c.d, 1), y: "name", fill: "n", inset: 0.5,
+          tip: true, title: (c) => `${c.name}\n${fmt(c.n)} detections\n${weekly ? "Week of " : ""}${fmtDate(c.d)}`,
+        }),
+        ...phaseMarks(el),
+      ],
+    })));
+
+    tableEl.append(table(["Species", "Detections", "Days detected", "First in range", "Last in range"],
+      totals.map(([name, t]) => [name, fmt(t.detections), fmt(t.days), fmtDate(t.first), fmtDate(t.last)]),
+      [false, true, true, false, false]));
   }
 
   // ---- render --------------------------------------------------------------
   function render() {
     rangeButtons.forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.days === state.days)));
     renderHealth();
+    renderPhaseKey();
     renderTiles();
     renderFeeder();
     renderHours();
