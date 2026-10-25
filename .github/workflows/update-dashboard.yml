@@ -180,21 +180,6 @@ jobs:
             fi
           fi
 
-      - name: Upload county BirdWeather data to release
-        if: always()
-        run: |
-          if [ ! -f data/county_level_birdweather.parquet ]; then
-            echo "No county BirdWeather parquet to upload"
-            exit 0
-          fi
-          gh release view county-birdweather >/dev/null 2>&1 \
-            || gh release create county-birdweather \
-              --title "County BirdWeather data" \
-              --notes "Incremental county-level BirdWeather detection data (managed by CI pipeline)"
-          gh release upload county-birdweather data/county_level_birdweather.parquet --clobber
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Upload DuckDB to release
         if: always()
         run: |
