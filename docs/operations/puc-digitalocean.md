@@ -54,6 +54,33 @@ TZ=America/New_York
 BACKUP_CMD=
 ```
 
+### Publishing county data back to GitHub
+
+The dashboard workflow reads `county_level_birdweather.parquet` from the
+`county-birdweather` release, so the VM has to upload it after each refresh or
+the county lines on the dashboard stop updating. Install the GitHub CLI and use
+`BACKUP_CMD` for the upload:
+
+```bash
+apt-get install -y gh
+```
+
+Create a fine-grained token limited to this repository with **Contents: Read
+and write**, then set in `/etc/backyard-ecology/puc-refresh.env`:
+
+```bash
+GH_TOKEN=<token>
+BACKUP_CMD=gh release upload county-birdweather /opt/backyard-ecology/data/county_level_birdweather.parquet -R david-j-cox/backyard-ecology --clobber
+```
+
+```bash
+chmod 600 /etc/backyard-ecology/puc-refresh.env
+```
+
+Only the county parquet is uploaded. The station CSV and DuckDB release assets
+are owned by the `PUC Station Catch-up` and `Update Dashboard` workflows, and a
+second writer would overwrite their updates.
+
 Install the timer:
 
 ```bash
