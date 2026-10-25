@@ -8,7 +8,7 @@
   const STALE_LATE = 3; // days behind before a source is flagged
   const STALE_BAD = 8;
 
-  const state = { site: "jacksonville_fl_32259", days: 90, phases: false };
+  const state = { site: "jacksonville_fl_32259", days: 90, phases: false, corrActivity: "detections", corrField: "tempMean" };
   try {
     const saved = JSON.parse(localStorage.getItem("by-filters") || "{}");
     Object.assign(state, saved);
@@ -55,9 +55,8 @@
   const phaseToggle = document.getElementById("phases");
   phaseToggle.checked = state.phases;
   phaseToggle.addEventListener("change", () => update({ phases: phaseToggle.checked }));
-  const corrActivity = document.getElementById("corr-activity");
-  const corrWeather = document.getElementById("corr-weather");
-  for (const sel of [corrActivity, corrWeather]) sel.addEventListener("change", renderCorrelation);
+  document.querySelectorAll("#corr-activity button").forEach((b) =>
+    b.addEventListener("click", () => update({ corrActivity: b.dataset.activity })));
 
   function update(patch) {
     Object.assign(state, patch);
@@ -82,7 +81,10 @@
   const countiesFor = (site) => Object.keys(data.counties).filter((k) => data.counties[k].site === site);
   const regionsFor = (site) => Object.keys(data.birdcastRegions).filter((k) => data.birdcastRegions[k].site === site);
   const daysBehind = (iso) => (iso ? Math.round((today - parse(iso)) / DAY) : Infinity);
-  const width = (el) => Math.max(320, el.clientWidth);
+  // Charts leave room on the right for their phase legend when phases are shown
+  const PHASE_ASIDE = 190;
+  const asideOn = () => state.phases && window.innerWidth >= 760;
+  const width = (el) => Math.max(320, el.clientWidth - (asideOn() ? PHASE_ASIDE : 0));
 
   function empty(el, text) {
     el.replaceChildren();
@@ -111,6 +113,7 @@
       width: width(el),
       marginLeft: 52,
       style: { background: "transparent", color: css("--ink-2"), fontSize: "12px" },
+      marginRight: 20,
       x: { type: "utc", domain: domain(), label: null },
       ...extra,
     };
@@ -150,53 +153,88 @@
     ];
   }
 
+  function phaseLegendItems(spans) {
+    const present = new Set(spans.map((s) => (s.description || "").trim()));
+    return ["Extinction", ...Object.keys(PHASE_SHADES)].filter((c) => present.has(c))
+      .concat([...present].filter((c) => c !== "Extinction" && !(c in PHASE_SHADES)));
+  }
+
+  function phaseSwatch(condition) {
+    const swatch = document.createElement("i");
+    swatch.className = "phase-swatch";
+    const shade = phaseShade(condition);
+    if (shade) { swatch.style.background = `color-mix(in srgb, ${shade} 30%, transparent)`; swatch.style.borderColor = shade; }
+    return swatch;
+  }
+
+  // Wrap a chart so the phases it shows are named in the space beside it
+  function withPhases(...nodes) {
+    if (!state.phases) return nodes.length === 1 ? nodes[0] : stack(nodes);
+    const spans = phaseSpans();
+    const row = document.createElement("div");
+    row.className = "plot-row";
+    const aside = document.createElement("div");
+    aside.className = "phase-aside";
+    if (spans.length) {
+      const title = document.createElement("div");
+      title.className = "phase-aside-title";
+      title.textContent = "Study phase";
+      aside.append(title);
+      for (const c of phaseLegendItems(spans)) {
+        const item = document.createElement("div");
+        item.append(phaseSwatch(c), document.createTextNode(c));
+        aside.append(item);
+      }
+    }
+    row.append(nodes.length === 1 ? nodes[0] : stack(nodes), aside);
+    return row;
+  }
+
+  function stack(nodes) {
+    const div = document.createElement("div");
+    div.append(...nodes);
+    return div;
+  }
+
+  // Heatmaps get a thin strip above instead of a wash, so cell density stays readable
+  function phaseStrip(el, marginLeft) {
+    if (!state.phases) return null;
+    const shaded = phaseSpans().filter((s) => phaseShade(s.description));
+    return Plot.plot({
+      width: width(el), height: 14, marginLeft, marginRight: 20, marginTop: 2, marginBottom: 2,
+      style: { background: "transparent" },
+      x: { type: "utc", domain: domain(), axis: null },
+      marks: [
+        Plot.rect(shaded, { x1: "x1", x2: "x2", fill: (s) => phaseShade(s.description), fillOpacity: 0.7, inset: 0.5,
+          title: (s) => `${s.description}\n${fmtDate(s.d)}${s.ratio ? `\n${s.ratio}` : ""}` }),
+      ],
+    });
+  }
+
   function renderPhaseKey() {
     const el = document.getElementById("phase-key");
     const spans = state.phases ? phaseSpans() : [];
     el.hidden = !spans.length;
     el.replaceChildren();
     if (!spans.length) return;
-
-    const legendEl = document.createElement("div");
-    legendEl.className = "legend phase-legend";
-    const label = document.createElement("strong");
-    label.textContent = "Study phases";
-    legendEl.append(label);
-    const conditions = [...new Set(spans.map((s) => (s.description || "").trim()))];
-    const ordered = ["Extinction", ...Object.keys(PHASE_SHADES)].filter((c) => conditions.includes(c))
-      .concat(conditions.filter((c) => c !== "Extinction" && !(c in PHASE_SHADES)));
-    for (const c of ordered) {
-      const item = document.createElement("span");
-      const swatch = document.createElement("i");
-      swatch.className = "phase-swatch";
-      const shade = phaseShade(c);
-      if (shade) { swatch.style.background = `color-mix(in srgb, ${shade} 30%, transparent)`; swatch.style.borderColor = shade; }
-      item.append(swatch, document.createTextNode(c === "Extinction" ? "Extinction (no shading)" : c));
-      legendEl.append(item);
-    }
-
     const details = document.createElement("details");
     const summary = document.createElement("summary");
-    summary.textContent = "Phase dates";
+    summary.textContent = "Study phase dates";
     const ol = document.createElement("ol");
     const allPhases = phases.filter((p) => p.site === state.site).sort((x, y) => x.d - y.d);
     for (const s of spans) {
       const next = allPhases[s.n];
       const li = document.createElement("li");
-      const swatch = document.createElement("i");
-      swatch.className = "phase-swatch";
-      const shade = phaseShade(s.description);
-      if (shade) { swatch.style.background = `color-mix(in srgb, ${shade} 30%, transparent)`; swatch.style.borderColor = shade; }
       const text = document.createElement("span");
       const strong = document.createElement("strong");
       strong.textContent = s.description;
       const until = next ? ` to ${fmtDate(d3.utcDay.offset(next.d, -1))}` : " onward";
       text.append(strong, document.createTextNode(`, ${fmtDate(s.d)}${until}${s.ratio ? `. ${s.ratio}` : ""}`));
-      li.append(swatch, text);
+      li.append(phaseSwatch(s.description), text);
       ol.append(li);
     }
     details.append(summary, ol);
-    el.append(legendEl, details);
+    el.append(details);
   }
 
   // ---- data health ---------------------------------------------------------
@@ -308,7 +346,7 @@
         Plot.ruleY([0], { stroke: css("--axis") }),
       ],
     }));
-    el.replaceChildren(legend(groups.map((g) => ({ label: g, color: color(g) }))), chart);
+    el.replaceChildren(legend(groups.map((g) => ({ label: g, color: color(g) }))), withPhases(chart));
     renderFeederTable(visible);
   }
 
@@ -347,18 +385,18 @@
     const el = document.getElementById("hour-chart");
     const visible = feederHourly.filter((r) => r.site === state.site).filter(inRange(domain()));
     if (!visible.length) { empty(el, "No feeder data in this range."); return; }
-    el.replaceChildren(Plot.plot(baseOptions(el, {
+    const chart = Plot.plot(baseOptions(el, {
       height: 280,
       y: { domain: [24, 0], label: "Hour of day", ticks: [0, 6, 12, 18, 24], tickFormat: (h) => `${String(h).padStart(2, "0")}:00` },
-      color: { type: "linear", range: [css("--seq-lo"), css("--seq-hi")], legend: true, label: "Visits in the hour" },
+      color: { type: "linear", range: [css("--seq-lo"), css("--seq-hi")], label: "Visits in the hour" },
       marks: [
-        ...phaseMarks(),
         Plot.rect(visible, {
           x: "d", interval: "day", y1: "hour", y2: (r) => r.hour + 1, fill: "visits", inset: 0.25,
           tip: true, title: (r) => `${fmt(r.visits)} visits\n${fmtDate(r.d)}, ${String(r.hour).padStart(2, "0")}:00`,
         }),
       ],
-    })));
+    }));
+    el.replaceChildren(withPhases(...[chart.legend("color"), phaseStrip(el, 52), chart].filter(Boolean)));
   }
 
   // ---- acoustic + migration small multiples --------------------------------
@@ -383,7 +421,7 @@
           title: (r) => `${fmt(r.value)} ${yLabel.toLowerCase()}\n${r.label}\n${fmtDate(r.d)}` })),
       ],
     }));
-    el.replaceChildren(...(multi ? [legend(series.map((s) => ({ label: s.label, color: s.color })), "line")] : []), chart);
+    el.replaceChildren(...(multi ? [legend(series.map((s) => ({ label: s.label, color: s.color })), "line")] : []), withPhases(chart));
     return true;
   }
 
@@ -420,7 +458,7 @@
     if (!nights.length) {
       empty(migEl, regions.length ? "No migration estimates in this range. BirdCast publishes during spring and fall migration." : "No BirdCast region for this site.");
     } else {
-      migEl.replaceChildren(Plot.plot(baseOptions(migEl, {
+      migEl.replaceChildren(withPhases(Plot.plot(baseOptions(migEl, {
         height: 170,
         y: { label: "Birds", grid: true, tickFormat: "~s" },
         marks: [
@@ -429,7 +467,7 @@
             tip: true, title: (r) => `${fmt(r.birds)} birds\n${data.birdcastRegions[r.region].name}\nNight of ${fmtDate(r.d)}` }),
           Plot.ruleY([0], { stroke: css("--axis") }),
         ],
-      })));
+      }))));
     }
   }
 
@@ -457,7 +495,7 @@
     const rainEl = document.getElementById("rain-chart");
     const rain = weather.filter(inRange(dom));
     if (!rain.length) empty(rainEl, "No weather data in this range.");
-    else rainEl.replaceChildren(Plot.plot(baseOptions(rainEl, {
+    else rainEl.replaceChildren(withPhases(Plot.plot(baseOptions(rainEl, {
       height: 140,
       y: { label: "mm", grid: true },
       marks: [
@@ -466,7 +504,7 @@
           tip: true, title: (r) => `${d3.format(".1f")(r.rainMm)} mm\n${fmtDate(r.d)}` }),
         Plot.ruleY([0], { stroke: css("--axis") }),
       ],
-    })));
+    }))));
 
     const windEl = document.getElementById("wind-chart");
     if (!lineChart(windEl, [{ label: "Open-Meteo regional", color: css("--s1"), rows: withGaps(weather, "windMean", dom) }], "m/s")) {
@@ -484,17 +522,19 @@
     return sxx && syy ? sxy / Math.sqrt(sxx * syy) : null;
   }
 
-  function renderCorrelation() {
-    const el = document.getElementById("corr-chart");
-    const stat = document.getElementById("corr-stat");
-    const dom = domain();
-    const activity = corrActivity.value;
-    const field = corrWeather.value;
-    const fieldLabel = corrWeather.selectedOptions[0].textContent;
-    const activityLabel = corrActivity.selectedOptions[0].textContent;
+  const CORR_FIELDS = [
+    { field: "tempMean", label: "Mean temperature", unit: "°C" },
+    { field: "tempMax", label: "High temperature", unit: "°C" },
+    { field: "rainMm", label: "Rain", unit: "mm" },
+    { field: "windMean", label: "Wind", unit: "m/s" },
+    { field: "humidity", label: "Humidity", unit: "%" },
+    { field: "clouds", label: "Cloud cover", unit: "%" },
+  ];
 
+  function corrPairs(field) {
+    const dom = domain();
     let daily;
-    if (activity === "detections") {
+    if (state.corrActivity === "detections") {
       const sid = stationsFor(state.site)[0];
       daily = sid ? stationDaily.filter((r) => r.station === sid).map((r) => ({ d: r.d, y: r.detections })) : [];
     } else {
@@ -502,45 +542,92 @@
         .map(([t, y]) => ({ d: new Date(t), y }));
     }
     const weather = new Map(weatherDaily.filter((r) => r.site === state.site).map((r) => [+r.d, r[field]]));
-    const pairs = daily.filter(inRange(dom)).filter((r) => weather.get(+r.d) != null)
+    return daily.filter(inRange(dom)).filter((r) => weather.get(+r.d) != null)
       .map((r) => ({ d: r.d, x: weather.get(+r.d), y: r.y }));
+  }
 
-    const r = pearson(pairs);
+  function describe(r) {
+    const a = Math.abs(r);
+    if (a < 0.1) return "no clear relationship";
+    const strength = a < 0.3 ? "a weak" : a < 0.5 ? "a moderate" : "a strong";
+    return `${strength} ${r > 0 ? "positive" : "negative"} relationship`;
+  }
+
+  function renderCorrelation() {
+    const el = document.getElementById("corr-chart");
+    const stat = document.getElementById("corr-stat");
+    const note = document.getElementById("corr-note");
+    const list = document.getElementById("corr-list");
+    document.querySelectorAll("#corr-activity button").forEach((b) =>
+      b.setAttribute("aria-pressed", String(b.dataset.activity === state.corrActivity)));
+    const activityLabel = state.corrActivity === "detections" ? "PUC detections" : "Feeder visits";
+    const activityText = state.corrActivity === "detections" ? "PUC detections" : "feeder visits";
+
+    // One row per weather measure: r, a diverging bar (blue positive, red negative), click to plot
+    const results = CORR_FIELDS.map((f) => { const pairs = corrPairs(f.field); return { ...f, pairs, r: pearson(pairs) }; });
+    if (!results.some((x) => x.field === state.corrField)) state.corrField = "tempMean";
+    list.replaceChildren();
+    for (const res of results) {
+      const li = document.createElement("li");
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("aria-pressed", String(res.field === state.corrField));
+      btn.disabled = res.r == null;
+      const name = document.createElement("span");
+      name.className = "corr-name";
+      name.textContent = res.label;
+      const bar = document.createElement("span");
+      bar.className = "corr-bar";
+      if (res.r != null) {
+        const fill = document.createElement("i");
+        fill.style.width = `${Math.abs(res.r) * 50}%`;
+        fill.style[res.r >= 0 ? "left" : "right"] = "50%";
+        fill.style.background = css(res.r >= 0 ? "--s1" : "--s8");
+        bar.append(fill);
+      }
+      const value = document.createElement("span");
+      value.className = "corr-r";
+      value.textContent = res.r == null ? "n/a" : d3.format("+.2f")(res.r).replace("-", "\u2212");
+      btn.append(name, bar, value);
+      btn.addEventListener("click", () => update({ corrField: res.field }));
+      li.append(btn);
+      list.append(li);
+    }
+
+    const sel = results.find((x) => x.field === state.corrField);
     stat.replaceChildren();
-    if (r == null) {
-      stat.textContent = "";
-      document.getElementById("corr-note").textContent = "";
-      empty(el, `Not enough days with both ${activityLabel.toLowerCase()} and weather in this range.`);
+    note.textContent = "";
+    if (!sel || sel.r == null) {
+      empty(el, `Not enough days with both ${activityText} and weather in this range.`);
       return;
     }
-    const strength = Math.abs(r) < 0.1 ? "no clear relationship" : Math.abs(r) < 0.3 ? "a weak" : Math.abs(r) < 0.5 ? "a moderate" : "a strong";
-    const direction = Math.abs(r) < 0.1 ? "" : r > 0 ? " positive relationship" : " negative relationship";
     const strong = document.createElement("strong");
-    strong.textContent = `r = ${d3.format(".2f")(r)}`;
-    const desc = `${strength}${direction}`;
-    stat.append(strong, document.createTextNode(`${desc[0].toUpperCase()}${desc.slice(1)}, across ${fmt(pairs.length)} days.`));
-    document.getElementById("corr-note").textContent =
-      `Each dot is one day. The line is a least-squares fit with its 95% confidence band. Weather is Open-Meteo for ${data.sites[state.site].name}.`;
+    strong.textContent = `r = ${d3.format(".2f")(sel.r).replace("-", "\u2212")}`;
+    const desc = describe(sel.r);
+    stat.append(strong, document.createTextNode(`${desc[0].toUpperCase()}${desc.slice(1)} between ${activityText} and ${sel.label.toLowerCase()}, across ${fmt(sel.pairs.length)} days.`));
+    note.textContent = `Each dot is one day. The line is a least-squares fit with its 95% confidence band. Weather is Open-Meteo for ${data.sites[state.site].name}. Bars: blue is positive, red is negative; longer is stronger.`;
 
-    const unit = { tempMean: "°C", tempMax: "°C", rainMm: "mm", windMean: "m/s", humidity: "%", clouds: "%" }[field];
     // Square, so neither variable is visually stretched
-    const size = Math.min(el.clientWidth || 520, 760);
+    const size = Math.min(el.clientWidth || 520, 680);
     el.replaceChildren(Plot.plot({
       width: size,
       height: size,
       marginLeft: 52,
+      marginRight: 20,
       style: { background: "transparent", color: css("--ink-2"), fontSize: "12px" },
-      x: { label: `${fieldLabel} (${unit})`, grid: true },
+      x: { label: `${sel.label} (${sel.unit})`, grid: true },
       y: { label: activityLabel, grid: true, tickFormat: "~s" },
       marks: [
-        Plot.linearRegressionY(pairs, { x: "x", y: "y", stroke: css("--s2"), fill: css("--s2"), fillOpacity: 0.1, strokeWidth: 2 }),
-        Plot.dot(pairs, { x: "x", y: "y", r: 4, fill: css("--s1"), stroke: css("--surface"), strokeWidth: 2,
-          tip: true, title: (p) => `${fmtDate(p.d)}\n${fmt(p.y)} ${activityLabel.toLowerCase()}\n${d3.format(".1f")(p.x)} ${unit}` }),
+        // clip keeps the confidence band inside the frame at extreme values
+        Plot.linearRegressionY(sel.pairs, { x: "x", y: "y", stroke: css("--s2"), fill: css("--s2"), fillOpacity: 0.1,
+          strokeWidth: 2, clip: true }),
+        Plot.dot(sel.pairs, { x: "x", y: "y", r: 4, fill: css("--s1"), stroke: css("--surface"), strokeWidth: 2,
+          tip: true, title: (p) => `${fmtDate(p.d)}\n${fmt(p.y)} ${activityText}\n${d3.format(".1f")(p.x)} ${sel.unit}` }),
       ],
     }));
   }
 
-  // ---- heard recently ------------------------------------------------------
+  // ---- species heard -------------------------------------------------------
   const MAX_HEATMAP_SPECIES = 25;
 
   function renderSpecies() {
@@ -587,21 +674,21 @@
       }
     }
 
-    el.replaceChildren(Plot.plot(baseOptions(el, {
+    const chart = Plot.plot(baseOptions(el, {
       height: top.length * 20 + 50,
       marginLeft: 170,
       y: { domain: top, label: null, tickSize: 0 },
-      color: { type: "log", range: [css("--seq-lo"), css("--seq-hi")], legend: true,
+      color: { type: "log", range: [css("--seq-lo"), css("--seq-hi")],
         label: weekly ? "Detections per week" : "Detections per day" },
       marks: [
-        ...phaseMarks(),
         // barX: a time span per cell on a categorical (species) axis
         Plot.barX(cells, {
           x1: "d", x2: (c) => bin.offset(c.d, 1), y: "name", fill: "n", inset: 0.5,
           tip: true, title: (c) => `${c.name}\n${fmt(c.n)} detections\n${weekly ? "Week of " : ""}${fmtDate(c.d)}`,
         }),
       ],
-    })));
+    }));
+    el.replaceChildren(withPhases(...[chart.legend("color"), phaseStrip(el, 170), chart].filter(Boolean)));
 
     tableEl.append(table(["Species", "Detections", "Days detected", "First in range", "Last in range"],
       totals.map(([name, t]) => [name, fmt(t.detections), fmt(t.days), fmtDate(t.first), fmtDate(t.last)]),

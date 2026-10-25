@@ -171,8 +171,8 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .phase-key strong { color: var(--ink); font-weight: 600; }
 
 .corr-layout { display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: flex-start; }
-.corr-layout .chart { flex: 1 1 520px; max-width: 760px; }
-.corr-side { flex: 0 1 260px; padding-top: 24px; }
+.corr-layout .chart { flex: 1 1 480px; max-width: 680px; }
+.corr-side { flex: 1 1 280px; max-width: 380px; padding-top: 24px; }
 .corr-side .corr-stat strong { display: block; font-size: 28px; margin-bottom: 2px; }
 
 .new-species { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 8px; font-size: 13px; color: var(--ink-2); }
@@ -188,3 +188,28 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .phase-key summary { cursor: pointer; color: var(--ink-2); font-size: 13px; }
 .phase-key details ol { margin-top: 8px; }
 .phase-key li .phase-swatch { margin-top: 3px; }
+
+/* Phase legend beside each chart */
+.plot-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0 8px; }
+.plot-row > :first-child { flex: 1 1 auto; min-width: 0; }
+.phase-aside { flex: 0 0 168px; font-size: 12px; color: var(--ink-2); padding-top: 18px; display: grid; gap: 5px; }
+.phase-aside > div { display: flex; align-items: center; gap: 7px; line-height: 1.25; }
+.phase-aside .phase-aside-title { color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; font-size: 11px; }
+@media (max-width: 759px) { .phase-aside { flex-basis: 100%; padding-top: 4px; display: flex; flex-wrap: wrap; gap: 6px 12px; } }
+
+/* Correlation: activity toggle and clickable weather measures */
+.corr-side .range { margin-bottom: 12px; }
+.corr-list { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 4px; }
+.corr-list button {
+  width: 100%; display: grid; grid-template-columns: minmax(120px, 1fr) 96px 48px; align-items: center; gap: 10px;
+  font: inherit; font-size: 13px; color: var(--ink-2); text-align: left; cursor: pointer;
+  background: transparent; border: 1px solid transparent; border-radius: 6px; padding: 6px 8px;
+}
+.corr-list button:hover { background: var(--page); }
+.corr-list button[aria-pressed="true"] { color: var(--ink); border-color: var(--border); background: var(--page); font-weight: 600; }
+.corr-list button:disabled { opacity: 0.5; cursor: default; }
+.corr-bar { position: relative; height: 8px; border-radius: 4px; background: var(--grid); }
+.corr-bar::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--axis); }
+.corr-bar i { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+.corr-r { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+.corr-side .corr-stat strong { font-size: 22px; }
