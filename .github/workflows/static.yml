@@ -40,6 +40,16 @@ jobs:
             || echo "WARNING: No flyway heatmap found for Pages deploy"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download dashboard images from release
+        # The PNGs in docs/dashboard_plots/images are not committed (they were
+        # bloating git history); the update job publishes them as a tarball.
+        run: |
+          gh release download dashboard-assets \
+            --pattern "dashboard-images.tar.gz" --dir "$RUNNER_TEMP" --clobber
+          mkdir -p docs/dashboard_plots/images
+          tar -xzf "$RUNNER_TEMP/dashboard-images.tar.gz" -C docs/dashboard_plots/images
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Pages
         uses: actions/configure-pages@v6
       - name: Upload artifact
