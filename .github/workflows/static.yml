@@ -26,7 +26,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,6 +57,14 @@ jobs:
         with:
           # Upload only the docs folder
           path: './docs'
+      # GitHub Pages sometimes stalls while syncing files until deploy-pages
+      # times out (10 minutes, its maximum). First attempt is allowed to fail;
+      # if it does, a second attempt runs. Same pattern as update-dashboard.yml.
       - name: Deploy to GitHub Pages
         id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@v5
+      - name: Deploy to GitHub Pages (retry)
+        id: deployment_retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v5
