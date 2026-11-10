@@ -289,18 +289,12 @@ jobs:
       # GitHub Pages occasionally returns a transient "Deployment failed,
       # try again later." First attempt is allowed to fail; if it does, a
       # second attempt runs. Only if the retry also fails does the job fail.
-      # Pages can also sit in "finished_file_sync" for over 10 minutes, so
-      # each attempt gets 20 minutes instead of the default 10.
       - name: Deploy to GitHub Pages
         id: deployment
         continue-on-error: true
         uses: actions/deploy-pages@v5
-        with:
-          timeout: 1200000
 
       - name: Deploy to GitHub Pages (retry)
         id: deployment_retry
         if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v5
-        with:
-          timeout: 1200000
