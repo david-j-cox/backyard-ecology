@@ -59,3 +59,4 @@ docs/dashboard_plots/images/
 # Birdfy clip videos (large; kept locally, listed in birdfy_work/manifest.csv)
 birdfy_work/raw_clips/
 birdfy_work/watch.log
+birdfy_work/sheets/
