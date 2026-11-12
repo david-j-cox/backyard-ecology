@@ -55,3 +55,7 @@ docs/dashboard_plots/images/
 # Temporary files
 *.tmp
 *.temp
+
+# Birdfy clip videos (large; kept locally, listed in birdfy_work/manifest.csv)
+birdfy_work/raw_clips/
+birdfy_work/watch.log
