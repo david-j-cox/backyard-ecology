@@ -33,6 +33,8 @@ MAMMALS = ("squirrel",)
 def species_name(raw):
     """Strip '(probable)' style qualifiers; keep the qualifier for notes."""
     s = raw.strip()
+    if s.lower().startswith("unidentified"):
+        return "Unidentified bird", "unidentified"
     m = re.match(r"^(.*?)\s*\((probable|possible)\)\s*$", s, re.I)
     if m:
         return m.group(1).strip(), m.group(2).lower()
@@ -69,7 +71,7 @@ def load(start, end):
 
 
 def build_batch(rows):
-    data, check, notes = [], [], []
+    data, check, notes, sq_guess = [], [], [], []
     for r in rows:
         m = r["_man"]
         d = datetime.strptime(m["date"], "%Y-%m-%d")
@@ -95,10 +97,20 @@ def build_batch(rows):
             bits.append(f"low-confidence pecks, range {r['peck_range'] or '?'}")
         data.append([d, sp, t, lp, rp, LEFT_SEED, RIGHT_SEED, lt, rt, "; ".join(bits)])
         notes.append(r)
-        if qual or r["confidence"] == "low" or (g and g >= 5):
+        tot = lt + rt
+        wide = False
+        for lo, hi in re.findall(r"(\d+)\s*-\s*(\d+)", r["peck_range"] or ""):
+            if int(hi) - int(lo) >= 8:
+                wide = True
+        if mammal and tot and g / tot > 0.5:
+            sq_guess.append(f"{m['date'][5:]} {m['card_time']}")
+        if qual or (not mammal and tot and g / tot > 0.5) or (wide and not mammal):
             check.append([d, t, f"{sp}: {r['confidence']} confidence (L {r['left_pecks'] or '-'}, R {r['right_pecks'] or '-'}"
                           f"{', range ' + r['peck_range'] if r['peck_range'] else ''}; side time L {lt:g} s, R {rt:g} s, "
                           f"guessed {g:g} s). {r['notes']}"])
+    if sq_guess:
+        check.insert(0, [None, None, f"Squirrel side times are mostly guessed in {len(sq_guess)} rows (head hidden while the squirrel "
+                         "sits on or against the lens; side taken from body position). Treat their left/right split as rough: " + ", ".join(sq_guess)])
     return data, check, notes
 
 

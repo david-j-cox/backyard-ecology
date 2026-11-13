@@ -60,3 +60,5 @@ docs/dashboard_plots/images/
 birdfy_work/raw_clips/
 birdfy_work/watch.log
 birdfy_work/sheets/
+birdfy_work/out/
+birdfy_work/blind/sheets/
