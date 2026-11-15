@@ -16,7 +16,7 @@
   };
 
   // Chart containers in the study analyses cards, for loading and error messages
-  const CHART_IDS = ["mb-chart", "bm-trend", "bm-species", "div-chart", "vw-grid", "vw-species-chart", "bout-chart", "seed-chart", "peck-chart"];
+  const CHART_IDS = ["mb-chart", "bm-trend", "bm-species", "div-chart", "vw-grid", "vw-species-chart", "bout-chart", "seed-chart", "ratio-compare", "peck-chart"];
 
   function showStatus(text) {
     for (const id of CHART_IDS) {
@@ -50,6 +50,8 @@
     const pecks = rows(d.pecks).map((p) => ({
       species: d.species[p.species], minute: p.minute, d: dayOf(p.minute), left: p.left, right: p.right,
       leftSeed: p.leftSeed == null ? null : d.seeds[p.leftSeed], rightSeed: p.rightSeed == null ? null : d.seeds[p.rightSeed],
+      // Seconds the head was over each side (scored from 2026-11-05; absent in older data files)
+      leftTime: p.leftTime ?? null, rightTime: p.rightTime ?? null,
     }));
     const momentum = d.momentum.map((m) => ({ ...m, startD: new Date(`${m.start}T00:00:00Z`), endD: new Date(`${m.end}T00:00:00Z`) }));
     const momentumSpecies = d.momentumSpecies.map((m) => ({ ...m, species: d.species[m.species] }));
@@ -670,23 +672,93 @@
     }).filter((ph) => !ph.empty);
   }
 
+  // Daily left/right totals per species and ln((left + 1) / (right + 1)); the +1 keeps a side with
+  // nothing from dividing by zero (one peck, or one second for side time).
+  function dailyRatios(rows, byTime) {
+    const lv = byTime ? (p) => p.leftTime || 0 : (p) => p.left || 0;
+    const rv = byTime ? (p) => p.rightTime || 0 : (p) => p.right || 0;
+    return d3.flatRollup(rows, (v) => ({ left: d3.sum(v, lv), right: d3.sum(v, rv) }), (p) => p.species, (p) => +p.d)
+      .map(([species, t, x]) => ({ species, d: new Date(t), ...x, ratio: Math.log((x.left + 1) / (x.right + 1)) }));
+  }
+
+  function spearman(xs, ys) {
+    const rank = (v) => {
+      const order = v.map((x, i) => [x, i]).sort((a, b) => a[0] - b[0]);
+      const r = new Array(v.length);
+      for (let i = 0; i < order.length;) {
+        let j = i;
+        while (j + 1 < order.length && order[j + 1][0] === order[i][0]) j++;
+        for (let k = i; k <= j; k++) r[order[k][1]] = (i + j) / 2 + 1;
+        i = j + 1;
+      }
+      return r;
+    };
+    const rx = rank(xs), ry = rank(ys);
+    const mx = d3.mean(rx), my = d3.mean(ry);
+    const num = d3.sum(rx, (x, i) => (x - mx) * (ry[i] - my));
+    const den = Math.sqrt(d3.sum(rx, (x) => (x - mx) ** 2) * d3.sum(ry, (y) => (y - my) ** 2));
+    return den ? num / den : NaN;
+  }
+
+  // Pecks vs time: one point per bird-day with both measures (squirrel left out: no pecks)
+  function renderRatioCompare(pecks, timed) {
+    const el = document.getElementById("ratio-compare");
+    const pk = new Map(dailyRatios(pecks.filter((p) => p.species !== SQUIRREL), false).map((r) => [`${r.species}|${+r.d}`, r]));
+    const both = dailyRatios(timed.filter((p) => p.species !== SQUIRREL && !/^unidentified/i.test(p.species)), true)
+      .filter((r) => pk.has(`${r.species}|${+r.d}`))
+      .map((r) => { const p = pk.get(`${r.species}|${+r.d}`); return { species: r.species, d: r.d, x: p.ratio, y: r.ratio, lp: p.left, rp: p.right, lt: r.left, rt: r.right }; });
+    if (both.length < 3) {
+      BY.empty(el, "Too few bird-days with both pecks and side times in this range. Side time is scored from 2026-11-05 on.");
+      return;
+    }
+    const ink = BY.css("--ink"), muted = BY.css("--muted");
+    const lim = d3.max(both, (r) => Math.max(Math.abs(r.x), Math.abs(r.y))) + 0.5;
+    const decided = both.filter((r) => r.x !== 0 && r.y !== 0);
+    const same = decided.filter((r) => Math.sign(r.x) === Math.sign(r.y)).length;
+    const rho = spearman(both.map((r) => r.x), both.map((r) => r.y));
+    el.replaceChildren(Plot.plot({
+      width: 420, height: 420, marginLeft: 48, marginBottom: 40,
+      style: { background: "transparent", color: BY.css("--ink-2"), fontSize: "11px" },
+      x: { domain: [-lim, lim], label: "ln(left pecks / right pecks)", grid: true },
+      y: { domain: [-lim, lim], label: "ln(left time / right time)", grid: true },
+      marks: [
+        Plot.ruleX([0], { stroke: BY.css("--axis") }),
+        Plot.ruleY([0], { stroke: BY.css("--axis") }),
+        Plot.line([[-lim, -lim], [lim, lim]], { stroke: muted, strokeDasharray: "4,3" }),
+        Plot.dot(both, { x: "x", y: "y", r: 4, fill: ink, fillOpacity: 0.75, stroke: BY.css("--surface") || "white", strokeWidth: 1,
+          tip: true, title: (r) => `${r.species}, ${BY.fmtDate(r.d)}\nPecks left ${BY.fmt(r.lp)}, right ${BY.fmt(r.rp)}\nTime left ${BY.fmt(r.lt)}s, right ${BY.fmt(r.rt)}s` }),
+      ],
+    }), noteEl(`Each point is one bird on one day. On the dashed line both measures give the same preference; ` +
+      `in the top-right or bottom-left quadrant they favor the same side. ${both.length} bird-days; same side on ${same} of ${decided.length} ` +
+      `(days where either measure is exactly balanced are left out); Spearman rho = ${Number.isFinite(rho) ? rho.toFixed(2) : "n/a"}. ` +
+      `Squirrels are left out because their pecks are not scored.`));
+  }
+
   function renderSeedPreference() {
     const dom = BY.domain();
     const sub = document.getElementById("seed-sub");
     const el = document.getElementById("seed-chart");
     const peckEl = document.getElementById("peck-chart");
     document.getElementById("peck-species").closest(".card-controls").style.display = "none";
-    const pecks = A.pecks.filter(BY.inRange(dom)).filter((p) => p.right != null);
-    if (!pecks.length) {
-      sub.textContent = "Pecks are recorded at Jacksonville only.";
-      BY.empty(el, "No peck counts in this range.");
-      peckEl.replaceChildren();
-      return;
+    const measureSel = bindOnce("seed-measure", "change", (e) => BY.update({ seedMeasure: e.target.value }));
+    const byTime = BY.state.seedMeasure === "time";
+    measureSel.value = byTime ? "time" : "pecks";
+    const inRange = A.pecks.filter(BY.inRange(dom));
+    const pecks = inRange.filter((p) => p.right != null);
+    const timed = inRange.filter((p) => p.leftTime != null || p.rightTime != null);
+    renderRatioCompare(pecks, timed);
+    const src = byTime ? timed : pecks;
+    if (!src.length) {
+      sub.textContent = byTime
+        ? "Time on each side is scored from Birdfy clips at Jacksonville from 2026-11-05 on."
+        : "Pecks are recorded at Jacksonville only.";
+      BY.empty(el, byTime ? "No side times in this range." : "No peck counts in this range.");
+      if (!pecks.length) { peckEl.replaceChildren(); return; }
     }
     const ink = BY.css("--ink"), muted = BY.css("--muted");
-    const daily = d3.flatRollup(pecks, (v) => ({ left: d3.sum(v, (p) => p.left || 0), right: d3.sum(v, (p) => p.right || 0) }),
-      (p) => p.species, (p) => +p.d).map(([species, t, x]) => ({ species, d: new Date(t), ...x, ratio: Math.log((x.left + 1) / (x.right + 1)) }));
-    const phs = seedPhases(daily.map((r) => r.d), pecks);
+    const daily = dailyRatios(src, byTime);
+    const unit = byTime ? "s" : " pecks";
+    const phs = src.length ? seedPhases(daily.map((r) => r.d), src) : [];
     // Transition lines halfway between the last day of one phase and the first of the next;
     // solid where either feeder side has no seed, dashed otherwise
     const dayList = [...new Set(daily.map((r) => +r.d))].sort((a, b) => a - b);
@@ -699,12 +771,16 @@
     });
     const labels = [...new Set([...phs.map((p) => p.left), ...phs.map((p) => p.right)])];
     const letter = new Map(labels.map((l, i) => [l, String.fromCharCode(65 + i)]));
-    const birds = d3.groups(daily.filter((r) => r.species !== SQUIRREL), (r) => r.species)
-      .filter(([, v]) => v.length >= 5).sort((a, b) => d3.ascending(a[0], b[0]));
+    // Pecks: birds with 5+ days, squirrel left out (no pecks scored), as in the study.
+    // Time: 3+ days and the squirrel stays in, since its side time is scored.
+    const birds = d3.groups(daily.filter((r) => (byTime || r.species !== SQUIRREL) && !/^unidentified/i.test(r.species)), (r) => r.species)
+      .filter(([, v]) => v.length >= (byTime ? 3 : 5)).sort((a, b) => d3.ascending(a[0], b[0]));
     const maxY = (d3.max(daily, (r) => Math.abs(r.ratio)) || 0) + 3;
-    const x0 = d3.utcDay.offset(d3.min(daily, (r) => r.d), -4), x1 = d3.utcDay.offset(d3.max(daily, (r) => r.d), 14);
-    sub.textContent = (BY.state.site === JAX ? "" : "Pecks are recorded at Jacksonville only, so this shows Jacksonville. ") +
-      "Each point is one day: ln((left pecks + 1) / (right pecks + 1)). Above zero, more pecks on the left feeder. " +
+    const x0 = d3.utcDay.offset(d3.min(daily, (r) => r.d), byTime ? -1 : -4), x1 = d3.utcDay.offset(d3.max(daily, (r) => r.d), byTime ? 2 : 14);
+    sub.textContent = (BY.state.site === JAX ? "" : (byTime ? "Side time is" : "Pecks are") + " recorded at Jacksonville only, so this shows Jacksonville. ") +
+      (byTime
+        ? "Each point is one day: ln((seconds on left + 1) / (seconds on right + 1)), from where the bird's head was in Birdfy clips (scored from 2026-11-05). Above zero, more time on the left feeder. "
+        : "Each point is one day: ln((left pecks + 1) / (right pecks + 1)). Above zero, more pecks on the left feeder. ") +
       "Letters give the seed on each side for each phase: top for the left feeder, bottom for the right. " +
       "Solid lines mark changes where a side had no seed; dashed lines mark other seed changes.";
 
@@ -736,13 +812,15 @@
           Plot.text(lettersFor, { x: "d", y: "y", text: "t", fill: BY.css("--ink-2"), fontWeight: 600, fontSize: 12 }),
           Plot.line(rows, { x: "d", y: "ratio", z: (r) => seg(r.d), stroke: ink, strokeWidth: 1 }),
           Plot.dot(rows, { x: "d", y: "ratio", r: 2.5, fill: ink,
-            tip: true, title: (r) => `${BY.fmtDate(r.d)}\nLeft ${BY.fmt(r.left)} pecks, right ${BY.fmt(r.right)} pecks` }),
+            tip: true, title: (r) => `${BY.fmtDate(r.d)}\nLeft ${BY.fmt(r.left)}${unit}, right ${BY.fmt(r.right)}${unit}` }),
         ],
       }));
       return div;
     });
     if (cards.length) el.replaceChildren(key, ...cards);
-    else BY.empty(el, "No species with 5 or more days of peck counts in this range.");
+    else if (src.length) BY.empty(el, byTime ? "No species with 3 or more days of side times in this range."
+      : "No species with 5 or more days of peck counts in this range.");
+    if (!pecks.length) { peckEl.replaceChildren(); return; }
 
     // Pecks per visit: per bird, the share of visits with each peck count, by seed (pecks > 0)
     const SEED_COLORS = { "Special Finch Food": ink, "Golden Safflower": "#d4a017", "Sunflower, Safflower, Mealworm, Peanuts": "#d03b3b" };

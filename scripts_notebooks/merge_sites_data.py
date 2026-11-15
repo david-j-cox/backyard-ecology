@@ -239,7 +239,11 @@ def process_raw_data(excel_file: pd.ExcelFile, raw_data_sheets: list, multi_site
         logger.debug(f"  {sheet_name}: {len(df)} rows")
     
     raw_data = pd.concat(raw_data_frames, ignore_index=True)
-    raw_data = raw_data[['Date', 'Bird', 'Time', 'LeftPecks', 'RightPecks', 'LeftSeed', 'RightSeed', 'source_sheet', 'Notes', 'CoolDown']]
+    # LeftTime_s/RightTime_s (seconds the bird's head was over each side) exist
+    # only on the Jacksonville sheet from 2026-11-05 on; reindex so other sites
+    # and older rows carry them as blank instead of raising KeyError.
+    raw_data = raw_data.reindex(columns=['Date', 'Bird', 'Time', 'LeftPecks', 'RightPecks', 'LeftSeed', 'RightSeed',
+                                         'LeftTime_s', 'RightTime_s', 'source_sheet', 'Notes', 'CoolDown'])
     raw_data = clean_visit_times(raw_data, output_dir, logger)
     
     output_path = output_dir / 'raw_data_all_locations.csv'
