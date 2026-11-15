@@ -142,6 +142,20 @@ def write_batch(path, data, check, notes):
     for r in notes:
         cn.append([num(r[c]) if c in ("individual", "left_pecks", "right_pecks", "left_time_s", "right_time_s", "guessed_time_s")
                    else r[c] for c in cols])
+    bc = HERE / "blind" / "blind_compare.csv"
+    if bc.exists():
+        final = {r["file"]: r for r in notes if (r["individual"] or "") == "1"}
+        bs = wb.create_sheet("Blind check")
+        bs.append(["file", "first species", "blind species", "final species",
+                   "first L", "first R", "blind L", "blind R", "blind range", "final L", "final R",
+                   "first L time", "first R time", "blind L time", "blind R time"])
+        for r in csv.DictReader(open(bc)):
+            f = final.get(r["file"], {})
+            bs.append([r["file"], r["first_species"], r["blind_species"], f.get("species", ""),
+                       num(r["first_left_pecks"]), num(r["first_right_pecks"]), num(r["blind_left_pecks"]),
+                       num(r["blind_right_pecks"]), r["blind_peck_range"], num(f.get("left_pecks")), num(f.get("right_pecks")),
+                       num(r["first_left_time_s"]), num(r["first_right_time_s"]),
+                       num(r["blind_left_time_s"]), num(r["blind_right_time_s"])])
     wb.save(path)
 
 

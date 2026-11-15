@@ -5,6 +5,8 @@ usage: sheet.py CLIP OUT.jpg [--start S] [--end E] [--fps F] [--cols C] [--width
 Frames are sampled at F per second between S and E (seconds into the clip),
 scaled to W pixels wide, tiled C across, and stamped with their time.
 --crop works in source pixels (2304x1296) to zoom on the trays.
+A thin cyan line marks the true side boundary (source x = 1152) in every
+frame, including cropped ones; it is omitted if the crop excludes it.
 Side reminder: image-left tray = FEEDER RIGHT; image-right tray = FEEDER LEFT.
 """
 import argparse, subprocess, tempfile, glob, os
@@ -32,6 +34,11 @@ with tempfile.TemporaryDirectory() as td:
         raise SystemExit("no frames")
     ims = [Image.open(f) for f in files]
     w, h = ims[0].size
+    # map source x = 1152 (feeder side boundary) into sheet-frame pixels
+    sx, sw = (0, 2304)
+    if a.crop:
+        sx, sw = int(a.crop.split(",")[0]), int(a.crop.split(",")[2])
+    cx = round((1152 - sx) / sw * w) if sx <= 1152 <= sx + sw else None
     rows = -(-len(ims) // a.cols)
     sheet = Image.new("RGB", (a.cols * w, rows * h), "black")
     d = ImageDraw.Draw(sheet)
@@ -42,6 +49,7 @@ with tempfile.TemporaryDirectory() as td:
         t = a.start + i / a.fps
         d.rectangle([x, y, x + w // 4, y + w // 13], fill="black")
         d.text((x + 3, y + 1), f"{t:.2f}s", fill="yellow", font=font)
-        d.line([x + w // 2, y + h - 8, x + w // 2, y + h], fill="cyan")  # lens-centre tick
+        if cx is not None:  # true side boundary (source x = 1152), mapped into this frame
+            d.line([x + cx, y, x + cx, y + h], fill="cyan", width=1)
     sheet.save(a.out, quality=85)
     print(f"{a.out}: {len(ims)} frames {a.start:.2f}-{end:.2f}s of {dur:.2f}s, {a.cols}x{rows}")
