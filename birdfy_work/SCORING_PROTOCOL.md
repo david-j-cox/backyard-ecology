@@ -55,3 +55,10 @@ Write `scores/scores_YYYY-MM-DD.csv` with Python's `csv` module (so quoting is c
 - One row per individual, or a single `individual` 0 row for a clip with no animal. Every clip in that day's manifest must appear.
 - Notes follow the earlier style: say what happens and when, and explain why pecks were or weren't counted. Keep them factual, without padding.
 - Save progress after each clip, appending rows, so the work can resume. Before starting a clip, skip any that already have rows.
+
+## Additions after the first batch's blind check (2026-11-15)
+
+- **Peck bouts:** a bout where the head stays down and works the seed counts as one peck per distinct strike, meaning the bill leaves the seed and goes back in. Do not split one continuous dig into a peck for every frame of movement. The largest blind-check disagreement (16 pecks against 5) came from splitting bouts in one scoring and missing them in the other. When unsure, give the middle count and a range.
+- **The cyan line** on every sheet, including cropped zooms, marks the true side boundary at x = 1152. Use it for both pecks and side time.
+- **Seeds:** the small striped/tan seed in the feeder-right (image-left) tray is the **safflower**. That is what it looks like on this camera. Do not report "no safflower seen". Note only real changes, such as refills, empty trays or mealworms appearing or running out.
+- **Helper scripts:** give any helper scripts a name specific to your day, such as `scripts/d1112_*.py`. Shared names were overwritten by other agents in the first batch.
