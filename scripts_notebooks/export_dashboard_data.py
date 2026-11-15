@@ -106,7 +106,8 @@ def clean_species(name):
 def load_raw_visits():
     """All feeder visit rows for the study sites, repeat visits included."""
     df = pd.read_csv(RAW_VISITS_CSV, dtype=str, usecols=lambda c: c in {
-        "Date", "Bird", "Time", "LeftPecks", "RightPecks", "LeftSeed", "RightSeed", "source_sheet"})
+        "Date", "Bird", "Time", "LeftPecks", "RightPecks", "LeftSeed", "RightSeed",
+        "LeftTime_s", "RightTime_s", "source_sheet"})
     return df[df["source_sheet"].isin(list(SITES))]
 
 
