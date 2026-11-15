@@ -53,6 +53,8 @@ STUDY_SECTIONS = [
     ]),
     ("Seed preference and pecks", [
         ("seed_preference_by_bird", "Seed Preference by Bird and Feeder Side"),
+        ("side_time_preference_by_bird", "Time on Each Feeder Side by Bird"),
+        ("peck_vs_time_ratio", "Side Preference: Pecks vs Time on Each Side"),
         ("peck_distribution_by_bird", "Number of Pecks per Visit by Seed Type"),
     ]),
 ]

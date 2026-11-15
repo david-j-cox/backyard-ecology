@@ -2,8 +2,8 @@
 """
 One-site analytics script.
 
-Generates seed preference and peck distribution plots for the Jacksonville site
-using data from multi_site_data.xlsx.
+Generates seed preference, side-time preference, peck-vs-time comparison and
+peck distribution plots for the Jacksonville site.
 """
 
 # Standard library imports
@@ -45,6 +45,8 @@ SHORT_PHASE_DAYS = 3  # phases shorter than this skip their text label
 # Non-bird visitors to exclude from the peck-data plots (seed preference and
 # peck distribution).
 EXCLUDE_SPECIES = {'Eastern Gray Squirrel'}
+# Rows that are not a single species (e.g. 'Unidentified bird') stay out of per-species plots.
+NOT_A_SPECIES_PREFIX = 'unidentified'
 
 
 def label_for_seed(seed):
@@ -122,8 +124,13 @@ def save_plot_for_dashboard(fig, filename, title, description=""):
 print("Loading data...")
 raw_data = pd.read_csv(RAW_DATA_CSV)
 raw_data = raw_data[raw_data['source_sheet'] == SITE_SHEET]
-raw_data = raw_data.dropna(subset=['RightPecks'])
 raw_data['Date'] = pd.to_datetime(raw_data['Date'])
+# Older CSVs predate the side-time columns
+for col in ('LeftTime_s', 'RightTime_s'):
+    if col not in raw_data.columns:
+        raw_data[col] = np.nan
+site_raw = raw_data.copy()  # every visit, including squirrels (no pecks) with side time
+raw_data = raw_data.dropna(subset=['RightPecks'])
 
 # Load phase changes for this site (canonical source of truth)
 print("Loading phase changes...")
@@ -154,184 +161,283 @@ peck_data[['right_pecks', 'left_pecks']] = peck_data[['right_pecks', 'left_pecks
 peck_data['log_ratio_left_right'] = np.log(peck_data['left_pecks'] / peck_data['right_pecks'])
 
 # ---------------------------------
-# Seed preference by bird plot
+# Side preference plots (pecks and time on each side)
 # ---------------------------------
+def build_phases(data_min, data_max, seed_rows):
+    """Phases spanning [data_min, data_max] from phase_change_data.csv. Each
+    phase is [phase_start, next_phase_start) and is annotated with the dominant
+    LeftSeed/RightSeed actually observed in seed_rows for that window."""
+    phase_starts = [data_min] + [b for b in phase_boundaries if data_min < b <= data_max]
+    phase_ends = phase_starts[1:] + [data_max + pd.Timedelta(days=1)]
+    phases = []
+    for start, end in zip(phase_starts, phase_ends):
+        window = seed_rows[(seed_rows['Date'] >= start) & (seed_rows['Date'] < end)]
+        if window.empty:
+            continue
+        actual_first = window['Date'].min()
+        actual_last = window['Date'].max()
+        phases.append({
+            'start': start,
+            'end': end,
+            'first_date': actual_first,
+            'last_date': actual_last,
+            'mid': actual_first + (actual_last - actual_first) / 2,
+            'duration_days': (end - start).days,
+            'left_label': label_for_seed(dominant_seed(window['LeftSeed'])),
+            'right_label': label_for_seed(dominant_seed(window['RightSeed'])),
+        })
+    return phases
+
+
+def build_transitions(phases):
+    """Transition midpoints + line styles. Solid line: at least one adjacent
+    phase has "No Seed" on either side. Dashed: between two food-only conditions."""
+    transitions = []
+    for i in range(len(phases) - 1):
+        prev_phase = phases[i]
+        next_phase = phases[i + 1]
+        mid = prev_phase['last_date'] + (next_phase['first_date'] - prev_phase['last_date']) / 2
+        involves_no_seed = NO_SEED_LABEL in (
+            prev_phase['left_label'], prev_phase['right_label'],
+            next_phase['left_label'], next_phase['right_label'],
+        )
+        transitions.append({'mid': mid, 'linestyle': '-' if involves_no_seed else '--'})
+    return transitions
+
+
+def plot_side_ratio_by_bird(daily, seed_rows, exclude, ylabel, filename, title, description,
+                            min_days=5, x_pad_left=4, x_pad_right=14, date_fmt='%m-%d'):
+    """Small multiples of the daily log(left / right) ratio per bird, broken at
+    phase changes, with seed-condition letters (top = left feeder seed, bottom =
+    right feeder seed). `daily` has Date, Bird, log_ratio_left_right."""
+    data_min = daily['Date'].min()
+    data_max = daily['Date'].max()
+    phases = build_phases(data_min, data_max, seed_rows)
+    transitions = build_transitions(phases)
+
+    # --- Filter birds with at least min_days days of data ---
+    days_per_bird = daily.groupby('Bird')['Date'].nunique()
+    birds = sorted(b for b in days_per_bird[days_per_bird >= min_days].index
+                   if b not in exclude and not str(b).lower().startswith(NOT_A_SPECIES_PREFIX))
+
+    n_birds = len(birds)
+    n_cols = 4
+    n_rows = max(1, math.ceil(n_birds / n_cols))
+
+    fig, axes = plt.subplots(
+        n_rows, n_cols,
+        figsize=(7 * n_cols, 4 * n_rows),
+        sharex=True,
+        sharey=True,
+        squeeze=False,
+    )
+    axes = axes.flatten()
+
+    # Global y-limits
+    max_y = max(
+        np.abs(daily['log_ratio_left_right'].min()),
+        daily['log_ratio_left_right'].max()
+    ) + 3
+
+    xlim_left = data_min - pd.Timedelta(days=x_pad_left)
+    xlim_right = data_max + pd.Timedelta(days=x_pad_right)
+
+    for ax, bird in zip(axes, birds):
+        df = daily[daily['Bird'] == bird].sort_values('Date')
+
+        # Plot each phase as a separate line so the trace breaks at boundaries
+        for phase in phases:
+            phase_df = df[(df['Date'] >= phase['start']) & (df['Date'] < phase['end'])]
+            if phase_df.empty:
+                continue
+            ax.plot(phase_df['Date'], phase_df['log_ratio_left_right'],
+                    marker='o', markersize=4, markerfacecolor='black',
+                    markeredgecolor='black', markeredgewidth=1,
+                    linewidth=1, color='black')
+
+        # Phase-change lines (solid/dashed determined dynamically above)
+        for transition in transitions:
+            if pd.notna(transition['mid']):
+                ax.axvline(x=transition['mid'], color='black',
+                           linestyle=transition['linestyle'], linewidth=1)
+        ax.axhline(y=0, color='black', linewidth=1)
+
+        sns.despine(ax=ax, top=True, right=True)
+        ax.set_ylim(-max_y, max_y)
+        ax.set_xlim(xlim_left, xlim_right)
+
+        ax.set_title(bird, fontsize=14)
+
+    # Phase labels: mark each phase span with a single-letter code (top = Left
+    # feeder seed, bottom = Right feeder seed) placed at the span midpoint - away
+    # from the phase-change lines at the boundaries - with a legend mapping the
+    # letters to conditions. Single letters stay legible however many/short the
+    # phases get, where the full text used to overlap the lines and each other.
+    labeled_phases = [
+        p for p in phases
+        if pd.notna(p['mid']) and p['duration_days'] >= SHORT_PHASE_DAYS
+    ]
+    labeled_phases.sort(key=lambda p: p['mid'])
+    # Assign letters over left-side then right-side seeds in chronological order.
+    letter_map, legend_entries = assign_condition_letters(
+        [p['left_label'] for p in labeled_phases]
+        + [p['right_label'] for p in labeled_phases]
+    )
+
+    def _code(label):
+        return letter_map[' '.join(str(label).split())]
+
+    # Center each letter within its condition span - midway between the bounding
+    # phase-change lines (or the axis edges for the first/last span) - rather than
+    # at the data midpoint, so codes sit visually centered in each condition.
+    n_phases = len(phases)
+
+    def _span_center(j):
+        left = xlim_left if j == 0 else transitions[j - 1]['mid']
+        right = xlim_right if j == n_phases - 1 else transitions[j]['mid']
+        if pd.isna(left):
+            left = phases[j]['start']
+        if pd.isna(right):
+            right = phases[j]['end']
+        return left + (right - left) / 2
+
+    y_code = max_y * 0.9
+    for ax in axes[:n_birds]:
+        for j, phase in enumerate(phases):
+            if pd.isna(phase['mid']) or phase['duration_days'] < SHORT_PHASE_DAYS:
+                continue
+            cx = _span_center(j)
+            ax.text(cx, y_code, _code(phase['left_label']),
+                    ha='center', va='center', fontsize=11, fontweight='bold')
+            ax.text(cx, -y_code, _code(phase['right_label']),
+                    ha='center', va='center', fontsize=11, fontweight='bold')
+
+    # Use the first unused grid cell as a legend for the letter codes; hide the rest.
+    legend_text = 'Seed condition key\n' + '\n'.join(
+        f'{code} = {name}' for code, name in legend_entries
+    )
+    for j in range(n_birds, len(axes)):
+        axes[j].axis('off')
+    if n_birds < len(axes):
+        axes[n_birds].text(0.02, 0.98, legend_text, transform=axes[n_birds].transAxes,
+                           ha='left', va='top', fontsize=12, family='monospace')
+
+    # Format x-ticks and rotate 45 degrees
+    for ax in axes:
+        ax.xaxis.set_major_formatter(mdates.DateFormatter(date_fmt))
+        ax.tick_params(axis='x', labelrotation=45)
+
+    fig.text(0.5, 0.0, 'Date', ha='center', fontsize=30)
+    fig.text(0.0825, 0.5, ylabel, va='center', rotation='vertical', fontsize=30)
+
+    plt.subplots_adjust(hspace=0.3)
+    save_plot_for_dashboard(fig, filename, title, description)
+    plt.close(fig)
+    return birds
+
+
 print("Generating seed preference plot...")
 peck_data['Date'] = pd.to_datetime(peck_data['Date'])
-
-# Build phases dynamically from phase_change_data.csv.
-# Each phase spans [phase_start, next_phase_start) and is annotated with
-# the dominant LeftSeed/RightSeed actually observed in raw_data for that window.
-data_min = peck_data['Date'].min()
-data_max = peck_data['Date'].max()
-
-phase_starts = [data_min] + [b for b in phase_boundaries if data_min < b <= data_max]
-phase_ends = phase_starts[1:] + [data_max + pd.Timedelta(days=1)]
-
-phases = []
-for start, end in zip(phase_starts, phase_ends):
-    window = raw_data[(raw_data['Date'] >= start) & (raw_data['Date'] < end)]
-    if window.empty:
-        continue
-    actual_first = window['Date'].min()
-    actual_last = window['Date'].max()
-    phases.append({
-        'start': start,
-        'end': end,
-        'first_date': actual_first,
-        'last_date': actual_last,
-        'mid': actual_first + (actual_last - actual_first) / 2,
-        'duration_days': (end - start).days,
-        'left_label': label_for_seed(dominant_seed(window['LeftSeed'])),
-        'right_label': label_for_seed(dominant_seed(window['RightSeed'])),
-    })
-
-# Transition midpoints + line styles.
-# Solid line: at least one adjacent phase has "No Seed" on either side.
-# Dashed line: transition between two food-only conditions.
-transitions = []
-for i in range(len(phases) - 1):
-    prev_phase = phases[i]
-    next_phase = phases[i + 1]
-    mid = prev_phase['last_date'] + (next_phase['first_date'] - prev_phase['last_date']) / 2
-    involves_no_seed = NO_SEED_LABEL in (
-        prev_phase['left_label'], prev_phase['right_label'],
-        next_phase['left_label'], next_phase['right_label'],
-    )
-    transitions.append({
-        'mid': mid,
-        'linestyle': '-' if involves_no_seed else '--',
-    })
-
-# --- Filter birds with at least 5 days of data (excluding non-birds) ---
-days_per_bird = peck_data.groupby('Bird')['Date'].nunique()
-birds = sorted(b for b in days_per_bird[days_per_bird >= 5].index
-               if b not in EXCLUDE_SPECIES)
-
-n_birds = len(birds)
-n_cols = 4
-n_rows = math.ceil(n_birds / n_cols)
-
-fig, axes = plt.subplots(
-    n_rows, n_cols,
-    figsize=(7 * n_cols, 4 * n_rows),
-    sharex=True,
-    sharey=True
-)
-axes = axes.flatten()
-
-# Global y-limits
-max_y = max(
-    np.abs(peck_data['log_ratio_left_right'].min()),
-    peck_data['log_ratio_left_right'].max()
-) + 3
-
-for i, (ax, bird) in enumerate(zip(axes, birds)):
-    df = peck_data[peck_data['Bird'] == bird].sort_values('Date')
-
-    # Plot each phase as a separate line so the trace breaks at boundaries
-    for phase in phases:
-        phase_df = df[(df['Date'] >= phase['start']) & (df['Date'] < phase['end'])]
-        if phase_df.empty:
-            continue
-        ax.plot(phase_df['Date'], phase_df['log_ratio_left_right'],
-                marker='o', markersize=4, markerfacecolor='black',
-                markeredgecolor='black', markeredgewidth=1,
-                linewidth=1, color='black')
-
-    # Phase-change lines (solid/dashed determined dynamically above)
-    for transition in transitions:
-        if pd.notna(transition['mid']):
-            ax.axvline(x=transition['mid'], color='black',
-                       linestyle=transition['linestyle'], linewidth=1)
-    ax.axhline(y=0, color='black', linewidth=1)
-
-    sns.despine(ax=ax, top=True, right=True)
-    ax.set_ylim(-max_y, max_y)
-    ax.set_xlim(data_min - pd.Timedelta(days=4), data_max + pd.Timedelta(days=14))
-
-    ax.set_title(bird, fontsize=14)
-
-# Phase labels: mark each phase span with a single-letter code (top = Left
-# feeder seed, bottom = Right feeder seed) placed at the span midpoint - away
-# from the phase-change lines at the boundaries - with a legend mapping the
-# letters to conditions. Single letters stay legible however many/short the
-# phases get, where the full text used to overlap the lines and each other.
-labeled_phases = [
-    p for p in phases
-    if pd.notna(p['mid']) and p['duration_days'] >= SHORT_PHASE_DAYS
-]
-labeled_phases.sort(key=lambda p: p['mid'])
-# Assign letters over left-side then right-side seeds in chronological order.
-letter_map, legend_entries = assign_condition_letters(
-    [p['left_label'] for p in labeled_phases]
-    + [p['right_label'] for p in labeled_phases]
-)
-
-
-def _code(label):
-    return letter_map[' '.join(str(label).split())]
-
-
-# Center each letter within its condition span - midway between the bounding
-# phase-change lines (or the axis edges for the first/last span) - rather than
-# at the data midpoint, so codes sit visually centered in each condition.
-xlim_left = data_min - pd.Timedelta(days=4)
-xlim_right = data_max + pd.Timedelta(days=14)
-n_phases = len(phases)
-
-
-def _span_center(j):
-    left = xlim_left if j == 0 else transitions[j - 1]['mid']
-    right = xlim_right if j == n_phases - 1 else transitions[j]['mid']
-    if pd.isna(left):
-        left = phases[j]['start']
-    if pd.isna(right):
-        right = phases[j]['end']
-    return left + (right - left) / 2
-
-
-y_code = max_y * 0.9
-for ax in axes[:n_birds]:
-    for j, phase in enumerate(phases):
-        if pd.isna(phase['mid']) or phase['duration_days'] < SHORT_PHASE_DAYS:
-            continue
-        cx = _span_center(j)
-        ax.text(cx, y_code, _code(phase['left_label']),
-                ha='center', va='center', fontsize=11, fontweight='bold')
-        ax.text(cx, -y_code, _code(phase['right_label']),
-                ha='center', va='center', fontsize=11, fontweight='bold')
-
-# Use the first unused grid cell as a legend for the letter codes; hide the rest.
-legend_text = 'Seed condition key\n' + '\n'.join(
-    f'{code} = {name}' for code, name in legend_entries
-)
-for j in range(n_birds, len(axes)):
-    axes[j].axis('off')
-if n_birds < len(axes):
-    axes[n_birds].text(0.02, 0.98, legend_text, transform=axes[n_birds].transAxes,
-                       ha='left', va='top', fontsize=12, family='monospace')
-
-# Format x-ticks as MM-DD and rotate 45 degrees
-date_fmt = mdates.DateFormatter('%m-%d')
-for ax in axes:
-    ax.xaxis.set_major_formatter(date_fmt)
-    ax.tick_params(axis='x', labelrotation=45)
-
-fig.text(0.5, 0.0, 'Date', ha='center', fontsize=30)
-fig.text(0.0825, 0.5, 'Log(Left Pecks (top) / Right Pecks (bottom))', va='center',
-         rotation='vertical', fontsize=30)
-
-plt.subplots_adjust(hspace=0.3)
-
-# Save diversity metrics plot for dashboard
-save_plot_for_dashboard(
-    fig,
+plot_side_ratio_by_bird(
+    peck_data, raw_data, EXCLUDE_SPECIES,
+    'Log(Left Pecks (top) / Right Pecks (bottom))',
     'seed_preference_by_bird',
     'Seed Preference by Bird and Feeder Side\n(Right Side More Open)',
-    'Seed preference by bird'
+    'Seed preference by bird',
 )
-plt.close(fig)
+
+# ---------------------------------
+# Side time preference (seconds the head was over each side)
+# ---------------------------------
+# LeftTime_s/RightTime_s are scored from Birdfy clips from 2026-11-05 on: the
+# seconds a bird's head was over the left / right tray, sampled at 4 fps. As
+# with pecks, 1 is added before the ratio so a side with no time does not
+# divide by zero; here the unit is one second.
+time_rows = site_raw.dropna(subset=['LeftTime_s', 'RightTime_s'], how='all').copy()
+time_rows[['LeftTime_s', 'RightTime_s']] = time_rows[['LeftTime_s', 'RightTime_s']].fillna(0)
+time_data = time_rows.groupby(['Date', 'Bird']).agg(
+    right_time=('RightTime_s', 'sum'),
+    left_time=('LeftTime_s', 'sum'),
+).reset_index()
+time_data['log_ratio_left_right'] = np.log((time_data['left_time'] + 1) / (time_data['right_time'] + 1))
+
+if time_data.empty:
+    print("No side-time data yet; skipping side time plots.")
+else:
+    print("Generating side time preference plot...")
+    # The squirrel stays in: it has side time even though its pecks are not counted.
+    plot_side_ratio_by_bird(
+        time_data, site_raw, set(),
+        'Log(Left Time (top) / Right Time (bottom))',
+        'side_time_preference_by_bird',
+        'Time on Each Feeder Side by Bird\n(Right Side More Open)',
+        'Daily log((seconds on left + 1) / (seconds on right + 1)) per bird, from head position in '
+        'Birdfy clips (scored from 2026-11-05). Squirrels are included because their side time is scored.',
+        min_days=3, x_pad_left=1, x_pad_right=2,
+    )
+
+    # ---------------------------------
+    # Pecks vs time: do the two measures of side preference agree?
+    # ---------------------------------
+    print("Generating peck vs time ratio comparison plot...")
+    both = peck_data.merge(time_data, on=['Date', 'Bird'], suffixes=('_pecks', '_time'))
+    both = both[~both['Bird'].isin(EXCLUDE_SPECIES)
+                & ~both['Bird'].str.lower().str.startswith(NOT_A_SPECIES_PREFIX)]
+    if len(both) >= 3:
+        from scipy.stats import spearmanr
+        xcol, ycol = 'log_ratio_left_right_pecks', 'log_ratio_left_right_time'
+        lim = max(both[[xcol, ycol]].abs().max()) + 0.5
+        species = sorted(both['Bird'].unique())
+        # Species panels need at least 3 days; every bird-day still counts in 'All birds'.
+        panels = [('All birds', both)] + [(b, both[both['Bird'] == b]) for b in species
+                                          if (both['Bird'] == b).sum() >= 3]
+        n_cols = 4
+        n_rows = math.ceil(len(panels) / n_cols)
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(5 * n_cols, 5 * n_rows),
+                                 sharex=True, sharey=True, squeeze=False)
+        axes = axes.flatten()
+
+        def _agreement(df, with_p=False):
+            # Same side: both ratios nonzero and with the same sign; days where
+            # either measure is exactly balanced (ratio 0) are left out.
+            decided = df[(df[xcol] != 0) & (df[ycol] != 0)]
+            same = int((np.sign(decided[xcol]) == np.sign(decided[ycol])).sum())
+            lines = [f'{len(df)} days; same side on {same} of {len(decided)}']
+            if len(df) >= 5 and df[xcol].nunique() > 1 and df[ycol].nunique() > 1:
+                rho, p = spearmanr(df[xcol], df[ycol])
+                lines.append(f'Spearman rho = {rho:.2f}' + (f' (p = {p:.2g})' if with_p else ''))
+            return '\n'.join(lines)
+
+        for ax, (name, df) in zip(axes, panels):
+            ax.plot([-lim, lim], [-lim, lim], color='black', linewidth=1, linestyle='--')
+            ax.axhline(0, color='grey', linewidth=0.8)
+            ax.axvline(0, color='grey', linewidth=0.8)
+            ax.scatter(df[xcol], df[ycol], s=36, color='black', alpha=0.75 if name == 'All birds' else 1)
+            ax.set_xlim(-lim, lim)
+            ax.set_ylim(-lim, lim)
+            ax.set_aspect('equal')
+            ax.set_title(name, fontsize=14, fontweight='bold' if name == 'All birds' else 'normal')
+            ax.text(0.03, 0.97, _agreement(df, with_p=name == 'All birds'), transform=ax.transAxes, ha='left', va='top', fontsize=10)
+            sns.despine(ax=ax, top=True, right=True)
+        for ax in axes[len(panels):]:
+            ax.axis('off')
+        fig.text(0.5, 0.02, 'Log(Left Pecks / Right Pecks)', ha='center', fontsize=22)
+        fig.text(0.04, 0.5, 'Log(Left Time / Right Time)', va='center', rotation='vertical', fontsize=22)
+        plt.subplots_adjust(hspace=0.3, wspace=0.15, left=0.08, bottom=0.1)
+        save_plot_for_dashboard(
+            fig,
+            'peck_vs_time_ratio',
+            'Side Preference: Pecks vs Time on Each Side',
+            'Each point is one bird on one day: log((left pecks + 1) / (right pecks + 1)) on x and '
+            'log((left seconds + 1) / (right seconds + 1)) on y. Points on the dashed line show the same '
+            'preference by both measures; points in the top-right or bottom-left quadrant agree on the side. '
+            '"Same side" counts bird-days where both measures favor the same side, leaving out days where either is exactly balanced. '
+            'Spearman rho is shown for 5 or more days; with this few days per species it is descriptive only. '
+            'Species need 3 or more days for their own panel; all bird-days count in "All birds".',
+        )
+        plt.close(fig)
+    else:
+        print("Too few bird-days with both pecks and side time; skipping comparison plot.")
 
 # ---------------------------------
 # Peck distribution by bird plot
