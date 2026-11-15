@@ -23,6 +23,7 @@ from openpyxl.utils import get_column_letter, column_index_from_string
 from openpyxl.worksheet.formula import ArrayFormula
 
 HERE = Path(__file__).resolve().parent.parent
+BLIND_DIR = "blind"  # set by --blind-dir
 # Seeds as in the last batch, confirmed by David on 2026-11-15. The safflower in
 # the feeder-right tray looks like small striped/tan seed on this camera.
 LEFT_SEED = "Peanuts, Sunflower"
@@ -143,7 +144,7 @@ def write_batch(path, data, check, notes):
     for r in notes:
         cn.append([num(r[c]) if c in ("individual", "left_pecks", "right_pecks", "left_time_s", "right_time_s", "guessed_time_s")
                    else r[c] for c in cols])
-    bc = HERE / "blind" / "blind_compare.csv"
+    bc = HERE / BLIND_DIR / "blind_compare.csv"
     if bc.exists():
         final = {r["file"]: r for r in notes if (r["individual"] or "") == "1"}
         bs = wb.create_sheet("Blind check")
@@ -182,18 +183,24 @@ def update_workbook(src, dst, data):
     wb = openpyxl.load_workbook(src)
     ws = wb["RawData"]
     hdr = [c.value for c in ws[1]]
-    assert hdr[7] == "IVI (mins)" and hdr[8] == "Northern Cardinal", hdr[:9]
-    first_sp, n_sp = 9, len(hdr) - 8           # species start at column I (9)
-    # 1. shift existing species formulas, then insert the two columns
-    for row in ws.iter_rows(min_row=2, min_col=first_sp, max_col=ws.max_column):
-        for c in row:
-            v = c.value
-            if isinstance(v, ArrayFormula):
-                c.value = ArrayFormula(shift_formula(v.ref, first_sp, 2), shift_formula(v.text, first_sp, 2))
-            elif isinstance(v, str) and v.startswith("="):
-                c.value = shift_formula(v, first_sp, 2)
-    ws.insert_cols(first_sp, 2)
-    ws.cell(1, first_sp, "LeftTime_s"); ws.cell(1, first_sp + 1, "RightTime_s")
+    assert hdr[7] == "IVI (mins)", hdr[:9]
+    first_sp = 9
+    if hdr[8] == "LeftTime_s" and hdr[9] == "RightTime_s":
+        # Time columns already inserted by an earlier batch; just append.
+        n_sp = len(hdr) - 10
+    else:
+        assert hdr[8] == "Northern Cardinal", hdr[:9]
+        n_sp = len(hdr) - 8                    # species start at column I (9)
+        # 1. shift existing species formulas, then insert the two columns
+        for row in ws.iter_rows(min_row=2, min_col=first_sp, max_col=ws.max_column):
+            for c in row:
+                v = c.value
+                if isinstance(v, ArrayFormula):
+                    c.value = ArrayFormula(shift_formula(v.ref, first_sp, 2), shift_formula(v.text, first_sp, 2))
+                elif isinstance(v, str) and v.startswith("="):
+                    c.value = shift_formula(v, first_sp, 2)
+        ws.insert_cols(first_sp, 2)
+        ws.cell(1, first_sp, "LeftTime_s"); ws.cell(1, first_sp + 1, "RightTime_s")
     # 2. append new rows with the sheet's own formulas
     last = ws.max_row
     while last > 1 and ws.cell(last, 1).value is None:
@@ -230,7 +237,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("start"); ap.add_argument("end")
     ap.add_argument("--workbook"); ap.add_argument("--out-dir", default=str(HERE / "out"))
+    ap.add_argument("--blind-dir", default="blind")
     a = ap.parse_args()
+    global BLIND_DIR
+    BLIND_DIR = a.blind_dir
     out = Path(a.out_dir); out.mkdir(exist_ok=True)
     rows = load(a.start, a.end)
     data, check, notes = build_batch(rows)

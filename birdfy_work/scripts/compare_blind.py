@@ -3,16 +3,17 @@
 Writes blind/blind_compare.csv and prints agreement summaries for species,
 pecks per side, and side time per side.
 """
-import csv, glob, statistics
+import csv, glob, statistics, sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
+BLIND = HERE / (sys.argv[1] if len(sys.argv) > 1 else "blind")
 first = {}
 for f in glob.glob(str(HERE / "scores" / "scores_*.csv")):
     for r in csv.DictReader(open(f)):
         if r["individual"] == "1":
             first[r["file"]] = r
-blind = {r["file"]: r for r in csv.DictReader(open(HERE / "blind" / "blind_scores.csv")) if r["individual"] in ("1", "0")}
+blind = {r["file"]: r for r in csv.DictReader(open(BLIND / "blind_scores.csv")) if r["individual"] in ("1", "0")}
 
 
 def n(v):
@@ -31,7 +32,7 @@ for f in sorted(blind):
         row[f"first_{k}"], row[f"blind_{k}"] = a[k], b[k]
     row["blind_peck_range"] = b["peck_range"]
     out.append(row)
-with open(HERE / "blind" / "blind_compare.csv", "w", newline="") as fh:
+with open(BLIND / "blind_compare.csv", "w", newline="") as fh:
     w = csv.DictWriter(fh, fieldnames=list(out[0])); w.writeheader(); w.writerows(out)
 
 print(f"clips compared: {len(out)}; species agree: {sp_agree}/{len(out)}")
