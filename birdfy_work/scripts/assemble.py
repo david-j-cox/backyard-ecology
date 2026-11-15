@@ -23,8 +23,8 @@ from openpyxl.utils import get_column_letter, column_index_from_string
 from openpyxl.worksheet.formula import ArrayFormula
 
 HERE = Path(__file__).resolve().parent.parent
-# Seeds carried forward from the last batch. Scorers saw no safflower in the
-# feeder-right tray, so these are flagged for David in the Check sheet.
+# Seeds as in the last batch, confirmed by David on 2026-11-15. The safflower in
+# the feeder-right tray looks like small striped/tan seed on this camera.
 LEFT_SEED = "Peanuts, Sunflower"
 RIGHT_SEED = "Safflower, Mealworm"
 MAMMALS = ("squirrel",)
@@ -128,8 +128,9 @@ def write_batch(path, data, check, notes):
     ck = wb.create_sheet("Check")
     ck.append(["Date", "Time", "What to check"])
     ck.append([None, None, "Squirrel rows have blank pecks by design (pecks are never recorded for squirrels); they do have side time."])
-    ck.append([None, None, f"LeftSeed/RightSeed are carried forward from the last batch ({LEFT_SEED} / {RIGHT_SEED}). "
-                           "Scorers saw no white safflower in the feeder-right (image-left) tray; see seed_check in Clip notes. Please confirm the seeds."])
+    ck.append([None, None, f"LeftSeed/RightSeed: {LEFT_SEED} / {RIGHT_SEED}, as in the last batch (confirmed by David 2026-11-15). "
+                           "In Clip notes, scorers describe the safflower as 'small striped/tan seed' and some wrote 'no safflower seen'; "
+                           "that is a scorer misreading, and the seed columns are correct."])
     ck.append([None, None, "LeftTime_s/RightTime_s: seconds the head was over feeder left (image-right) / feeder right (image-left), "
                            "sampled at 4 fps. Hidden-head time is a best guess (see Notes). Clips stop at about 30 s, so long visits are lower bounds."])
     for row in check:
