@@ -624,6 +624,13 @@ locations_dict = {
 }
 daily_summs['source_sheet'] = daily_summs['source_sheet'].map(locations_dict)
 
+# A renamed Google Sheets tab shows up here as an unmapped name; fail with the name
+# rather than a TypeError from sorting NaN further down.
+for _name, _df in (('raw_data', raw_data), ('daily_summaries', daily_summs)):
+    if _df['source_sheet'].isna().any():
+        raise SystemExit(f"{_name}: source_sheet values not in locations_dict; "
+                         "check merge_sites_data.SITE_KEYWORDS against the sheet's tab names")
+
 
 # # Basic plots of the action
 
