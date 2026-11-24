@@ -2152,3 +2152,8 @@ scrape_timestamp,url,region_code,region_name,total_birds,peak_birds_in_flight,fl
 2026-11-19T19:34:15.735208+00:00,https://dashboard.birdcast.info/region/US-NJ-013,US-NJ-013,"Essex County, New Jersey",,,,,,,,,,"Thursday night, Nov 19"
 2026-11-19T19:34:16.391824+00:00,https://dashboard.birdcast.info/region/US-CA-013,US-CA-013,"Contra Costa County, California",,,,,,,,,,"Thursday night, Nov 19"
 2026-11-19T19:34:17.025300+00:00,https://dashboard.birdcast.info/region/US-AL-081,US-AL-081,"Lee County, Alabama",,,,,,,,,,"Thursday night, Nov 19"
+2026-11-24T21:26:32.214962+00:00,https://dashboard.birdcast.info/region/US-FL-031,US-FL-031,"Duval County, Florida",,,,,,,,,,"Tuesday night, Nov 24"
+2026-11-24T21:26:33.040808+00:00,https://dashboard.birdcast.info/region/US-CO-013,US-CO-013,"Boulder County, Colorado",,,,,,,,,,"Tuesday night, Nov 24"
+2026-11-24T21:26:33.867714+00:00,https://dashboard.birdcast.info/region/US-NJ-013,US-NJ-013,"Essex County, New Jersey",,,,,,,,,,"Tuesday night, Nov 24"
+2026-11-24T21:26:34.692152+00:00,https://dashboard.birdcast.info/region/US-CA-013,US-CA-013,"Contra Costa County, California",,,,,,,,,,"Tuesday night, Nov 24"
+2026-11-24T21:26:35.508519+00:00,https://dashboard.birdcast.info/region/US-AL-081,US-AL-081,"Lee County, Alabama",,,,,,,,,,"Tuesday night, Nov 24"
