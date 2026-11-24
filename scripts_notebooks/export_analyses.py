@@ -7,7 +7,7 @@ Writes docs/data/analyses.json, loaded by the page after the main view:
   from raw_data_all_locations.csv so repeat visits in the same minute count
 - daily summary visits per site and species (multiple baseline, diversity)
 - weather for every local hour that had a visit (visits by weather)
-- Jacksonville pecks and seed per visit (seed/side preference, pecks)
+- Jacksonville pecks, side times and seed per visit (seed/side preference, pecks, time on each side)
 - behavioral momentum fits for every extinction phase, overall and by
   species, using the same models, starting values, bounds, and metrics as
   all_sites_all_analytics.py
@@ -112,13 +112,18 @@ def export_visit_weather(con, visits):
 
 
 def export_pecks(raw, species, seeds):
-    """Jacksonville visits with peck counts: [species, minutes, left pecks, right pecks, left seed, right seed]."""
+    """Jacksonville visits with peck counts or side times:
+    [species, minutes, left pecks, right pecks, left seed, right seed, left seconds, right seconds].
+    Side times (head over each side, from 2026-11-05) exist for squirrels too, whose pecks are blank."""
     df = raw[raw["source_sheet"] == "jacksonville_fl_32259"].copy()
     df["Bird"] = df["Bird"].map(lambda b: None if pd.isna(b) else clean_species(b))
     df = df.dropna(subset=["Bird", "Time", "Date"])
     left = pd.to_numeric(df["LeftPecks"], errors="coerce")
     right = pd.to_numeric(df["RightPecks"], errors="coerce")
-    df = df[left.notna() | right.notna()].assign(left=left, right=right)
+    ltime = pd.to_numeric(df["LeftTime_s"], errors="coerce") if "LeftTime_s" in df else pd.Series(float("nan"), index=df.index)
+    rtime = pd.to_numeric(df["RightTime_s"], errors="coerce") if "RightTime_s" in df else pd.Series(float("nan"), index=df.index)
+    keep = left.notna() | right.notna() | ltime.notna() | rtime.notna()
+    df = df[keep].assign(left=left[keep], right=right[keep], ltime=ltime[keep], rtime=rtime[keep])
     stamp = pd.to_datetime(df["Date"].str[:10] + " " + df["Time"].str[:8], errors="coerce")
     df = df.assign(minute=((stamp - EPOCH).dt.total_seconds() // 60)).dropna(subset=["minute"])
 
@@ -126,9 +131,14 @@ def export_pecks(raw, species, seeds):
         value = "" if value is None or pd.isna(value) else str(value).strip()
         return None if value.lower() in ("", "none", "nan") else seeds(value)
 
+    def secs(v):
+        return None if pd.isna(v) else round(float(v), 2)
+
     return [
-        [species(b), int(m), None if pd.isna(lp) else int(lp), None if pd.isna(rp) else int(rp), seed(ls), seed(rs)]
-        for b, m, lp, rp, ls, rs in zip(df["Bird"], df["minute"], df["left"], df["right"], df["LeftSeed"], df["RightSeed"])
+        [species(b), int(m), None if pd.isna(lp) else int(lp), None if pd.isna(rp) else int(rp), seed(ls), seed(rs),
+         secs(lt), secs(rt)]
+        for b, m, lp, rp, ls, rs, lt, rt in zip(df["Bird"], df["minute"], df["left"], df["right"],
+                                                df["LeftSeed"], df["RightSeed"], df["ltime"], df["rtime"])
     ]
 
 
@@ -249,7 +259,7 @@ def main():
         "visits": {"cols": ["site", "species", "minute"], "rows": visits},
         "dailySummaries": {"cols": ["site", "date", "species", "visits"], "rows": summaries},
         "visitWeather": {"cols": ["site", "hour", "temp", "wind"], "rows": visit_weather},
-        "pecks": {"cols": ["species", "minute", "left", "right", "leftSeed", "rightSeed"], "rows": pecks},
+        "pecks": {"cols": ["species", "minute", "left", "right", "leftSeed", "rightSeed", "leftTime", "rightTime"], "rows": pecks},
         "momentum": momentum,
         "momentumSpecies": momentum_species,
     }

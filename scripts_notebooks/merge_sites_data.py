@@ -29,6 +29,50 @@ pd.set_option('display.max_columns', None)
 # Google Sheets URL
 GOOGLE_SHEETS_URL = "https://docs.google.com/spreadsheets/d/1n3R-RCKLKrk5cxk1zamKZg0GSu4fRbroY5VAnf9tpbk/export?format=xlsx"
 
+# Site identity comes from a keyword in the tab name, not the exact tab name,
+# so renamed or archived tabs ("(OLD) Essex Fells, NJ 07021 Dai", "Essex Fells
+# 07021 Daily Summ.") still land under the same keys. Downstream scripts and the
+# DuckDB primary keys use these canonical values:
+#   keyword -> (raw_data source_sheet, daily_summaries source_sheet)
+SITE_KEYWORDS = {
+    "jacksonville": ("jacksonville_fl_32259", "Jacksonville, FL 32259 Daily Su"),
+    "essex": ("essex_fells_nj_07021", "Essex Fells, NJ 07021 Daily Sum"),
+    "southampton": ("southampton_uk", "Southampton daily summaries"),
+    "auburn": ("auburn_al_36830", "Auburn, AL 36830 Daily Sum"),
+}
+# Tabs that mention a site but are not feeder data
+NON_FEEDER_TAB_WORDS = ("vocaliz",)
+
+
+def classify_sheet(sheet_name: str):
+    """Return (kind, site_keyword) for a feeder-data tab, or None.
+
+    kind is 'raw' or 'daily'. Google truncates tab names to 31 characters in the
+    xlsx export, so 'daily' may appear only as 'Dai' or 'Summ'.
+    """
+    low = sheet_name.lower()
+    if any(w in low for w in NON_FEEDER_TAB_WORDS):
+        return None
+    site = next((k for k in SITE_KEYWORDS if k in low), None)
+    if site is None:
+        return None
+    if "raw" in low:
+        return "raw", site
+    if re.search(r"\bdai", low) or "summ" in low:
+        return "daily", site
+    return None
+
+
+# Column names some site tabs use for the same quantity
+RAW_COLUMN_ALIASES = {"LeftSecs": "LeftTime_s", "RightSecs": "RightTime_s"}
+DAILY_COLUMN_ALIASES = {"Visits": "Feeder Visits"}
+
+
+def apply_aliases(df: pd.DataFrame, aliases: dict) -> pd.DataFrame:
+    """Rename alias columns to the canonical name when the canonical one is absent."""
+    renames = {a: c for a, c in aliases.items() if a in df.columns and c not in df.columns}
+    return df.rename(columns=renames)
+
 
 def setup_logging(script_dir: Path) -> Path:
     """
@@ -213,7 +257,9 @@ def process_raw_data(excel_file: pd.ExcelFile, raw_data_sheets: list, multi_site
     raw_data_frames = []
     for sheet_name in raw_data_sheets:
         df = pd.read_excel(excel_file, sheet_name=sheet_name)
-        df['source_sheet'] = sheet_name.lower().replace(" raw data", "").replace(" ", "_").replace(",", "")
+        df = apply_aliases(df, RAW_COLUMN_ALIASES)
+        raw_key = SITE_KEYWORDS[classify_sheet(sheet_name)[1]][0]
+        df['source_sheet'] = raw_key
         
         # Check if this is a Jacksonville sheet and if we have matching data in multi_site_data.xlsx
         if "jacksonville" in sheet_name.lower() and multi_site_excel is not None:
@@ -229,7 +275,7 @@ def process_raw_data(excel_file: pd.ExcelFile, raw_data_sheets: list, multi_site
                 logger.info(f"Found matching Jacksonville raw data sheet in multi_site_data.xlsx: {matching_sheet}")
                 multi_site_df = pd.read_excel(multi_site_excel, sheet_name=matching_sheet)
                 # Ensure source_sheet column matches
-                multi_site_df['source_sheet'] = sheet_name.lower().replace(" raw data", "").replace(" ", "_").replace(",", "")
+                multi_site_df['source_sheet'] = raw_key
                 # Merge the data
                 df = merge_jacksonville_data(df, multi_site_df, sheet_name, logger)
             else:
@@ -239,7 +285,11 @@ def process_raw_data(excel_file: pd.ExcelFile, raw_data_sheets: list, multi_site
         logger.debug(f"  {sheet_name}: {len(df)} rows")
     
     raw_data = pd.concat(raw_data_frames, ignore_index=True)
-    raw_data = raw_data[['Date', 'Bird', 'Time', 'LeftPecks', 'RightPecks', 'LeftSeed', 'RightSeed', 'source_sheet', 'Notes', 'CoolDown']]
+    # LeftTime_s/RightTime_s (seconds the bird's head was over each side) exist
+    # only on the Jacksonville sheet from 2026-11-05 on; reindex so other sites
+    # and older rows carry them as blank instead of raising KeyError.
+    raw_data = raw_data.reindex(columns=['Date', 'Bird', 'Time', 'LeftPecks', 'RightPecks', 'LeftSeed', 'RightSeed',
+                                         'LeftTime_s', 'RightTime_s', 'source_sheet', 'Notes', 'CoolDown'])
     raw_data = clean_visit_times(raw_data, output_dir, logger)
     
     output_path = output_dir / 'raw_data_all_locations.csv'
@@ -256,7 +306,9 @@ def process_daily_summaries(excel_file: pd.ExcelFile, daily_summaries_sheets: li
     for sheet_name in daily_summaries_sheets:
         logger.debug(f"Processing sheet: {sheet_name}")
         df = pd.read_excel(excel_file, sheet_name=sheet_name)
-        df['source_sheet'] = sheet_name
+        df = apply_aliases(df, DAILY_COLUMN_ALIASES)
+        daily_key = SITE_KEYWORDS[classify_sheet(sheet_name)[1]][1]
+        df['source_sheet'] = daily_key
         
         # Check if this is a Jacksonville sheet and if we have matching data in multi_site_data.xlsx
         if "jacksonville" in sheet_name.lower() and multi_site_excel is not None:
@@ -272,7 +324,7 @@ def process_daily_summaries(excel_file: pd.ExcelFile, daily_summaries_sheets: li
                 logger.info(f"Found matching Jacksonville daily summary sheet in multi_site_data.xlsx: {matching_sheet}")
                 multi_site_df = pd.read_excel(multi_site_excel, sheet_name=matching_sheet)
                 # Ensure source_sheet column matches
-                multi_site_df['source_sheet'] = sheet_name
+                multi_site_df['source_sheet'] = daily_key
                 # Merge the data
                 df = merge_jacksonville_data(df, multi_site_df, sheet_name, logger)
             else:
@@ -361,11 +413,20 @@ def main():
             logger.warning(f"multi_site_data.xlsx not found at {multi_site_file_path}. Skipping merge step.")
         
         # Identify sheet types
-        raw_data_sheets = [sheet for sheet in all_sheet_names if 'raw' in sheet.lower()]
-        daily_summaries_sheets = [sheet for sheet in all_sheet_names if 'daily' in sheet.lower()]
-        
-        logger.info(f"Raw data sheets: {len(raw_data_sheets)}")
-        logger.info(f"Daily summary sheets: {len(daily_summaries_sheets)}")
+        kinds = {sheet: classify_sheet(sheet) for sheet in all_sheet_names}
+        raw_data_sheets = [s for s, k in kinds.items() if k and k[0] == 'raw']
+        daily_summaries_sheets = [s for s, k in kinds.items() if k and k[0] == 'daily']
+        skipped = [s for s, k in kinds.items() if not k]
+
+        logger.info(f"Raw data sheets ({len(raw_data_sheets)}): {raw_data_sheets}")
+        logger.info(f"Daily summary sheets ({len(daily_summaries_sheets)}): {daily_summaries_sheets}")
+        logger.info(f"Tabs not used as feeder data: {skipped}")
+        # Every site should still have at least one tab of each kind it had before
+        for kw, (raw_key, daily_key) in SITE_KEYWORDS.items():
+            if kw != 'auburn' and not any(kinds[s][1] == kw for s in raw_data_sheets):
+                logger.warning(f"No raw data tab found for {raw_key}")
+            if not any(kinds[s][1] == kw for s in daily_summaries_sheets):
+                logger.warning(f"No daily summary tab found for {daily_key}")
         
         # Process each data type
         process_phase_changes(excel_file, output_dir, logger)
